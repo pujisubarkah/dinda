@@ -8,8 +8,8 @@
         <div class="flex items-center flex-shrink-0 pl-0">
           <!-- Logo Banten, Kota Cilegon & Berakhlak -->
           <div class="flex items-center space-x-3 mr-4">
-            <img src="/banten.png" width="60" height="54" alt="Logo Banten" class="mr-0" />
-            <img src="https://cilegon.go.id/assets/images/logokotacilegon.png" alt="Logo Kota Cilegon" class="w-20 h-auto mr-0" />
+            <img src="/banten.png" width="80" height="72" alt="Logo Banten" class="mr-0 w-20 h-18 object-contain" />
+            <img src="https://cilegon.go.id/assets/images/logokotacilegon.png" alt="Logo Kota Cilegon" class="mr-0 w-20 h-18 object-contain" />
             <img src="/berakhlak.png" width="120" height="54" alt="Logo Berakhlak" class="mr-0" />
           </div>
           <!-- Text Logo -->
