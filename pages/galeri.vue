@@ -32,7 +32,18 @@
         <img src="https://placehold.co/400x200?text=Inovasi" alt="Inovasi" class="rounded-lg mb-4" />
         <h3 class="font-semibold text-green-700 text-lg">Judul Inovasi {{ i }}</h3>
         <p class="text-sm text-gray-600">Kategori: Teknologi</p>
-        <p class="text-sm text-gray-600">Daerah: Yogyakarta</p>
+        <p class="text-sm text-gray-600">
+          Daerah: {{ [
+            'Cibeber',
+            'Cilegon',
+            'Pulomerak',
+            'Ciwandan',
+            'Jombang',
+            'Gerogol',
+            'Purwakarta',
+            'Citangkil'
+          ][(i-1)%8] }}
+        </p>
         <NuxtLink to="/galeri/detail/1" class="mt-3 inline-block text-yellow-600 font-semibold hover:text-green-700">
           Lihat Detail →
         </NuxtLink>
@@ -48,3 +59,7 @@
     </div>
   </div>
 </template>
+
+<script setup>
+import PetaInovasi from '~/components/PetaInovasi.vue'
+</script>
