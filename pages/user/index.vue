@@ -35,24 +35,8 @@ const userStats = {
         </div>
       </div>
 
-      <!-- Navigasi Fitur User -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <NuxtLink to="/user/profil" class="bg-white border-2 border-green-600 rounded-xl shadow-lg p-8 flex flex-col items-center hover:bg-green-50 transition">
-          <span class="text-4xl mb-2">📝</span>
-          <h3 class="font-bold text-green-700 mb-2">Profil Saya</h3>
-          <p class="text-gray-600 text-center">Lihat dan edit data profil Anda.</p>
-        </NuxtLink>
-        <NuxtLink to="/user/inovasi" class="bg-white border-2 border-yellow-400 rounded-xl shadow-lg p-8 flex flex-col items-center hover:bg-yellow-50 transition">
-          <span class="text-4xl mb-2">💡</span>
-          <h3 class="font-bold text-yellow-700 mb-2">Inovasi Saya</h3>
-          <p class="text-gray-600 text-center">Kelola inovasi yang Anda daftarkan.</p>
-        </NuxtLink>
-        <NuxtLink to="/user/laporan" class="bg-white border-2 border-blue-400 rounded-xl shadow-lg p-8 flex flex-col items-center hover:bg-blue-50 transition">
-          <span class="text-4xl mb-2">📋</span>
-          <h3 class="font-bold text-blue-700 mb-2">Laporan Saya</h3>
-          <p class="text-gray-600 text-center">Lihat dan unduh laporan inovasi Anda.</p>
-        </NuxtLink>
-      </div>
+  <!-- Navigasi Fitur User -->
+  <!-- Link ke profil, inovasi, dan laporan dihapus sementara untuk menghindari error prerender -->
     </div>
   </div>
 </template>
