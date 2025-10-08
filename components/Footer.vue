@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-green-800 text-yellow-300 py-8 mt-10">
+  <footer class="text-yellow-300 py-8 mt-10" style="background: linear-gradient(135deg, #2E8B8B 0%, #20B2AA 50%, #4682B4 100%);">
     <div class="max-w-7xl mx-auto px-6">
       <div class="flex flex-col items-center">
         <img src="https://cilegon.go.id/assets/images/logokotacilegon.png" alt="Logo Kota Cilegon" class="w-20 mb-4" />

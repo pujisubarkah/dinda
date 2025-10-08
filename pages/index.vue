@@ -18,6 +18,25 @@
         </div>
       </div>
     </section>
+
+    <!-- Walikota Section -->
+    <section class="bg-white py-12">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div class="lg:col-span-5">
+            <img src="https://cilegon.go.id/assets/img/walikota.png" alt="Walikota Cilegon" class="w-full rounded-lg shadow-lg">
+          </div>
+          <div class="lg:col-span-7">
+            <p class="text-2xl md:text-3xl font-light text-green-700 italic mb-6 leading-relaxed">
+              " Berkolaborasi dan bekerja bersama untuk mencapai tujuan-tujuan yang diharapkan melalui serangkaian program dan kebijakan yang partisipatif "
+            </p>
+            <a href="https://cilegon.go.id/profil-kota-cilegon" target="_blank" class="inline-block bg-transparent border-2 border-yellow-400 text-yellow-600 hover:bg-yellow-400 hover:text-green-900 px-8 py-3 rounded-lg font-semibold text-lg transition-all duration-200">
+              Profil Pemerintah
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
    
   <!-- Hero -->
     <section class="bg-white text-green-900 py-20 text-center relative">
