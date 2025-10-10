@@ -212,6 +212,17 @@
 import { ref, reactive, onMounted, nextTick } from 'vue'
 import * as echarts from 'echarts'
 
+// Set page title and meta
+useHead({
+  title: 'Dashboard',
+  meta: [
+    { 
+      name: 'description', 
+      content: 'Dashboard monitoring dan analitik inovasi daerah Kota Cilegon - Visualisasi data kinerja, statistik, dan perkembangan implementasi inovasi yang mendukung SDGs' 
+    }
+  ]
+})
+
 // Refs untuk chart containers
 const lineChart = ref(null)
 const pieChart = ref(null)

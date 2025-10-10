@@ -147,6 +147,17 @@
 import * as echarts from 'echarts'
 import { onMounted, ref } from 'vue'
 
+// Set page title and meta
+useHead({
+  title: 'Beranda',
+  meta: [
+    { 
+      name: 'description', 
+      content: 'Halaman utama Dashboard Inovasi Daerah (DINDA) Kota Cilegon - Menampilkan statistik dan visualisasi inovasi-inovasi daerah yang mendukung pencapaian SDGs di Kota Cilegon' 
+    }
+  ]
+})
+
 const showModal = ref(false)
 const pieChart = ref(null)
 const barChart = ref(null)

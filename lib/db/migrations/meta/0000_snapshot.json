@@ -1,0 +1,279 @@
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "prevId": "",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "dinda.sdgs": {
+      "name": "sdgs",
+      "schema": "dinda",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tujuan_ke": {
+          "name": "tujuan_ke",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sdgs": {
+          "name": "sdgs",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "image": {
+          "name": "image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "dinda.kecamatan": {
+      "name": "kecamatan",
+      "schema": "dinda",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "nama": {
+          "name": "nama",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "dinda.inovasi": {
+      "name": "inovasi",
+      "schema": "dinda",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "judul_inovasi": {
+          "name": "judul_inovasi",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kld": {
+          "name": "kld",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "urusan": {
+          "name": "urusan",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "deskripsi": {
+          "name": "deskripsi",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tahun": {
+          "name": "tahun",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id_provinsi": {
+          "name": "id_provinsi",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id_kabkot": {
+          "name": "id_kabkot",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "inovator": {
+          "name": "inovator",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sdgs": {
+          "name": "sdgs",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "agency_id_panrb": {
+          "name": "agency_id_panrb",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "inovator_id": {
+          "name": "inovator_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id_kecamatan": {
+          "name": "id_kecamatan",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "inovasi_inovator_fk": {
+          "name": "inovasi_inovator_fk",
+          "tableFrom": "inovasi",
+          "tableTo": "inovator",
+          "schemaTo": "dinda",
+          "columnsFrom": [
+            "inovator_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "inovasi_sdgs_fk": {
+          "name": "inovasi_sdgs_fk",
+          "tableFrom": "inovasi",
+          "tableTo": "sdgs",
+          "schemaTo": "dinda",
+          "columnsFrom": [
+            "sdgs"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "dinda.inovator": {
+      "name": "inovator",
+      "schema": "dinda",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "inovator": {
+          "name": "inovator",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "agency_id_panrb": {
+          "name": "agency_id_panrb",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id_kabkot": {
+          "name": "id_kabkot",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id_provinsi": {
+          "name": "id_provinsi",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "longlat": {
+          "name": "longlat",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "alamat": {
+          "name": "alamat",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id_kecamatan": {
+          "name": "id_kecamatan",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {
+    "dinda": "dinda"
+  },
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "tables": {}
+  }
+}
