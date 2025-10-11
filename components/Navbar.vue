@@ -176,8 +176,8 @@
 
     <!-- Register Modal -->
     <div v-if="showRegisterModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
-      <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 animate-fade-in max-h-[90vh] overflow-y-auto">
-        <button @click="showRegisterModal = false" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
+      <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 animate-fade-in max-h-[90vh] overflow-y-auto relative">
+        <button @click="showRegisterModal = false" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors z-10">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
           </svg>
@@ -230,21 +230,29 @@
               <select
                 v-model="registerForm.opd"
                 required
-                class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors text-sm"
+                :disabled="loadingOpd"
+                class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors text-sm disabled:bg-gray-100 disabled:cursor-not-allowed appearance-none bg-white text-gray-900"
+                style="background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 4 5\'><path d=\'M2 0L0 2h4zm0 5L0 3h4z\' fill=\'%23666\'/></svg>'); background-repeat: no-repeat; background-position: right 12px center; background-size: 12px;"
               >
-                <option value="">Pilih OPD</option>
-                <option value="Diskominfo">Dinas Komunikasi dan Informatika</option>
-                <option value="Bappeda">Badan Perencanaan Pembangunan Daerah</option>
-                <option value="Disdik">Dinas Pendidikan</option>
-                <option value="Dinkes">Dinas Kesehatan</option>
-                <option value="DPUPR">Dinas Pekerjaan Umum dan Penataan Ruang</option>
-                <option value="Dishub">Dinas Perhubungan</option>
-                <option value="Dinsos">Dinas Sosial</option>
-                <option value="Disnaker">Dinas Tenaga Kerja</option>
-                <option value="DPMPTSP">Dinas Penanaman Modal dan Pelayanan Terpadu</option>
-                <option value="Sekretariat Daerah">Sekretariat Daerah</option>
-                <option value="Lainnya">Lainnya</option>
+                <option value="" disabled style="color: #9CA3AF; background-color: #F9FAFB;">
+                  {{ loadingOpd ? 'Memuat OPD...' : 'Pilih OPD' }}
+                </option>
+                <option 
+                  v-for="opd in opdList" 
+                  :key="opd.id" 
+                  :value="opd.namaOpd"
+                  style="color: #1F2937; background-color: #FFFFFF; padding: 8px 12px;"
+                >
+                  {{ opd.namaOpd }}
+                </option>
               </select>
+              
+              <!-- Debug info - sementara -->
+              <div class="text-xs text-gray-400 mt-1">
+                <span v-if="loadingOpd">🔄 Loading OPD...</span>
+                <span v-else-if="opdList.length > 0">✅ {{ opdList.length }} OPD tersedia</span>
+                <span v-else>❌ Data OPD tidak tersedia</span>
+              </div>
             </div>
 
             <!-- Jabatan -->
@@ -328,7 +336,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 
 const isOpen = ref(false)
 const showLoginModal = ref(false)
@@ -349,6 +357,56 @@ const registerForm = ref({
   position: '',
   password: '',
   confirmPassword: ''
+})
+
+// OPD data from API
+const opdList = ref([])
+const loadingOpd = ref(false)
+
+// Fetch OPD list
+const fetchOpdList = async () => {
+  try {
+    loadingOpd.value = true
+    console.log('🔄 Fetching OPD list...')
+    
+    const response = await $fetch('/api/master-opd')
+    console.log('📡 OPD API Response:', response)
+    
+    if (response.success && response.data && response.data.length > 0) {
+      opdList.value = response.data
+      console.log('✅ OPD list loaded from API:', opdList.value.length, 'items')
+    } else {
+      console.warn('⚠️ API response empty, using fallback data')
+      opdList.value = fallbackOpd
+    }
+  } catch (error) {
+    console.error('❌ Error fetching OPD list, using fallback data:', error)
+    opdList.value = fallbackOpd
+  } finally {
+    loadingOpd.value = false
+  }
+}
+
+// Load OPD when register modal is opened
+watch(showRegisterModal, (newValue) => {
+  if (newValue && opdList.value.length === 0) {
+    console.log('🎯 Register modal opened, fetching OPD list...')
+    fetchOpdList()
+  }
+})
+
+// Fallback OPD data for testing
+const fallbackOpd = [
+  { id: 1, namaOpd: 'Dinas Komunikasi dan Informatika' },
+  { id: 2, namaOpd: 'Badan Perencanaan Pembangunan Daerah' },
+  { id: 3, namaOpd: 'Dinas Pendidikan dan Kebudayaan' },
+  { id: 4, namaOpd: 'Dinas Kesehatan' },
+  { id: 5, namaOpd: 'Dinas Pekerjaan Umum dan Penataan Ruang' }
+]
+
+// Load fallback data if API fails
+onMounted(() => {
+  console.log('🚀 Component mounted')
 })
 
 const handleLogin = () => {
@@ -512,5 +570,31 @@ const handleRegister = async () => {
 .nav-link.router-link-active::after {
   width: calc(100% - 24px);
   background: rgba(255, 255, 255, 0.9);
+}
+
+/* Dropdown styling */
+select option {
+  color: #1F2937 !important;
+  background-color: #FFFFFF !important;
+  padding: 8px 12px !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+}
+
+select option:hover {
+  background-color: #F3F4F6 !important;
+  color: #111827 !important;
+}
+
+select option:checked {
+  background-color: #10B981 !important;
+  color: #FFFFFF !important;
+}
+
+/* Ensure dropdown is visible */
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 </style>

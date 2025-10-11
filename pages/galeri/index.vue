@@ -5,7 +5,8 @@
       <h1 class="text-4xl font-bold bg-gradient-to-r from-teal-600 to-teal-700 bg-clip-text text-transparent mb-4">� Galeri Video Inovasi</h1>
       <p class="text-xl text-gray-600">Dokumentasi kegiatan dan inovasi Kota Cilegon</p>
       <div class="mt-4 inline-flex items-center bg-teal-50 text-teal-700 px-4 py-2 rounded-full text-sm font-semibold">
-        📹 {{ videos.length }} Video Tersedia
+        <span v-if="loading">📹 Memuat video...</span>
+        <span v-else>📹 {{ totalVideos || videos.length }} Video Tersedia</span>
       </div>
     </div>
 
@@ -40,8 +41,35 @@
       </div>
     </div>
 
+    <!-- Loading State -->
+    <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div v-for="n in 6" :key="n" class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 animate-pulse">
+        <div class="aspect-video bg-gray-200"></div>
+        <div class="p-6">
+          <div class="h-4 bg-gray-200 rounded mb-2"></div>
+          <div class="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+          <div class="h-3 bg-gray-200 rounded mb-2"></div>
+          <div class="h-3 bg-gray-200 rounded w-2/3 mb-4"></div>
+          <div class="h-8 bg-gray-200 rounded"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error State -->
+    <div v-else-if="error" class="text-center py-16">
+      <div class="text-6xl mb-4">❌</div>
+      <h3 class="text-xl font-semibold text-red-600 mb-2">Gagal memuat video</h3>
+      <p class="text-gray-500 mb-6">{{ error }}</p>
+      <button 
+        @click="fetchVideos"
+        class="bg-gradient-to-r from-teal-500 to-teal-600 text-white px-6 py-3 rounded-xl font-bold hover:from-teal-600 hover:to-teal-700 transition-all duration-300"
+      >
+        🔄 Coba Lagi
+      </button>
+    </div>
+
     <!-- Video Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       <div 
         v-for="video in filteredVideos" 
         :key="video.id" 
@@ -78,7 +106,7 @@
               <span class="mr-3">📅 {{ video.date }}</span>
               <span>👀 {{ video.views }} views</span>
             </div>
-            <span class="text-teal-600 font-semibold">{{ video.duration }}</span>
+            <span v-if="video.duration" class="text-teal-600 font-semibold">{{ video.duration }}</span>
           </div>
 
           <div class="flex gap-2">
@@ -129,150 +157,81 @@ const selectedCategory = ref('')
 const selectedYear = ref('')
 const currentPage = ref(1)
 const videosPerPage = 9
+const loading = ref(true)
+const error = ref(null)
 
-// Video data
-const videos = ref([
-  {
-    id: 1,
-    title: 'Launching SAKIP Kota Cilegon 2024',
-    description: 'Peluncuran Sistem Akuntabilitas Kinerja Instansi Pemerintah (SAKIP) Kota Cilegon untuk meningkatkan transparansi dan akuntabilitas pemerintahan.',
-    youtubeId: '4TUD2qDslww',
-    url: 'https://youtu.be/4TUD2qDslww',
-    category: 'kegiatan',
-    categoryLabel: '🎪 Kegiatan',
-    date: '15 Okt 2024',
-    views: '2.1K',
-    duration: '12:34'
-  },
-  {
-    id: 2,
-    title: 'Inovasi Pelayanan Digital Kota Cilegon',
-    description: 'Transformasi digital pelayanan publik Kota Cilegon melalui berbagai aplikasi dan sistem online untuk kemudahan masyarakat.',
-    youtubeId: 'm9xJQXw2nC0',
-    url: 'https://youtu.be/m9xJQXw2nC0',
-    category: 'inovasi',
-    categoryLabel: '💡 Inovasi',
-    date: '8 Sep 2024',
-    views: '3.5K',
-    duration: '15:42'
-  },
-  {
-    id: 3,
-    title: 'Program Smart City Cilegon',
-    description: 'Implementasi konsep smart city di Kota Cilegon dengan berbagai teknologi untuk meningkatkan kualitas hidup masyarakat.',
-    youtubeId: 'cFytF7e1VwA',
-    url: 'https://youtu.be/cFytF7e1VwA',
-    category: 'pembangunan',
-    categoryLabel: '🏗️ Pembangunan',
-    date: '22 Agu 2024',
-    views: '4.2K',
-    duration: '18:56'
-  },
-  {
-    id: 4,
-    title: 'Festival Krakatau Kota Cilegon 2024',
-    description: 'Kemeriahan Festival Krakatau sebagai event tahunan yang menampilkan budaya, seni, dan pariwisata Kota Cilegon.',
-    youtubeId: 'festival-krakatau-2024',
-    url: 'https://youtu.be/festival-krakatau-2024',
-    category: 'kegiatan',
-    categoryLabel: '🎪 Kegiatan',
-    date: '10 Jul 2024',
-    views: '5.8K',
-    duration: '25:13'
-  },
-  {
-    id: 5,
-    title: 'Pelayanan Kesehatan Terintegrasi',
-    description: 'Sistem pelayanan kesehatan terintegrasi di Kota Cilegon untuk memberikan layanan kesehatan yang lebih baik dan efisien.',
-    youtubeId: 'kesehatan-terintegrasi',
-    url: 'https://youtu.be/kesehatan-terintegrasi',
-    category: 'pelayanan',
-    categoryLabel: '🏛️ Pelayanan Publik',
-    date: '5 Jun 2024',
-    views: '2.7K',
-    duration: '11:28'
-  },
-  {
-    id: 6,
-    title: 'Pembangunan Infrastruktur Berkelanjutan',
-    description: 'Proyek pembangunan infrastruktur berkelanjutan di Kota Cilegon dengan mengedepankan aspek lingkungan dan teknologi.',
-    youtubeId: 'infrastruktur-berkelanjutan',
-    url: 'https://youtu.be/infrastruktur-berkelanjutan',
-    category: 'pembangunan',
-    categoryLabel: '🏗️ Pembangunan',
-    date: '18 Mei 2024',
-    views: '3.1K',
-    duration: '20:45'
-  },
-  {
-    id: 7,
-    title: 'E-Government Kota Cilegon',
-    description: 'Implementasi sistem e-government untuk meningkatkan efisiensi dan transparansi dalam pelayanan pemerintahan.',
-    youtubeId: 'e-government-cilegon',
-    url: 'https://youtu.be/e-government-cilegon',
-    category: 'inovasi',
-    categoryLabel: '💡 Inovasi',
-    date: '3 Apr 2024',
-    views: '4.6K',
-    duration: '14:22'
-  },
-  {
-    id: 8,
-    title: 'Pelatihan UMKM Digital',
-    description: 'Program pelatihan untuk meningkatkan kemampuan UMKM dalam menggunakan teknologi digital untuk mengembangkan usaha.',
-    youtubeId: 'umkm-digital-training',
-    url: 'https://youtu.be/umkm-digital-training',
-    category: 'kegiatan',
-    categoryLabel: '🎪 Kegiatan',
-    date: '12 Mar 2024',
-    views: '1.9K',
-    duration: '16:33'
-  },
-  {
-    id: 9,
-    title: 'Sistem Manajemen Sampah Pintar',
-    description: 'Inovasi sistem manajemen sampah pintar di Kota Cilegon untuk menciptakan lingkungan yang lebih bersih dan sehat.',
-    youtubeId: 'sampah-pintar-system',
-    url: 'https://youtu.be/sampah-pintar-system',
-    category: 'inovasi',
-    categoryLabel: '💡 Inovasi',
-    date: '28 Feb 2024',
-    views: '3.8K',
-    duration: '13:17'
-  },
-  {
-    id: 10,
-    title: 'Aplikasi Pengaduan Masyarakat Online',
-    description: 'Aplikasi online untuk memudahkan masyarakat dalam menyampaikan pengaduan dan aspirasi kepada pemerintah kota.',
-    youtubeId: 'pengaduan-online-app',
-    url: 'https://youtu.be/pengaduan-online-app',
-    category: 'pelayanan',
-    categoryLabel: '🏛️ Pelayanan Publik',
-    date: '14 Jan 2024',
-    views: '2.4K',
-    duration: '9:45'
+// Video data from API
+const videos = ref([])
+const totalVideos = ref(0)
+
+// Fetch videos from API
+const fetchVideos = async () => {
+  try {
+    loading.value = true
+    error.value = null
+    
+    // Build query parameters
+    const params = new URLSearchParams()
+    if (searchQuery.value) params.append('search', searchQuery.value)
+    if (selectedCategory.value) params.append('category', selectedCategory.value)
+    params.append('limit', '50') // Load more videos initially
+    
+    const response = await $fetch(`/api/videos?${params.toString()}`)
+    
+    if (response.success) {
+      videos.value = response.data.map(video => ({
+        ...video,
+        // Format views untuk display
+        views: formatViews(video.views),
+        // Format date untuk display
+        date: formatDate(video.date || video.createdAt)
+      }))
+      totalVideos.value = response.total || response.data.length
+    } else {
+      throw new Error('Failed to fetch videos')
+    }
+  } catch (err) {
+    error.value = err.message || 'Gagal memuat video'
+    console.error('Error fetching videos:', err)
+  } finally {
+    loading.value = false
   }
-])
+}
+
+// Format views count
+const formatViews = (views) => {
+  if (views >= 1000000) {
+    return Math.floor(views / 100000) / 10 + 'M'
+  } else if (views >= 1000) {
+    return Math.floor(views / 100) / 10 + 'K'
+  }
+  return views.toString()
+}
+
+// Format date
+const formatDate = (dateString) => {
+  if (!dateString) return 'Tanggal tidak tersedia'
+  
+  const date = new Date(dateString)
+  const options = { 
+    day: 'numeric', 
+    month: 'short', 
+    year: 'numeric',
+    timeZone: 'Asia/Jakarta'
+  }
+  return date.toLocaleDateString('id-ID', options)
+}
+
+// Load videos on mount
+onMounted(() => {
+  fetchVideos()
+})
 
 // Computed properties
 const filteredVideos = computed(() => {
   let filtered = videos.value
 
-  // Filter by search query
-  if (searchQuery.value) {
-    const query = searchQuery.value.toLowerCase()
-    filtered = filtered.filter(video => 
-      video.title.toLowerCase().includes(query) ||
-      video.description.toLowerCase().includes(query)
-    )
-  }
-
-  // Filter by category
-  if (selectedCategory.value) {
-    filtered = filtered.filter(video => video.category === selectedCategory.value)
-  }
-
-  // Filter by year
+  // Filter by year (client-side for already loaded data)
   if (selectedYear.value) {
     filtered = filtered.filter(video => video.date.includes(selectedYear.value))
   }
@@ -287,18 +246,6 @@ const filteredVideos = computed(() => {
 const hasMoreVideos = computed(() => {
   const totalFiltered = videos.value.filter(video => {
     let matches = true
-    
-    if (searchQuery.value) {
-      const query = searchQuery.value.toLowerCase()
-      matches = matches && (
-        video.title.toLowerCase().includes(query) ||
-        video.description.toLowerCase().includes(query)
-      )
-    }
-    
-    if (selectedCategory.value) {
-      matches = matches && video.category === selectedCategory.value
-    }
     
     if (selectedYear.value) {
       matches = matches && video.date.includes(selectedYear.value)
@@ -325,8 +272,27 @@ const loadMoreVideos = () => {
   currentPage.value++
 }
 
-// Watch for filter changes to reset pagination
-watch([searchQuery, selectedCategory, selectedYear], () => {
+// Debounced search function
+let searchTimeout
+const debouncedSearch = () => {
+  clearTimeout(searchTimeout)
+  searchTimeout = setTimeout(() => {
+    currentPage.value = 1
+    fetchVideos()
+  }, 500)
+}
+
+// Watch for filter changes
+watch([selectedCategory], () => {
+  currentPage.value = 1
+  fetchVideos()
+})
+
+watch([searchQuery], () => {
+  debouncedSearch()
+})
+
+watch([selectedYear], () => {
   currentPage.value = 1
 })
 </script>
