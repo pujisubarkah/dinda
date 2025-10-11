@@ -27,15 +27,43 @@ export const jenisPelatihanEnum = pgEnum('jenis_pelatihan', ['webinar', 'worksho
 // Users & Authentication
 export const usersInDinda = dinda.table("users", {
   id: serial().primaryKey(),
-  uuid: uuid().defaultRandom().unique().notNull(),
-  email: varchar({ length: 255 }).unique().notNull(),
-  name: varchar({ length: 255 }).notNull(),
+  username: varchar({ length: 100 }).unique().notNull(),
   password: varchar({ length: 255 }).notNull(),
-  avatar: text(),
-  role: roleEnum().default('user').notNull(),
+  name: varchar({ length: 255 }).notNull(),
+  email: varchar({ length: 255 }),
+  nip: varchar({ length: 30 }),
+  role: varchar({ length: 50 }).default('user').notNull(),
+  phone: varchar({ length: 20 }),
+  opd: varchar({ length: 255 }),
+  position: varchar({ length: 255 }),
   isVerified: boolean("is_verified").default(false),
+  isActive: boolean("is_active").default(true),
+  lastLogin: timestamp("last_login", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
+// Videos
+export const videosInDinda = dinda.table("videos", {
+  id: serial().primaryKey(),
+  title: varchar({ length: 500 }).notNull(),
+  description: text(),
+  youtubeId: varchar("youtube_id", { length: 50 }).notNull(),
+  url: varchar({ length: 500 }).notNull(),
+  category: varchar({ length: 100 }),
+  categoryLabel: varchar("category_label", { length: 100 }),
+  date: timestamp({ mode: 'date' }),
+  views: integer().default(0),
+  duration: varchar({ length: 20 }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+// OPD (Organisasi Perangkat Daerah)
+export const opdInDinda = dinda.table("master_opd", {
+  id: serial().primaryKey(),
+  namaOpd: varchar("nama_opd", { length: 255 }).notNull(),
+  kepalaDinas: varchar("kepala_dinas", { length: 255 }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 });
 
 // SDGs
