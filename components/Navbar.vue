@@ -168,8 +168,159 @@
         <div class="text-center">
           <p class="text-gray-600">
             Belum punya akun? 
-            <a href="#" class="text-teal-600 hover:text-teal-700 font-semibold">Daftar sekarang</a>
+            <button @click="showRegisterModal = true; showLoginModal = false" class="text-teal-600 hover:text-teal-700 font-semibold">Daftar sekarang</button>
           </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div v-if="showRegisterModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+      <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 animate-fade-in max-h-[90vh] overflow-y-auto">
+        <button @click="showRegisterModal = false" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+
+        <div class="p-8">
+          <h2 class="text-2xl font-bold text-center text-gray-900 mb-2">Daftar Akun DINDA</h2>
+          <p class="text-gray-600 text-center">Bergabung dengan platform inovasi Kota Cilegon</p>
+
+          <!-- Register Form -->
+          <form @submit.prevent="handleRegister" class="space-y-4 mt-6">
+            <!-- Username -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Username *</label>
+              <input
+                v-model="registerForm.username"
+                type="text"
+                required
+                class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors text-sm"
+                placeholder="Contoh: puji.diskominfo"
+              />
+            </div>
+
+            <!-- Nama Lengkap -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap *</label>
+              <input
+                v-model="registerForm.name"
+                type="text"
+                required
+                class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors text-sm"
+                placeholder="Masukkan nama lengkap"
+              />
+            </div>
+
+            <!-- Email -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <input
+                v-model="registerForm.email"
+                type="email"
+                class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors text-sm"
+                placeholder="nama@cilegon.go.id"
+              />
+            </div>
+
+            <!-- OPD -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">OPD *</label>
+              <select
+                v-model="registerForm.opd"
+                required
+                class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors text-sm"
+              >
+                <option value="">Pilih OPD</option>
+                <option value="Diskominfo">Dinas Komunikasi dan Informatika</option>
+                <option value="Bappeda">Badan Perencanaan Pembangunan Daerah</option>
+                <option value="Disdik">Dinas Pendidikan</option>
+                <option value="Dinkes">Dinas Kesehatan</option>
+                <option value="DPUPR">Dinas Pekerjaan Umum dan Penataan Ruang</option>
+                <option value="Dishub">Dinas Perhubungan</option>
+                <option value="Dinsos">Dinas Sosial</option>
+                <option value="Disnaker">Dinas Tenaga Kerja</option>
+                <option value="DPMPTSP">Dinas Penanaman Modal dan Pelayanan Terpadu</option>
+                <option value="Sekretariat Daerah">Sekretariat Daerah</option>
+                <option value="Lainnya">Lainnya</option>
+              </select>
+            </div>
+
+            <!-- Jabatan -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Jabatan</label>
+              <input
+                v-model="registerForm.position"
+                type="text"
+                class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors text-sm"
+                placeholder="Contoh: Staff IT, Kabid Inovasi"
+              />
+            </div>
+
+            <!-- Password -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Password *</label>
+              <div class="relative">
+                <input
+                  v-model="registerForm.password"
+                  :type="showRegisterPassword ? 'text' : 'password'"
+                  required
+                  class="w-full px-3 py-2.5 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors text-sm"
+                  placeholder="Minimal 8 karakter"
+                />
+                <button
+                  type="button"
+                  @click="showRegisterPassword = !showRegisterPassword"
+                  class="absolute inset-y-0 right-0 pr-3 flex items-center"
+                >
+                  <svg v-if="showRegisterPassword" class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                  </svg>
+                  <svg v-else class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Confirm Password -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Konfirmasi Password *</label>
+              <input
+                v-model="registerForm.confirmPassword"
+                type="password"
+                required
+                class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors text-sm"
+                placeholder="Ulangi password"
+              />
+            </div>
+
+            <button 
+              type="submit" 
+              :disabled="isRegisterLoading"
+              class="w-full bg-gradient-to-r from-teal-600 to-teal-700 text-white py-3 px-4 rounded-lg font-semibold hover:from-teal-700 hover:to-teal-800 transition-all duration-200 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <span v-if="isRegisterLoading">Mendaftar...</span>
+              <span v-else>Daftar Sekarang</span>
+            </button>
+          </form>
+
+          <!-- Divider -->
+          <div class="my-6 flex items-center">
+            <div class="flex-1 border-t border-gray-300"></div>
+            <span class="px-4 text-sm text-gray-500">atau</span>
+            <div class="flex-1 border-t border-gray-300"></div>
+          </div>
+
+          <!-- Login Link -->
+          <div class="text-center">
+            <p class="text-gray-600">
+              Sudah punya akun? 
+              <button @click="showLoginModal = true; showRegisterModal = false" class="text-teal-600 hover:text-teal-700 font-semibold">Masuk di sini</button>
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -181,9 +332,23 @@ import { ref } from 'vue'
 
 const isOpen = ref(false)
 const showLoginModal = ref(false)
+const showRegisterModal = ref(false)
+const showRegisterPassword = ref(false)
+const isRegisterLoading = ref(false)
+
 const loginForm = ref({
   email: '',
   password: ''
+})
+
+const registerForm = ref({
+  username: '',
+  name: '',
+  email: '',
+  opd: '',
+  position: '',
+  password: '',
+  confirmPassword: ''
 })
 
 const handleLogin = () => {
@@ -192,6 +357,51 @@ const handleLogin = () => {
   alert('Login berhasil! (Demo)')
   showLoginModal.value = false
   loginForm.value = { email: '', password: '' }
+}
+
+const handleRegister = async () => {
+  // Validasi form
+  if (!registerForm.value.username || !registerForm.value.name || !registerForm.value.opd || !registerForm.value.password) {
+    alert('Mohon lengkapi semua field yang wajib diisi!')
+    return
+  }
+
+  if (registerForm.value.password !== registerForm.value.confirmPassword) {
+    alert('Konfirmasi password tidak sesuai!')
+    return
+  }
+
+  if (registerForm.value.password.length < 8) {
+    alert('Password minimal 8 karakter!')
+    return
+  }
+
+  isRegisterLoading.value = true
+
+  try {
+    // Simulasi API call
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    
+    console.log('Register attempt:', registerForm.value)
+    alert('Pendaftaran berhasil! Silakan tunggu verifikasi admin.')
+    
+    // Reset form dan tutup modal
+    showRegisterModal.value = false
+    registerForm.value = {
+      username: '',
+      name: '',
+      email: '',
+      opd: '',
+      position: '',
+      password: '',
+      confirmPassword: ''
+    }
+  } catch (error) {
+    console.error('Register error:', error)
+    alert('Pendaftaran gagal. Silakan coba lagi.')
+  } finally {
+    isRegisterLoading.value = false
+  }
 }
 </script>
 
