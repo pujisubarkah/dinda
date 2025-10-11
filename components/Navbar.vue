@@ -1,5 +1,5 @@
 <template>
-  <nav class="text-white shadow-lg border-b-2 border-gray-400 h-20 md:h-24 flex items-center" style="background: linear-gradient(to right, #008080, #40E0D0);">
+  <nav class="text-white shadow-lg border-b-2 border-gray-400 h-20 md:h-24 flex items-center" style="background: linear-gradient(to right, #20B2AA, #20B2AA);">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
       <div class="flex items-center justify-between h-full">
         <!-- Logo dan Text di pojok kiri -->
@@ -28,8 +28,8 @@
         
         <!-- Menu & Login di tengah-kanan -->
         <div class="flex items-center space-x-8 ml-auto">
-          <!-- Menu Desktop -->
-          <div class="hidden lg:flex items-center space-x-8">
+          <!-- Menu Desktop & Tablet -->
+          <div class="hidden md:flex items-center space-x-6">
             <NuxtLink to="/" class="text-white font-medium hover:text-gray-200 transition-colors duration-200 px-3 py-2 rounded-md hover:bg-white/10 nav-text-outline">
               Home
             </NuxtLink>
@@ -46,18 +46,22 @@
               Forum
             </NuxtLink>
             <NuxtLink to="/lomba" class="text-white font-medium hover:text-gray-200 transition-colors duration-200 px-3 py-2 rounded-md hover:bg-white/10 nav-text-outline">
-              Lomba Inovasi
+              Lomba
             </NuxtLink>
           </div>
           
           <!-- User/Profile -->
           <div class="hidden md:flex items-center">
-            <button @click="showLoginModal = true" class="bg-gray-100 px-6 py-2.5 rounded-lg font-semibold hover:bg-gray-200 hover:shadow-lg transition-all duration-200 transform hover:scale-105" style="color: #008080;">
+            <button @click="showLoginModal = true" class="bg-gray-100 px-6 py-2.5 rounded-lg font-semibold hover:bg-gray-200 hover:shadow-lg transition-all duration-200 transform hover:scale-105" style="color: #20B2AA;">
               Login
             </button>
           </div>
-          <!-- Hamburger Menu Mobile -->
-          <div class="lg:hidden flex items-center">
+          
+          <!-- Mobile Menu - Hanya untuk HP kecil -->
+          <div class="md:hidden flex items-center">
+            <button @click="showLoginModal = true" class="bg-gray-100 px-4 py-2 rounded-lg font-semibold hover:bg-gray-200 transition-all duration-200 mr-3" style="color: #20B2AA;">
+              Login
+            </button>
             <button @click="isOpen = !isOpen" class="focus:outline-none text-gray-200 p-2 rounded-md hover:bg-white/10 transition-colors duration-200">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -69,31 +73,26 @@
       </div>
     </div>
 
-    <!-- Mobile Menu -->
-    <div v-if="isOpen" class="lg:hidden px-6 py-4 space-y-3 border-t shadow-lg" style="background-color: #008080; border-color: #40E0D0;">
-      <NuxtLink to="/" class="block py-3 px-4 rounded-lg text-white font-medium hover:text-gray-200 transition-all duration-200 hover-tosca nav-text-outline">
-        Home
+    <!-- Mobile Menu - Hanya untuk HP kecil -->
+    <div v-if="isOpen" class="md:hidden px-6 py-4 space-y-3 border-t shadow-lg" style="background-color: #20B2AA; border-color: #20B2AA;">
+      <NuxtLink to="/" @click="isOpen = false" class="block py-3 px-4 rounded-lg text-white font-medium hover:text-gray-200 transition-all duration-200 hover-tosca nav-text-outline">
+        🏠 Home
       </NuxtLink>
-      <NuxtLink to="/galeri" class="block py-3 px-4 rounded-lg text-white font-medium hover:text-gray-200 transition-all duration-200 hover-tosca nav-text-outline">
-        Galeri
+      <NuxtLink to="/galeri" @click="isOpen = false" class="block py-3 px-4 rounded-lg text-white font-medium hover:text-gray-200 transition-all duration-200 hover-tosca nav-text-outline">
+        🖼️ Galeri
       </NuxtLink>
-      <NuxtLink to="/dashboard" class="block py-3 px-4 rounded-lg text-white font-medium hover:text-gray-200 transition-all duration-200 hover-tosca nav-text-outline">
-        Dashboard
+      <NuxtLink to="/dashboard" @click="isOpen = false" class="block py-3 px-4 rounded-lg text-white font-medium hover:text-gray-200 transition-all duration-200 hover-tosca nav-text-outline">
+        📊 Dashboard
       </NuxtLink>
-      <NuxtLink to="/inkubasi" class="block py-3 px-4 rounded-lg text-white font-medium hover:text-gray-200 transition-all duration-200 hover-tosca nav-text-outline">
-        Inkubasi
+      <NuxtLink to="/inkubasi" @click="isOpen = false" class="block py-3 px-4 rounded-lg text-white font-medium hover:text-gray-200 transition-all duration-200 hover-tosca nav-text-outline">
+        🚀 Inkubasi
       </NuxtLink>
-      <NuxtLink to="/forum" class="block py-3 px-4 rounded-lg text-white font-medium hover:text-gray-200 transition-all duration-200 hover-tosca nav-text-outline">
-        Forum
+      <NuxtLink to="/forum" @click="isOpen = false" class="block py-3 px-4 rounded-lg text-white font-medium hover:text-gray-200 transition-all duration-200 hover-tosca nav-text-outline">
+        💬 Forum
       </NuxtLink>
-      <NuxtLink to="/lomba" class="block py-3 px-4 rounded-lg text-white font-medium hover:text-gray-200 transition-all duration-200 hover-tosca nav-text-outline">
-        Lomba Inovasi
+      <NuxtLink to="/lomba" @click="isOpen = false" class="block py-3 px-4 rounded-lg text-white font-medium hover:text-gray-200 transition-all duration-200 hover-tosca nav-text-outline">
+        🏆 Lomba
       </NuxtLink>
-      <div class="pt-3" style="border-top: 1px solid #40E0D0;">
-        <button @click="showLoginModal = true" class="w-full bg-gray-100 px-4 py-3 rounded-lg font-semibold hover:bg-gray-200 hover:shadow-lg transition-all duration-200 transform hover:scale-105" style="color: #008080;">
-          Login
-        </button>
-      </div>
     </div>
 
     <!-- Login Modal -->
@@ -211,7 +210,7 @@ const handleLogin = () => {
 }
 
 .hover-tosca:hover {
-  background-color: rgba(0, 128, 128, 0.3);
+  background-color: rgba(32, 178, 170, 0.3);
 }
 
 .nav-text-outline {
