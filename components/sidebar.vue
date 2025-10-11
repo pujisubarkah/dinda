@@ -1,30 +1,5 @@
 <template>
-  <aside class="h-screen w-64 bg-gradient-to-b from-green-700 via-green-800 to-green-900 shadow-xl flex flex-col text-white">
-    <!-- Logo & Title -->
-    <div class="flex items-center gap-3 px-6 py-8 border-b border-yellow-400 bg-gradient-to-r from-green-600 to-yellow-500">
-      <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
-        <img src="/banten.png" alt="Logo Banten" class="h-8 w-auto" />
-      </div>
-      <div>
-        <span class="text-xl font-extrabold tracking-wide text-white drop-shadow-lg">ADMIN</span>
-        <div class="text-sm text-yellow-100 font-light">DINDA</div>
-      </div>
-    </div>
-
-    <!-- Quick Dashboard Stats -->
-    <div class="px-4 py-4 border-b border-green-600">
-      <div class="grid grid-cols-2 gap-2 text-center">
-        <div class="bg-green-600 rounded-lg p-2">
-          <div class="text-lg font-bold text-yellow-300">156</div>
-          <div class="text-xs text-green-200">Total</div>
-        </div>
-        <div class="bg-yellow-500 rounded-lg p-2">
-          <div class="text-lg font-bold text-green-900">12</div>
-          <div class="text-xs text-green-800">Bulan Ini</div>
-        </div>
-      </div>
-    </div>
-
+  <aside class="fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-green-700 via-green-800 to-green-900 shadow-xl flex flex-col text-white z-40">
     <!-- Menu List -->
     <nav class="flex-1 py-6 px-4 space-y-3">
       <!-- Dashboard Menu -->
@@ -58,6 +33,22 @@
         </div>
         <span class="group-hover:font-bold">Laporan</span>
       </NuxtLink>
+      
+      <!-- Master OPD Menu -->
+      <NuxtLink to="/admin/opd" class="group flex items-center gap-3 px-4 py-3 rounded-lg font-semibold hover:bg-gradient-to-r hover:from-yellow-400 hover:to-yellow-500 hover:text-green-900 transition-all duration-300 transform hover:scale-105">
+        <div class="w-8 h-8 bg-teal-400 rounded-lg flex items-center justify-center text-white group-hover:bg-white group-hover:text-teal-600 transition-colors">
+          <span class="text-lg">🏛️</span>
+        </div>
+        <span class="group-hover:font-bold">Master OPD</span>
+      </NuxtLink>
+      
+      <!-- Verifikasi User Menu -->
+      <NuxtLink to="/admin/verifikasi-user" class="group flex items-center gap-3 px-4 py-3 rounded-lg font-semibold hover:bg-gradient-to-r hover:from-yellow-400 hover:to-yellow-500 hover:text-green-900 transition-all duration-300 transform hover:scale-105">
+        <div class="w-8 h-8 bg-indigo-400 rounded-lg flex items-center justify-center text-white group-hover:bg-white group-hover:text-indigo-600 transition-colors">
+          <span class="text-lg">✅</span>
+        </div>
+        <span class="group-hover:font-bold">Verifikasi User</span>
+      </NuxtLink>
     </nav>
 
     <!-- Admin Profile Section -->
@@ -76,7 +67,7 @@
     <!-- Footer -->
     <div class="px-6 py-4 border-t border-yellow-400 text-xs text-yellow-200 text-center bg-green-800">
       <div class="text-yellow-300 font-semibold">DINDA</div>
-      <div>&copy; 2025 Prov. Banten</div>
+      <div>&copy; 2025 Kota Cilegon</div>
     </div>
   </aside>
 </template>

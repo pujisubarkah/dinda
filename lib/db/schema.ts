@@ -368,6 +368,22 @@ export const activityLogsInDinda = dinda.table("activity_logs", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 });
 
+// Ide Inovasi (Innovation Ideas)
+export const ideInovasiInDinda = dinda.table("ide_inovasi", {
+  id: serial().primaryKey(),
+  latarBelakang: text("latar_belakang"),
+  ideInovasi: text("ide_inovasi"),
+  stakeholderInovasi: text("stakeholder_inovasi"),
+  sumberDaya: text("sumber_daya"),
+  penerimaManfaat: text("penerima_manfaat"),
+  deskripsiSingkat: text("deskripsi_singkat"),
+  keterangan: text(),
+  kebaruan: text(),
+  createdBy: integer("created_by").references(() => usersInDinda.id),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
 // Notifications
 export const notificationsInDinda = dinda.table("notifications", {
   id: serial().primaryKey(),

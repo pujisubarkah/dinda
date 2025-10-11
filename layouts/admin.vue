@@ -1,12 +1,15 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <!-- Header -->
-    <Header />
-    <div class="flex">
-      <!-- Sidebar -->
-      <Sidebar />
+    <!-- Sidebar - Fixed Position -->
+    <Sidebar />
+    
+    <!-- Main Content Area with Left Margin -->
+    <div class="ml-64">
+      <!-- Header -->
+      <Header />
+      
       <!-- Main Content -->
-      <main class="flex-1 p-6">
+      <main class="p-6">
         <NuxtPage />
       </main>
     </div>
