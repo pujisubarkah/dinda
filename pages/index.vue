@@ -38,33 +38,160 @@
       </div>
     </section>
    
-  <!-- Hero -->
-    <section class="bg-white text-green-900 py-20 text-center relative">
-      <button @click="showModal = true" class="absolute top-6 right-8 bg-yellow-400 text-green-900 px-8 py-4 rounded-full font-bold text-lg shadow hover:bg-yellow-300 transition">
-        Punya Ide Inovasi?
-      </button>
-    <!-- Modal Ide Inovasi -->
-    <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-      <div class="bg-white rounded-xl shadow-lg p-8 max-w-md w-full relative">
-        <button @click="showModal = false" class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-xl">&times;</button>
-        <h2 class="text-2xl font-bold text-green-700 mb-4">Daftarkan Ide Inovasi</h2>
-        <p class="mb-4 text-gray-700">Silakan isi form ide inovasi Anda di halaman Inkubasi.</p>
-        <NuxtLink to="/inkubasi" class="bg-yellow-400 text-green-900 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition block text-center">Ke Halaman Inkubasi</NuxtLink>
+  <!-- Enhanced Hero Section -->
+    <section class="relative min-h-screen bg-gradient-to-br from-teal-50 via-white to-blue-50 overflow-hidden">
+      <!-- Background Pattern -->
+      <div class="absolute inset-0 opacity-5">
+        <div class="absolute top-20 left-10 w-32 h-32 bg-teal-400 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute top-40 right-20 w-48 h-48 bg-blue-300 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div class="absolute bottom-20 left-1/3 w-40 h-40 bg-green-300 rounded-full blur-3xl animate-pulse delay-2000"></div>
       </div>
-    </div>
-      <h1 class="text-4xl md:text-5xl font-extrabold text-green-700">
-        DINDA 
-      </h1>
-      <p class="mt-4 text-lg md:text-xl text-gray-700">
-        Dashboard Inovasi Daerah — Wadah Kolaborasi & Inkubasi
-      </p>
-      <div class="mt-6 space-x-4">
-        <NuxtLink to="/galeri" class="bg-yellow-400 text-green-900 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition">
-          Lihat Galeri Inovasi
-        </NuxtLink>
-        <NuxtLink to="/inkubasi" class="border-2 border-yellow-400 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-400 hover:text-green-900 transition">
-          Daftarkan Ide
-        </NuxtLink>
+
+      <!-- Floating Action Button -->
+      <button @click="showModal = true" class="absolute top-8 right-8 z-20 bg-gradient-to-r from-teal-500 to-teal-600 text-white px-8 py-4 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 pulse-ring">
+        <span class="flex items-center">
+          💡 Punya Ide Inovasi?
+        </span>
+      </button>
+
+      <!-- Modal Ide Inovasi -->
+      <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 relative animate-modal-in">
+          <button @click="showModal = false" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl transition-colors">&times;</button>
+          <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-gradient-to-r from-teal-500 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-2xl">💡</span>
+            </div>
+            <h2 class="text-2xl font-bold text-teal-700 mb-2">Daftarkan Ide Inovasi</h2>
+            <p class="text-gray-600">Wujudkan inovasi Anda bersama DINDA Cilegon</p>
+          </div>
+          <NuxtLink to="/inkubasi" class="w-full bg-gradient-to-r from-teal-500 to-teal-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-teal-600 hover:to-teal-700 transition-all duration-300 transform hover:scale-105 shadow-lg block text-center">
+            🚀 Mulai Inkubasi
+          </NuxtLink>
+        </div>
+      </div>
+
+      <!-- Main Hero Content -->
+      <div class="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-16">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
+          
+          <!-- Left Content -->
+          <div class="text-left">
+            <div class="inline-flex items-center bg-teal-100 text-teal-700 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+              🌟 Platform Inovasi Terdepan
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-black mb-6">
+              <span class="bg-gradient-to-r from-teal-600 via-teal-700 to-blue-600 bg-clip-text text-transparent">
+                DINDA CILEGON
+              </span>
+            </h1>
+            
+            <p class="text-xl md:text-2xl text-gray-700 mb-4 leading-relaxed">
+              <span class="font-semibold text-teal-700">Dashboard Inovasi Daerah Kota Cilegon</span>
+            </p>
+            
+            <p class="text-lg md:text-xl text-gray-600 mb-8 italic leading-relaxed">
+              Wahana Informasi & Akselerasi Inovasi Kota Cilegon
+            </p>
+
+            <!-- Feature Highlights -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+              <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
+                  <span class="text-teal-600">🎯</span>
+                </div>
+                <span class="text-gray-700 font-medium">Inkubasi Ide Inovatif</span>
+              </div>
+              <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <span class="text-blue-600">🤝</span>
+                </div>
+                <span class="text-gray-700 font-medium">Kolaborasi Lintas Sektor</span>
+              </div>
+              <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                  <span class="text-green-600">📊</span>
+                </div>
+                <span class="text-gray-700 font-medium">Dashboard Monitoring</span>
+              </div>
+              <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                  <span class="text-purple-600">🏆</span>
+                </div>
+                <span class="text-gray-700 font-medium">Kompetisi Inovasi</span>
+              </div>
+            </div>
+
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4">
+              <NuxtLink to="/galeri" class="bg-gradient-to-r from-teal-500 to-teal-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:from-teal-600 hover:to-teal-700 transition-all duration-300 transform hover:scale-105 shadow-lg text-center">
+                🖼️ Jelajahi Galeri Inovasi
+              </NuxtLink>
+              <NuxtLink to="/inkubasi" class="border-2 border-teal-500 text-teal-700 px-8 py-4 rounded-xl font-bold text-lg hover:bg-teal-500 hover:text-white transition-all duration-300 transform hover:scale-105 shadow-lg text-center">
+                🚀 Daftarkan Ide Anda
+              </NuxtLink>
+            </div>
+          </div>
+
+          <!-- Right Visual Content -->
+          <div class="relative">
+            <!-- Stats Cards Floating -->
+            <div class="grid grid-cols-2 gap-4 mb-8">
+              <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                <div class="text-3xl font-black text-teal-600 mb-2">12.8K+</div>
+                <div class="text-sm text-gray-600">💡 Ide Inovasi</div>
+              </div>
+              <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                <div class="text-3xl font-black text-blue-600 mb-2">120</div>
+                <div class="text-sm text-gray-600">🏛️ Daerah Terlibat</div>
+              </div>
+              <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                <div class="text-3xl font-black text-green-600 mb-2">500+</div>
+                <div class="text-sm text-gray-600">👥 Inovator Aktif</div>
+              </div>
+              <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                <div class="text-3xl font-black text-purple-600 mb-2">200+</div>
+                <div class="text-sm text-gray-600">🎯 Program Inkubasi</div>
+              </div>
+            </div>
+
+            <!-- Innovation Showcase -->
+            <div class="bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-white/30">
+              <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">🌟 Inovasi Unggulan</h3>
+              <div class="space-y-4">
+                <div class="flex items-center space-x-4 p-4 bg-teal-50 rounded-xl">
+                  <div class="w-12 h-12 bg-teal-500 rounded-full flex items-center justify-center text-white text-xl">🌱</div>
+                  <div>
+                    <div class="font-semibold text-gray-800">Smart Agriculture</div>
+                    <div class="text-sm text-gray-600">Teknologi pertanian berkelanjutan</div>
+                  </div>
+                </div>
+                <div class="flex items-center space-x-4 p-4 bg-blue-50 rounded-xl">
+                  <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white text-xl">📱</div>
+                  <div>
+                    <div class="font-semibold text-gray-800">Digital Government</div>
+                    <div class="text-sm text-gray-600">Platform layanan publik digital</div>
+                  </div>
+                </div>
+                <div class="flex items-center space-x-4 p-4 bg-green-50 rounded-xl">
+                  <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white text-xl">⚡</div>
+                  <div>
+                    <div class="font-semibold text-gray-800">Clean Energy</div>
+                    <div class="text-sm text-gray-600">Solusi energi terbarukan</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Wave -->
+      <div class="absolute bottom-0 left-0 right-0">
+        <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block w-full h-16 fill-teal-50">
+          <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"></path>
+        </svg>
       </div>
     </section>
 
@@ -217,5 +344,59 @@ onMounted(() => {
 </script>
 
 <style>
-/* CSS di sini */
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 20px rgba(20, 184, 166, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(20, 184, 166, 0);
+  }
+}
+
+.animate-modal-in {
+  animation: modal-in 0.3s ease-out;
+}
+
+.pulse-ring {
+  animation: pulse-ring 2s infinite;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom gradient text */
+.bg-clip-text {
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+/* Glass morphism effects */
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
+}
+
+/* Hover animations for cards */
+.hover\:shadow-2xl:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.hover\:-translate-y-2:hover {
+  transform: translateY(-8px);
+}
 </style>

@@ -1,51 +1,59 @@
 <template>
   <nav class="text-white shadow-lg border-b-2 border-gray-400 h-20 md:h-24 flex items-center" style="background: linear-gradient(to right, #20B2AA, #20B2AA);">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-      <div class="flex items-center justify-between h-full">
+    <div class="w-full px-0">
+      <div class="flex items-center justify-between h-full pl-1 pr-4 sm:pl-2 sm:pr-6 lg:pl-3 lg:pr-8">
         <!-- Logo dan Text di pojok kiri -->
         <div class="flex items-center flex-shrink-0">
           <!-- Logo Banten, Kota Cilegon & Berakhlak -->
-          <div class="flex items-center space-x-2 mr-8">
+          <div class="flex items-center space-x-2 mr-2">
             <img src="/banten.png" alt="Logo Banten" class="w-12 h-12 object-contain" />
             <img src="https://cilegon.go.id/assets/images/logokotacilegon.png" alt="Logo Kota Cilegon" class="w-12 h-12 object-contain" />
-            <img src="/berakhlak.png" alt="Logo Berakhlak" class="w-16 h-12 object-contain" />
+            <div class="bg-white/10 backdrop-blur-sm rounded-lg p-1.5 border border-white/20">
+              <img src="/berakhlak.png" alt="Logo Berakhlak" class="w-18 h-14 object-contain" />
+            </div>
           </div>
           <!-- Text Logo -->
-          <div>
+          <div class="bg-white/5 backdrop-blur-sm rounded-xl p-3 border border-white/10">
             <div class="flex items-center">
-              <span class="text-xl md:text-2xl font-bold text-gray-100" style="text-shadow: 1px 1px 2px rgba(128, 128, 128, 0.8), -1px -1px 2px rgba(128, 128, 128, 0.3);">
+              <span class="text-xl md:text-3xl font-extrabold text-white tracking-wide" 
+                    style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 1px 1px 2px rgba(255, 255, 255, 0.3); 
+                           background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 50%, #ffffff 100%); 
+                           background-clip: text; 
+                           -webkit-background-clip: text;">
                 DINDA CILEGON
               </span>
             </div>
-            <p class="text-xs md:text-sm text-gray-200 hidden lg:block" style="text-shadow: 1px 1px 1px rgba(128, 128, 128, 0.6);">
+            <p class="text-sm md:text-base text-white font-semibold hidden lg:block mt-1" 
+               style="text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4), 0px 0px 4px rgba(255, 255, 255, 0.2);">
               ( Dashboard Inovasi Daerah Kota Cilegon )
             </p>
-            <p class="text-xs text-gray-300 italic hidden lg:block" style="text-shadow: 1px 1px 1px rgba(128, 128, 128, 0.5);">
+            <p class="text-xs md:text-sm text-blue-100 italic hidden lg:block font-medium" 
+               style="text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3), 0px 0px 3px rgba(173, 216, 230, 0.5);">
               Wahana Informasi & Akselerasi Inovasi Kota Cilegon
             </p>
           </div>
         </div>
         
         <!-- Menu & Login di tengah-kanan -->
-        <div class="flex items-center space-x-8 ml-auto">
+        <div class="flex items-center space-x-10 ml-auto">
           <!-- Menu Desktop & Tablet -->
-          <div class="hidden md:flex items-center space-x-6">
-            <NuxtLink to="/" class="text-white font-medium hover:text-gray-200 transition-colors duration-200 px-3 py-2 rounded-md hover:bg-white/10 nav-text-outline">
+          <div class="hidden md:flex items-center space-x-8">
+            <NuxtLink to="/" class="nav-link">
               Home
             </NuxtLink>
-            <NuxtLink to="/galeri" class="text-white font-medium hover:text-gray-200 transition-colors duration-200 px-3 py-2 rounded-md hover:bg-white/10 nav-text-outline">
+            <NuxtLink to="/galeri" class="nav-link">
               Galeri
             </NuxtLink>
-            <NuxtLink to="/dashboard" class="text-white font-medium hover:text-gray-200 transition-colors duration-200 px-3 py-2 rounded-md hover:bg-white/10 nav-text-outline">
+            <NuxtLink to="/dashboard" class="nav-link">
               Dashboard
             </NuxtLink>
-            <NuxtLink to="/inkubasi" class="text-white font-medium hover:text-gray-200 transition-colors duration-200 px-3 py-2 rounded-md hover:bg-white/10 nav-text-outline">
+            <NuxtLink to="/inkubasi" class="nav-link">
               Inkubasi
             </NuxtLink>
-            <NuxtLink to="/forum" class="text-white font-medium hover:text-gray-200 transition-colors duration-200 px-3 py-2 rounded-md hover:bg-white/10 nav-text-outline">
+            <NuxtLink to="/forum" class="nav-link">
               Forum
             </NuxtLink>
-            <NuxtLink to="/lomba" class="text-white font-medium hover:text-gray-200 transition-colors duration-200 px-3 py-2 rounded-md hover:bg-white/10 nav-text-outline">
+            <NuxtLink to="/lomba" class="nav-link">
               Lomba
             </NuxtLink>
           </div>
@@ -205,6 +213,15 @@ const handleLogin = () => {
   }
 }
 
+@keyframes underlineSlide {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
 .animate-fade-in {
   animation: fade-in 0.3s ease-out;
 }
@@ -218,5 +235,78 @@ const handleLogin = () => {
                -1px -1px 1px rgba(128, 128, 128, 0.3),
                1px -1px 1px rgba(128, 128, 128, 0.3),
                -1px 1px 1px rgba(128, 128, 128, 0.3);
+}
+
+/* Enhanced Navigation Link Styles */
+.nav-link {
+  color: white;
+  font-weight: 500;
+  padding: 12px 24px;
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  display: inline-block;
+  text-shadow: 1px 1px 1px rgba(128, 128, 128, 0.7), 
+               -1px -1px 1px rgba(128, 128, 128, 0.3),
+               1px -1px 1px rgba(128, 128, 128, 0.3),
+               -1px 1px 1px rgba(128, 128, 128, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Background fade effect */
+.nav-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 6px;
+}
+
+/* Underline animation */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.8));
+  transform: translateX(-50%);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 1px;
+}
+
+/* Hover effects */
+.nav-link:hover {
+  color: rgba(255, 255, 255, 0.95);
+  transform: translateY(-1px);
+}
+
+.nav-link:hover::before {
+  opacity: 1;
+}
+
+.nav-link:hover::after {
+  width: calc(100% - 24px);
+}
+
+/* Active state */
+.nav-link.router-link-active {
+  color: rgba(255, 255, 255, 1);
+}
+
+.nav-link.router-link-active::before {
+  opacity: 0.15;
+}
+
+.nav-link.router-link-active::after {
+  width: calc(100% - 24px);
+  background: rgba(255, 255, 255, 0.9);
 }
 </style>
