@@ -44,9 +44,6 @@
             <NuxtLink to="/galeri" class="nav-link">
               Galeri
             </NuxtLink>
-            <NuxtLink to="/dashboard" class="nav-link">
-              Dashboard
-            </NuxtLink>
             <NuxtLink to="/inkubasi" class="nav-link">
               Inkubasi
             </NuxtLink>
@@ -87,10 +84,7 @@
         🏠 Home
       </NuxtLink>
       <NuxtLink to="/galeri" @click="isOpen = false" class="block py-3 px-4 rounded-lg text-white font-medium hover:text-gray-200 transition-all duration-200 hover-tosca nav-text-outline">
-        🖼️ Galeri
-      </NuxtLink>
-      <NuxtLink to="/dashboard" @click="isOpen = false" class="block py-3 px-4 rounded-lg text-white font-medium hover:text-gray-200 transition-all duration-200 hover-tosca nav-text-outline">
-        📊 Dashboard
+        🎨 Galeri
       </NuxtLink>
       <NuxtLink to="/inkubasi" @click="isOpen = false" class="block py-3 px-4 rounded-lg text-white font-medium hover:text-gray-200 transition-all duration-200 hover-tosca nav-text-outline">
         🚀 Inkubasi
