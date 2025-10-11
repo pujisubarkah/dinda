@@ -197,7 +197,7 @@
 
    
 
-    <!-- Statistik & Chart -->
+    <!-- Statistik & Peta Inovasi -->
     <section class="py-12 bg-green-50">
       <div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center mb-10">
         <div class="p-6 bg-white rounded-xl shadow border-2 border-yellow-400">
@@ -217,15 +217,10 @@
           <p class="text-sm text-gray-600">Program Inkubasi</p>
         </div>
       </div>
-      <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div class="bg-white rounded-xl shadow border border-yellow-300 p-6 flex flex-col items-center">
-          <h3 class="font-semibold text-green-700 mb-4">Distribusi Kategori</h3>
-          <div style="height:250px;width:100%;" ref="pieChart"></div>
-        </div>
-        <div class="bg-white rounded-xl shadow border border-yellow-300 p-6 flex flex-col items-center">
-          <h3 class="font-semibold text-green-700 mb-4">Jumlah Inovasi per Daerah</h3>
-          <div style="height:250px;width:100%;" ref="barChart"></div>
-        </div>
+      
+      <!-- Peta Inovasi Component -->
+      <div class="max-w-7xl mx-auto">
+        <PetaInovasi />
       </div>
     </section>
 
@@ -270,9 +265,8 @@
 </template>
 
 <script setup>
-
-import * as echarts from 'echarts'
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
+import PetaInovasi from '~/components/PetaInovasi.vue'
 
 // Set page title and meta
 useHead({
@@ -286,61 +280,6 @@ useHead({
 })
 
 const showModal = ref(false)
-const pieChart = ref(null)
-const barChart = ref(null)
-
-const pieOptions = {
-  title: { show: false },
-  tooltip: { trigger: 'item' },
-  legend: { orient: 'vertical', left: 'left' },
-  series: [
-    {
-      name: 'Kategori',
-      type: 'pie',
-      radius: '60%',
-      data: [
-        { value: 40, name: 'Teknologi' },
-        { value: 30, name: 'Digital' },
-        { value: 20, name: 'Lingkungan' },
-        { value: 10, name: 'Infrastruktur' }
-      ],
-      itemStyle: {
-        color: function(params) {
-          const colors = ['#22c55e', '#15803d', '#65a30d', '#84cc16'];
-          return colors[params.dataIndex];
-        }
-      }
-    }
-  ]
-};
-
-const barOptions = {
-  tooltip: {},
-  xAxis: {
-    type: 'category',
-    data: ['Cilegon', 'Anyer', 'Merak', 'Pulomerak', 'Grogol'],
-    axisLabel: { color: '#15803d' }
-  },
-  yAxis: { type: 'value', axisLabel: { color: '#15803d' } },
-  series: [{
-    name: 'Jumlah Inovasi',
-    type: 'bar',
-    data: [20, 15, 25, 10, 30],
-    itemStyle: { color: '#16a34a' }
-  }]
-};
-
-onMounted(() => {
-  if (pieChart.value) {
-    const pieChartInstance = echarts.init(pieChart.value);
-    pieChartInstance.setOption(pieOptions);
-  }
-  
-  if (barChart.value) {
-    const barChartInstance = echarts.init(barChart.value);
-    barChartInstance.setOption(barOptions);
-  }
-})
 </script>
 
 <style>
