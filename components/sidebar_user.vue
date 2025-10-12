@@ -10,12 +10,21 @@
         <span class="group-hover:font-bold">Dashboard</span>
       </NuxtLink>
       
+
       <!-- Usulan Inovasi Menu -->
       <NuxtLink to="/user/usulan-inovasi" class="group flex items-center gap-3 px-4 py-3 rounded-lg font-semibold hover:bg-gradient-to-r hover:from-yellow-400 hover:to-yellow-500 hover:text-green-900 transition-all duration-300 transform hover:scale-105">
         <div class="w-8 h-8 bg-blue-400 rounded-lg flex items-center justify-center text-white group-hover:bg-white group-hover:text-blue-600 transition-colors">
-          <span class="text-lg">�</span>
+          <span class="text-lg">💡</span>
         </div>
         <span class="group-hover:font-bold">Usulan Inovasi</span>
+      </NuxtLink>
+
+      <!-- Rencana Aksi Menu -->
+      <NuxtLink to="/user/rencana-aksi" class="group flex items-center gap-3 px-4 py-3 rounded-lg font-semibold hover:bg-gradient-to-r hover:from-yellow-400 hover:to-yellow-500 hover:text-green-900 transition-all duration-300 transform hover:scale-105">
+        <div class="w-8 h-8 bg-green-400 rounded-lg flex items-center justify-center text-white group-hover:bg-white group-hover:text-green-600 transition-colors">
+          <span class="text-lg">📝</span>
+        </div>
+        <span class="group-hover:font-bold">Rencana Aksi</span>
       </NuxtLink>
       
       <!-- Status Usulan Menu -->
