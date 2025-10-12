@@ -1,15 +1,19 @@
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+* {
+  font-family: 'Poppins', sans-serif;
+}
+</style>
 <template>
   <div class="min-h-screen bg-gray-50">
-    <!-- Sidebar - Fixed Position -->
-    <Sidebar />
-    
-    <!-- Main Content Area with Left Margin -->
-    <div class="ml-64">
-      <!-- Header -->
-      <Header />
-      
+    <!-- Header - Full Width -->
+    <Header />
+    <!-- Content Area with Sidebar and Main -->
+    <div class="flex">
+      <!-- Sidebar -->
+      <Sidebar />
       <!-- Main Content -->
-      <main class="p-6">
+      <main class="flex-1 p-6">
         <NuxtPage />
       </main>
     </div>

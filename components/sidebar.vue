@@ -1,5 +1,5 @@
 <template>
-  <aside class="fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-green-700 via-green-800 to-green-900 shadow-xl flex flex-col text-white z-40">
+  <aside class="h-screen w-64 bg-gradient-to-b from-green-700 via-green-800 to-green-900 shadow-xl flex flex-col text-white">
     <!-- Menu List -->
     <nav class="flex-1 py-6 px-4 space-y-3">
       
