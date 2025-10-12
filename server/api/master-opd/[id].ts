@@ -76,7 +76,7 @@ export default defineEventHandler(async (event) => {
       }
 
       // Validation
-      if (!body.namaOpd) {
+      if (!body.nama_opd) {
         throw createError({
           statusCode: 400,
           statusMessage: 'Nama OPD is required'
@@ -86,8 +86,8 @@ export default defineEventHandler(async (event) => {
       const updatedOpd = await db
         .update(opdInDinda)
         .set({
-          namaOpd: body.namaOpd,
-          kepalaDinas: body.kepalaDinas !== undefined ? body.kepalaDinas : existingOpd[0].kepalaDinas
+          namaOpd: body.nama_opd,
+          kepalaDinas: body.kode_opd || existingOpd[0].kepalaDinas
         })
         .where(eq(opdInDinda.id, opdId))
         .returning()

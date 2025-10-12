@@ -56,17 +56,41 @@
           </div>
           
           <!-- User/Profile -->
-          <div class="hidden md:flex items-center">
-            <button @click="showLoginModal = true" class="bg-gray-100 px-6 py-2.5 rounded-lg font-semibold hover:bg-gray-200 hover:shadow-lg transition-all duration-200 transform hover:scale-105" style="color: #20B2AA;">
-              Login
-            </button>
+          <div class="hidden md:flex items-center space-x-4">
+            <div v-if="!isLoggedIn">
+              <button @click="showLoginModal = true" class="bg-gray-100 px-6 py-2.5 rounded-lg font-semibold hover:bg-gray-200 hover:shadow-lg transition-all duration-200 transform hover:scale-105" style="color: #20B2AA;">
+                Login
+              </button>
+            </div>
+            <div v-else class="flex items-center space-x-4">
+              <!-- Admin Menu -->
+              <NuxtLink v-if="currentUser?.role === 'admin'" to="/admin" class="nav-link-admin">
+                Admin
+              </NuxtLink>
+              <!-- User Info -->
+              <div class="flex items-center space-x-3">
+                <div class="text-right">
+                  <p class="text-sm font-medium text-white">{{ currentUser?.name }}</p>
+                  <p class="text-xs text-blue-100">{{ currentUser?.role }} - {{ currentUser?.opd }}</p>
+                </div>
+                <button @click="handleNavbarLogout" class="bg-red-100 text-red-700 px-4 py-2 rounded-lg font-semibold hover:bg-red-200 transition-colors">
+                  Logout
+                </button>
+              </div>
+            </div>
           </div>
           
           <!-- Mobile Menu - Hanya untuk HP kecil -->
           <div class="md:hidden flex items-center">
-            <button @click="showLoginModal = true" class="bg-gray-100 px-4 py-2 rounded-lg font-semibold hover:bg-gray-200 transition-all duration-200 mr-3" style="color: #20B2AA;">
+            <button v-if="!isLoggedIn" @click="showLoginModal = true" class="bg-gray-100 px-4 py-2 rounded-lg font-semibold hover:bg-gray-200 transition-all duration-200 mr-3" style="color: #20B2AA;">
               Login
             </button>
+            <div v-else class="flex items-center space-x-2 mr-3">
+              <span class="text-white text-sm">{{ currentUser?.name }}</span>
+              <button @click="handleNavbarLogout" class="bg-red-100 text-red-700 px-3 py-1 rounded text-sm">
+                Logout
+              </button>
+            </div>
             <button @click="isOpen = !isOpen" class="focus:outline-none text-gray-200 p-2 rounded-md hover:bg-white/10 transition-colors duration-200">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -94,6 +118,9 @@
       </NuxtLink>
       <NuxtLink to="/lomba" @click="isOpen = false" class="block py-3 px-4 rounded-lg text-white font-medium hover:text-gray-200 transition-all duration-200 hover-tosca nav-text-outline">
         🏆 Lomba
+      </NuxtLink>
+      <NuxtLink v-if="currentUser?.role === 'admin'" to="/admin" @click="isOpen = false" class="block py-3 px-4 rounded-lg text-white font-medium hover:text-gray-200 transition-all duration-200 hover-tosca nav-text-outline">
+        ⚙️ Admin Dashboard
       </NuxtLink>
     </div>
 
@@ -125,7 +152,7 @@
               v-model="loginForm.email" 
               type="email" 
               required
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all bg-white text-gray-900"
               placeholder="Masukkan email atau username"
             />
           </div>
@@ -136,7 +163,7 @@
               v-model="loginForm.password" 
               type="password" 
               required
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all bg-white text-gray-900"
               placeholder="Masukkan password"
             />
           </div>
@@ -151,9 +178,11 @@
 
           <button 
             type="submit" 
-            class="w-full bg-gradient-to-r from-teal-600 to-teal-700 text-white py-3 px-4 rounded-lg font-semibold hover:from-teal-700 hover:to-teal-800 transition-all duration-200 transform hover:scale-105 shadow-lg"
+            :disabled="isLoginLoading"
+            class="w-full bg-gradient-to-r from-teal-600 to-teal-700 text-white py-3 px-4 rounded-lg font-semibold hover:from-teal-700 hover:to-teal-800 transition-all duration-200 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
           >
-            Masuk
+            <span v-if="isLoginLoading">Masuk...</span>
+            <span v-else>Masuk</span>
           </button>
         </form>
 
@@ -196,7 +225,7 @@
                 v-model="registerForm.username"
                 type="text"
                 required
-                class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors text-sm"
+                class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors text-sm bg-white text-gray-900"
                 placeholder="Contoh: puji.diskominfo"
               />
             </div>
@@ -208,7 +237,7 @@
                 v-model="registerForm.name"
                 type="text"
                 required
-                class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors text-sm"
+                class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors text-sm bg-white text-gray-900"
                 placeholder="Masukkan nama lengkap"
               />
             </div>
@@ -219,7 +248,7 @@
               <input
                 v-model="registerForm.email"
                 type="email"
-                class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors text-sm"
+                class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors text-sm bg-white text-gray-900"
                 placeholder="nama@cilegon.go.id"
               />
             </div>
@@ -261,7 +290,7 @@
               <input
                 v-model="registerForm.position"
                 type="text"
-                class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors text-sm"
+                class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors text-sm bg-white text-gray-900"
                 placeholder="Contoh: Staff IT, Kabid Inovasi"
               />
             </div>
@@ -274,7 +303,7 @@
                   v-model="registerForm.password"
                   :type="showRegisterPassword ? 'text' : 'password'"
                   required
-                  class="w-full px-3 py-2.5 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors text-sm"
+                  class="w-full px-3 py-2.5 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors text-sm bg-white text-gray-900"
                   placeholder="Minimal 8 karakter"
                 />
                 <button
@@ -300,7 +329,7 @@
                 v-model="registerForm.confirmPassword"
                 type="password"
                 required
-                class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors text-sm"
+                class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors text-sm bg-white text-gray-900"
                 placeholder="Ulangi password"
               />
             </div>
@@ -343,6 +372,11 @@ const showLoginModal = ref(false)
 const showRegisterModal = ref(false)
 const showRegisterPassword = ref(false)
 const isRegisterLoading = ref(false)
+const isLoginLoading = ref(false)
+
+// User state
+const currentUser = ref(null)
+const isLoggedIn = ref(false)
 
 const loginForm = ref({
   email: '',
@@ -404,17 +438,99 @@ const fallbackOpd = [
   { id: 5, namaOpd: 'Dinas Pekerjaan Umum dan Penataan Ruang' }
 ]
 
+// Check user login state
+const checkLoginState = () => {
+  try {
+    const token = localStorage.getItem('dinda_token')
+    const userData = localStorage.getItem('dinda_user')
+    
+    if (token && userData) {
+      currentUser.value = JSON.parse(userData)
+      isLoggedIn.value = true
+      console.log('✅ User logged in:', currentUser.value.name, 'Role:', currentUser.value.role)
+    } else {
+      currentUser.value = null
+      isLoggedIn.value = false
+    }
+  } catch (error) {
+    console.error('Error checking login state:', error)
+    currentUser.value = null
+    isLoggedIn.value = false
+  }
+}
+
+// Logout function
+const handleNavbarLogout = () => {
+  localStorage.removeItem('dinda_token')
+  localStorage.removeItem('dinda_user')
+  currentUser.value = null
+  isLoggedIn.value = false
+  navigateTo('/')
+}
+
 // Load fallback data if API fails
 onMounted(() => {
   console.log('🚀 Component mounted')
+  checkLoginState()
 })
 
-const handleLogin = () => {
-  // Simulasi login sementara
-  console.log('Login attempt:', loginForm.value)
-  alert('Login berhasil! (Demo)')
-  showLoginModal.value = false
-  loginForm.value = { email: '', password: '' }
+const handleLogin = async () => {
+  isLoginLoading.value = true
+  
+  try {
+    console.log('🔄 Login attempt:', loginForm.value.email)
+    
+    const response = await $fetch('/api/auth/login', {
+      method: 'POST',
+      body: {
+        username: loginForm.value.email, // Can be username or email
+        password: loginForm.value.password
+      }
+    })
+
+    console.log('✅ Login response:', response)
+
+    if (response.success) {
+      // Store token in localStorage (you might want to use a more secure method)
+      localStorage.setItem('dinda_token', response.data.token)
+      localStorage.setItem('dinda_user', JSON.stringify(response.data.user))
+
+      // Update component state
+      currentUser.value = response.data.user
+      isLoggedIn.value = true
+
+      alert(`Login berhasil! Selamat datang, ${response.data.user.name}`)
+      
+      // Close modal and reset form
+      showLoginModal.value = false
+      loginForm.value = { email: '', password: '' }
+
+      // Redirect based on user role
+      if (response.data.user.role === 'admin') {
+        await navigateTo('/admin')
+      } else if (response.data.user.role === 'user') {
+        // Regular users go to user dashboard
+        await navigateTo('/user')
+      } else {
+        // Default fallback
+        await navigateTo('/dashboard')
+      }
+    }
+  } catch (error) {
+    console.error('❌ Login error:', error)
+    
+    let errorMessage = 'Login gagal. Silakan coba lagi.'
+    
+    if (error.data?.statusMessage) {
+      errorMessage = error.data.statusMessage
+    } else if (error.statusMessage) {
+      errorMessage = error.statusMessage
+    }
+    
+    alert(errorMessage)
+  } finally {
+    isLoginLoading.value = false
+  }
 }
 
 const handleRegister = async () => {
@@ -437,26 +553,49 @@ const handleRegister = async () => {
   isRegisterLoading.value = true
 
   try {
-    // Simulasi API call
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    console.log('🔄 Register attempt:', registerForm.value.username)
     
-    console.log('Register attempt:', registerForm.value)
-    alert('Pendaftaran berhasil! Silakan tunggu verifikasi admin.')
-    
-    // Reset form dan tutup modal
-    showRegisterModal.value = false
-    registerForm.value = {
-      username: '',
-      name: '',
-      email: '',
-      opd: '',
-      position: '',
-      password: '',
-      confirmPassword: ''
+    const response = await $fetch('/api/auth/register', {
+      method: 'POST',
+      body: {
+        username: registerForm.value.username,
+        name: registerForm.value.name,
+        email: registerForm.value.email || null,
+        password: registerForm.value.password,
+        opd: registerForm.value.opd,
+        position: registerForm.value.position || null
+      }
+    })
+
+    console.log('✅ Register response:', response)
+
+    if (response.success) {
+      alert(`Pendaftaran berhasil! Akun ${registerForm.value.username} telah dibuat. Silakan tunggu verifikasi admin sebelum dapat login.`)
+      
+      // Reset form dan tutup modal
+      showRegisterModal.value = false
+      registerForm.value = {
+        username: '',
+        name: '',
+        email: '',
+        opd: '',
+        position: '',
+        password: '',
+        confirmPassword: ''
+      }
     }
   } catch (error) {
-    console.error('Register error:', error)
-    alert('Pendaftaran gagal. Silakan coba lagi.')
+    console.error('❌ Register error:', error)
+    
+    let errorMessage = 'Pendaftaran gagal. Silakan coba lagi.'
+    
+    if (error.data?.statusMessage) {
+      errorMessage = error.data.statusMessage
+    } else if (error.statusMessage) {
+      errorMessage = error.statusMessage
+    }
+    
+    alert(errorMessage)
   } finally {
     isRegisterLoading.value = false
   }
@@ -572,6 +711,27 @@ const handleRegister = async () => {
   background: rgba(255, 255, 255, 0.9);
 }
 
+/* Admin nav link styling */
+.nav-link-admin {
+  color: white;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.nav-link-admin:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 /* Dropdown styling */
 select option {
   color: #1F2937 !important;
@@ -596,5 +756,35 @@ select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+}
+
+/* Input styling - ensure text is always visible */
+input[type="text"],
+input[type="email"], 
+input[type="password"] {
+  color: #1F2937 !important;
+  background-color: #FFFFFF !important;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  color: #111827 !important;
+  background-color: #FFFFFF !important;
+}
+
+/* Placeholder styling */
+input::placeholder {
+  color: #9CA3AF !important;
+  opacity: 1 !important;
+}
+
+/* Ensure autocomplete doesn't override colors */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #1F2937 !important;
+  -webkit-box-shadow: 0 0 0px 1000px #FFFFFF inset !important;
+  background-color: #FFFFFF !important;
 }
 </style>

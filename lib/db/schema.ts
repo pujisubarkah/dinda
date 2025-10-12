@@ -1,3 +1,4 @@
+
 import { 
   pgTable, 
   pgSchema, 
@@ -82,6 +83,7 @@ export const kecamatanInDinda = dinda.table("kecamatan", {
   id: bigint({ mode: "number" }).primaryKey().notNull(),
   nama: varchar({ length: 255 }).notNull(),
   kode: varchar({ length: 20 }),
+  svgPath: text("svg_path"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 });
 
@@ -368,6 +370,22 @@ export const activityLogsInDinda = dinda.table("activity_logs", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 });
 
+// Ide Inovasi (Innovation Ideas)
+export const ideInovasiInDinda = dinda.table("ide_inovasi", {
+  id: serial().primaryKey(),
+  latarBelakang: text("latar_belakang"),
+  ideInovasi: text("ide_inovasi"),
+  stakeholderInovasi: text("stakeholder_inovasi"),
+  sumberDaya: text("sumber_daya"),
+  penerimaManfaat: text("penerima_manfaat"),
+  deskripsiSingkat: text("deskripsi_singkat"),
+  keterangan: text(),
+  kebaruan: text(),
+  createdBy: integer("created_by").references(() => usersInDinda.id),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
 // Notifications
 export const notificationsInDinda = dinda.table("notifications", {
   id: serial().primaryKey(),
@@ -381,4 +399,40 @@ export const notificationsInDinda = dinda.table("notifications", {
   isRead: boolean("is_read").default(false),
   readAt: timestamp("read_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+// Ide Inovasi Comments
+export const ideInovasiCommentsInDinda = dinda.table("ide_inovasi_comments", {
+  id: serial().primaryKey(),
+  ideInovasiId: integer("ide_inovasi_id").references(() => ideInovasiInDinda.id).notNull(),
+  userId: integer("user_id").references(() => usersInDinda.id).notNull(),
+  parentId: integer("parent_id"),
+  content: text().notNull(),
+  isApproved: boolean("is_approved").default(false),
+  likeCount: integer("like_count").default(0),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
+// Rencana Aksi
+export const rencanaAksiInDinda = dinda.table("rencana_aksi", {
+  id: serial().primaryKey(),
+  ideInovasiId: integer("ide_inovasi_id").notNull(),
+  judulAksi: varchar("judul_aksi", { length: 255 }).notNull(),
+  deskripsiAksi: text("deskripsi_aksi"),
+  jenisPeriode: varchar("jenis_periode", { length: 50 }),
+  periodeMulai: timestamp("periode_mulai", { mode: 'date' }),
+  periodeSelesai: timestamp("periode_selesai", { mode: 'date' }),
+  targetCapaian: text("target_capaian"),
+  indikatorKeberhasilan: text("indikator_keberhasilan"),
+  picPelaksana: varchar("pic_pelaksana", { length: 255 }),
+  anggaran: bigint("anggaran", { mode: "number" }),
+  status: varchar({ length: 50 }),
+  progressPercentage: integer("progress_percentage"),
+  catatanPelaksanaan: text("catatan_pelaksanaan"),
+  hambatan: text("hambatan"),
+  solusi: text("solusi"),
+  createdBy: integer("created_by"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });

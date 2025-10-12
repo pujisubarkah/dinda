@@ -57,7 +57,7 @@ export default defineEventHandler(async (event) => {
       const body = await readBody(event)
       
       // Validation
-      if (!body.namaOpd) {
+      if (!body.nama_opd) {
         throw createError({
           statusCode: 400,
           statusMessage: 'Nama OPD is required'
@@ -67,8 +67,8 @@ export default defineEventHandler(async (event) => {
       const newOpd = await db
         .insert(opdInDinda)
         .values({
-          namaOpd: body.namaOpd,
-          kepalaDinas: body.kepalaDinas || null
+          namaOpd: body.nama_opd,
+          kepalaDinas: body.kode_opd || null
         })
         .returning()
 

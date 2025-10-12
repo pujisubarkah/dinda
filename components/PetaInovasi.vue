@@ -33,7 +33,7 @@ onMounted(async () => {
       attribution: '© OpenStreetMap contributors'
     }).addTo(map)
     // Load GeoJSON
-    fetch('/geojson/kecamatan.geojson')
+    fetch('/geojson/kecamatan_polygon.geojson')
       .then(res => res.json())
       .then(geojson => {
         window.L.geoJSON(geojson, {
