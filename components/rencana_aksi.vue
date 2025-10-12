@@ -1,4 +1,3 @@
-
 <template>
 	<form @submit.prevent="handleSubmit" class="p-0 bg-gradient-to-br from-blue-50 to-teal-50 rounded-2xl shadow-2xl max-w-2xl mx-auto max-h-[90vh] overflow-y-auto border border-blue-100">
 		<!-- Header -->
@@ -46,17 +45,21 @@
 					<textarea v-model="form.indikatorKeberhasilan" class="textarea textarea-bordered w-full focus:ring-2 focus:ring-teal-400" rows="2" placeholder="Indikator keberhasilan rencana aksi..."></textarea>
 				</div>
 				<div>
+					<label class="block font-semibold mb-1">PIC Pelaksana</label>
+					<input v-model="form.picPelaksana" type="text" class="input input-bordered w-full focus:ring-2 focus:ring-teal-400" placeholder="Nama PIC pelaksana..." />
+				</div>
+				<div>
 					<label class="block font-semibold mb-1">Anggaran</label>
 					<input v-model.number="form.anggaran" type="number" class="input input-bordered w-full focus:ring-2 focus:ring-teal-400" min="0" placeholder="Rp" />
 				</div>
 						<div>
-							<label class="block font-semibold mb-1">Status</label>
-							<select v-model="form.status" class="input input-bordered w-full focus:ring-2 focus:ring-teal-400">
-								<option value="">Pilih Status</option>
-								<option value="Tahap Persiapan">Tahap Persiapan</option>
-								<option value="Tahapan Pelaksanaan">Tahapan Pelaksanaan</option>
-								<option value="Tahap Monitoring dan Evaluasi">Tahap Monitoring dan Evaluasi</option>
-							</select>
+							<label class="block font-semibold mb-1">Tahap</label>
+							<select v-model="form.tahap" class="input input-bordered w-full focus:ring-2 focus:ring-teal-400">
+  <option value="">Pilih Tahap</option>
+  <option value="Tahap Persiapan">Tahap Persiapan</option>
+  <option value="Tahap Pelaksanaan">Tahap Pelaksanaan</option>
+  <option value="Tahap Monitoring dan Evaluasi">Tahap Monitoring dan Evaluasi</option>
+</select>
 						</div>
 				<div>
 					<label class="block font-semibold mb-1">Progress (%)</label>
@@ -96,6 +99,7 @@ import { ref, onMounted, watch } from 'vue';
 
 // Terima PIC Pelaksana dan id ide inovasi dari parent
 const props = defineProps<{ picPelaksana: string; ideInovasiId: string | number }>();
+const emit = defineEmits(['close', 'submitted']);
 
 const form = ref({
 	ideInovasiId: props.ideInovasiId ?? undefined,
@@ -113,6 +117,7 @@ const form = ref({
 	catatanPelaksanaan: '',
 	hambatan: '',
 	solusi: '',
+	tahap: '',
 });
 const error = ref('');
 const success = ref('');
@@ -145,6 +150,7 @@ watch(() => props.ideInovasiId, (val) => {
 		catatanPelaksanaan: '',
 		hambatan: '',
 		solusi: '',
+		tahap: '',
 	};
 	error.value = '';
 	success.value = '';
@@ -157,18 +163,68 @@ async function handleSubmit() {
 		return;
 	}
 	try {
+		// Prepare payload with correct types and date formatting
+		const payload: Record<string, any> = { ...form.value };
+
+				// Ambil id user dari localStorage dan set ke createdBy (pasti setelah payload dibuat, sebelum submit)
+				try {
+					const userStr = localStorage.getItem('id');
+					if (userStr) {
+						const userObj = JSON.parse(userStr);
+						if (userObj && userObj.id) {
+							payload.createdBy = userObj.id;
+							console.log('Set createdBy:', payload.createdBy);
+						} else {
+							console.warn('User object tidak ada id:', userObj);
+						}
+					} else {
+						console.warn('localStorage user tidak ditemukan');
+					}
+				} catch (e) {
+					console.error('Gagal parsing localStorage user:', e);
+				}
+
+				// Pastikan periodeMulai dan periodeSelesai dikirim sebagai string ISO yyyy-mm-dd
+				if (payload.periodeMulai instanceof Date && !isNaN(payload.periodeMulai.getTime())) {
+					payload.periodeMulai = payload.periodeMulai.toISOString().slice(0, 10);
+				} else if (typeof payload.periodeMulai === 'string' && payload.periodeMulai.trim() !== '') {
+					// string sudah diinput dari input type="date", pastikan format yyyy-mm-dd
+					payload.periodeMulai = payload.periodeMulai.slice(0, 10);
+				} else {
+					delete payload.periodeMulai;
+				}
+
+				if (payload.periodeSelesai instanceof Date && !isNaN(payload.periodeSelesai.getTime())) {
+					payload.periodeSelesai = payload.periodeSelesai.toISOString().slice(0, 10);
+				} else if (typeof payload.periodeSelesai === 'string' && payload.periodeSelesai.trim() !== '') {
+					payload.periodeSelesai = payload.periodeSelesai.slice(0, 10);
+				} else {
+					delete payload.periodeSelesai;
+				}
+
+				// Log payload sebelum submit
+				console.log('Payload sebelum submit:', payload);
+
+
+		payload.anggaran = (payload.anggaran !== undefined && payload.anggaran !== null && payload.anggaran !== '' && !isNaN(Number(payload.anggaran))) ? Number(payload.anggaran) : undefined;
+		payload.progressPercentage = (payload.progressPercentage !== undefined && payload.progressPercentage !== null && payload.progressPercentage !== '' && !isNaN(Number(payload.progressPercentage))) ? Number(payload.progressPercentage) : undefined;
+		console.log('Payload yang dikirim:', payload);
 		const res = await $fetch('/api/rencana_aksi', {
 			method: 'POST',
-			body: form.value,
+			body: payload,
 		});
+		console.log('Response rencana_aksi:', res);
 		if (res.success) {
 			success.value = 'Rencana aksi berhasil disimpan';
+			alert('Rencana aksi berhasil disimpan!');
 			resetForm();
 		} else {
 			error.value = (res as any).error || (res as any).message || 'Gagal menyimpan rencana aksi';
+			console.error('API error:', res);
 		}
 	} catch (e: any) {
 		error.value = e?.data?.statusMessage || e.message || 'Gagal menyimpan rencana aksi';
+		console.error('Exception error:', e);
 	}
 }
 
@@ -190,6 +246,7 @@ function resetForm() {
 		catatanPelaksanaan: '',
 		hambatan: '',
 		solusi: '',
+		tahap: '',
 	};
 	error.value = '';
 	success.value = '';

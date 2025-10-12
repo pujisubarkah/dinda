@@ -120,73 +120,45 @@
         </div>
       </div>
 
-      <!-- Recent Discussions -->
+      <!-- Recent Discussions (Dynamic) -->
       <div class="mb-8">
         <div class="flex justify-between items-center mb-6">
           <h2 class="text-2xl font-bold text-gray-800">🔥 Diskusi Terpopuler</h2>
           <button class="text-teal-600 hover:text-teal-700 font-semibold">Lihat Semua →</button>
         </div>
-        
-        <div class="space-y-4">
-          <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
+        <div v-if="loading" class="text-center py-8 text-gray-500">Memuat diskusi...</div>
+        <div v-else-if="threads.length === 0" class="text-center py-8 text-gray-500">Belum ada diskusi.</div>
+        <div v-else class="space-y-4">
+          <div v-for="thread in threads" :key="thread.id" class="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
             <div class="flex items-start space-x-4">
               <div class="w-12 h-12 bg-gradient-to-r from-teal-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold">
-                DR
+                {{ thread.title.slice(0,2).toUpperCase() }}
               </div>
               <div class="flex-1">
                 <div class="flex items-center space-x-3 mb-2">
-                  <h3 class="font-bold text-gray-800">Implementasi Smart City di Cilegon</h3>
-                  <span class="bg-teal-100 text-teal-700 px-2 py-1 rounded-full text-xs font-semibold">💻 Teknologi Digital</span>
+                  <h3 class="font-bold text-gray-800">{{ thread.title }}</h3>
+                  <span class="bg-teal-100 text-teal-700 px-2 py-1 rounded-full text-xs font-semibold">Kategori #{{ thread.categoryId }}</span>
                 </div>
-                <p class="text-gray-700 mb-3">Bagaimana strategi terbaik untuk mengimplementasikan konsep smart city di Kota Cilegon? Mari diskusikan tantangan dan peluang yang ada...</p>
+                <p class="text-gray-700 mb-3 line-clamp-2">{{ thread.content }}</p>
                 <div class="flex items-center space-x-4 text-sm text-gray-500">
-                  <span>👤 Dr. Rudi Santoso</span>
-                  <span>💬 23 balasan</span>
-                  <span>👀 156 views</span>
-                  <span>⏰ 2 jam lalu</span>
+                  <span>👤 User #{{ thread.userId }}</span>
+                  <span>💬 {{ thread.posts.length }} balasan</span>
+                  <span>👀 {{ thread.viewCount }} views</span>
+                  <span>⏰ {{ new Date(thread.createdAt).toLocaleString('id-ID', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'short' }) }}</span>
                 </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
-            <div class="flex items-start space-x-4">
-              <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center text-white font-bold">
-                SA
-              </div>
-              <div class="flex-1">
-                <div class="flex items-center space-x-3 mb-2">
-                  <h3 class="font-bold text-gray-800">Program Bank Sampah Digital</h3>
-                  <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-semibold">🌱 Lingkungan Hidup</span>
+                <!-- Show up to 2 latest posts -->
+                <div v-if="thread.posts.length" class="mt-4 border-t pt-3 space-y-2">
+                  <div v-for="post in thread.posts.slice(0,2)" :key="post.id" class="bg-gray-50 border rounded p-2 text-sm">
+                    <p class="font-medium text-teal-700">User #{{ post.userId }}</p>
+                    <p>{{ post.content }}</p>
+                  </div>
                 </div>
-                <p class="text-gray-700 mb-3">Inisiatif bank sampah digital untuk mengurangi limbah dan meningkatkan ekonomi circular. Ada yang punya pengalaman serupa?</p>
-                <div class="flex items-center space-x-4 text-sm text-gray-500">
-                  <span>👤 Sari Amelia</span>
-                  <span>💬 18 balasan</span>
-                  <span>👀 89 views</span>
-                  <span>⏰ 4 jam lalu</span>
+                <!-- Reply form -->
+                <div v-if="userStore.id" class="mt-4 flex gap-2 items-center">
+                  <input v-model="replyInputs[thread.id]" type="text" placeholder="Tulis balasan..." class="flex-1 border rounded p-2 text-gray-800" />
+                  <button @click="submitReply(thread.id)" class="px-4 py-2 rounded bg-teal-500 text-white font-bold hover:bg-teal-700">Balas</button>
                 </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
-            <div class="flex items-start space-x-4">
-              <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
-                BP
-              </div>
-              <div class="flex-1">
-                <div class="flex items-center space-x-3 mb-2">
-                  <h3 class="font-bold text-gray-800">Pelatihan Digital Marketing untuk UMKM</h3>
-                  <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded-full text-xs font-semibold">🚀 Startup & UMKM</span>
-                </div>
-                <p class="text-gray-700 mb-3">Mencari mentor dan peserta untuk program pelatihan digital marketing bagi pelaku UMKM di Cilegon. Free dan bersertifikat!</p>
-                <div class="flex items-center space-x-4 text-sm text-gray-500">
-                  <span>👤 Budi Prasetyo</span>
-                  <span>💬 31 balasan</span>
-                  <span>👀 203 views</span>
-                  <span>⏰ 6 jam lalu</span>
-                </div>
+                <div v-else class="mt-4 text-sm text-red-500">Login untuk membalas diskusi.</div>
               </div>
             </div>
           </div>
@@ -198,12 +170,45 @@
         <h2 class="text-2xl font-bold mb-4">🚀 Mulai Diskusi Baru</h2>
         <p class="text-teal-100 mb-6">Punya ide, pertanyaan, atau ingin berbagi pengalaman? Bergabunglah dengan komunitas inovator!</p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <button class="bg-white text-teal-600 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105">
+          <button @click="showModal = true" class="bg-white text-teal-600 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105">
             ✍️ Buat Diskusi Baru
           </button>
           <button class="border-2 border-white text-white px-8 py-3 rounded-lg font-bold hover:bg-white hover:text-teal-600 transition-all duration-300 transform hover:scale-105">
             💡 Bagikan Ide Inovasi
           </button>
+        </div>
+
+        <!-- Modal Form Buat Diskusi Baru -->
+        <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div class="bg-white rounded-xl shadow-xl w-full max-w-lg p-8 relative animate-fadeIn">
+            <button @click="showModal = false" class="absolute top-3 right-3 text-gray-400 hover:text-teal-600 text-2xl font-bold">&times;</button>
+            <h3 class="text-xl font-bold mb-4 text-teal-700">Buat Diskusi Baru</h3>
+            <form @submit.prevent="submitThread">
+              <div class="mb-3">
+                <label class="block text-sm font-medium mb-1">Judul Diskusi</label>
+                <input v-model="newThread.title" type="text" class="w-full border rounded p-2 text-gray-800" required />
+              </div>
+              <div class="mb-3">
+                <label class="block text-sm font-medium mb-1">Kategori</label>
+                <select v-model="newThread.categoryId" class="w-full border rounded p-2 text-gray-800">
+                  <option value="1">Ide & Inovasi</option>
+                  <option value="2">Kebijakan Publik</option>
+                  <option value="3">Teknologi Digital</option>
+                  <option value="4">Lingkungan Hidup</option>
+                  <option value="5">Startup & UMKM</option>
+                  <option value="6">Pendidikan & Pelatihan</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="block text-sm font-medium mb-1">Isi Diskusi</label>
+                <textarea v-model="newThread.content" rows="4" class="w-full border rounded p-2 text-gray-800" required></textarea>
+              </div>
+              <div class="flex justify-end gap-2 mt-6">
+                <button type="button" @click="showModal = false" class="px-4 py-2 rounded bg-gray-100 text-gray-700 hover:bg-gray-200">Batal</button>
+                <button type="submit" class="px-4 py-2 rounded bg-teal-600 text-white font-bold hover:bg-teal-700">Posting</button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
@@ -211,6 +216,82 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
 import sidebar_forum from '~/components/sidebar_forum.vue'
-// ...existing code...
+import { useUserStore } from '~/stores/user'
+
+const threads = ref([])
+const loading = ref(false)
+const showModal = ref(false)
+const newThread = ref({ title: '', categoryId: 1, content: '' })
+const userStore = useUserStore()
+const replyInputs = ref({})
+const submitReply = async (threadId) => {
+  const content = replyInputs.value[threadId]
+  if (!content) return
+  await $fetch('/api/forum_posts', {
+    method: 'POST',
+    body: {
+      thread_id: threadId,
+      content,
+      user_id: userStore.id || 1
+    }
+  })
+  replyInputs.value[threadId] = ''
+  await fetchThreads()
+}
+
+const fetchThreads = async () => {
+  loading.value = true
+  const res = await $fetch('/api/forum_threads', { method: 'GET', query: { limit: 5 } })
+  if (res && res.success) {
+    const threadList = await Promise.all(res.data.map(async (thread) => {
+      // Ambil semua post tanpa filter is_approved, limit besar agar balasan baru langsung muncul
+      const postsRes = await $fetch('/api/forum_posts', {
+        method: 'GET',
+        query: { thread_id: thread.id, limit: 100 }
+      })
+      return {
+        ...thread,
+        posts: postsRes && postsRes.success ? postsRes.data : []
+      }
+    }))
+    threads.value = threadList
+  }
+  loading.value = false
+}
+
+const slugify = (text) => {
+  return text
+    .toString()
+    .toLowerCase()
+    .replace(/\s+/g, '-')           // Replace spaces with -
+    .replace(/[^\w\-]+/g, '')      // Remove all non-word chars
+    .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+    .replace(/^-+/, '')             // Trim - from start of text
+    .replace(/-+$/, '')             // Trim - from end of text
+}
+
+const submitThread = async () => {
+  if (!newThread.value.title || !newThread.value.content) return
+  const slug = slugify(newThread.value.title)
+  const res = await $fetch('/api/forum_threads', {
+    method: 'POST',
+    body: {
+      title: newThread.value.title,
+      slug,
+      content: newThread.value.content,
+      category_id: Number(newThread.value.categoryId),
+      user_id: userStore.id || 1
+    }
+  })
+  if (res && res.success) {
+    showModal.value = false
+    newThread.value = { title: '', categoryId: 1, content: '' }
+    await fetchThreads()
+  }
+}
+
+onMounted(fetchThreads)
 </script>
+// end script

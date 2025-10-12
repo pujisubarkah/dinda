@@ -1,5 +1,3 @@
-
-
 import { 
   pgTable, 
   pgSchema, 
@@ -21,6 +19,7 @@ import { sql } from "drizzle-orm"
 export const dinda = pgSchema("dinda");
 
 // Enums
+export const tahapEnum = pgEnum('tahap', ['Tahap Persiapan', 'Tahap Pelaksanaan', 'Tahap Monitoring dan Evaluasi']);
 export const statusEnum = pgEnum('status', ['draft', 'review', 'approved', 'rejected', 'published']);
 export const kategoriEnum = pgEnum('kategori', ['teknologi', 'digital', 'lingkungan', 'infrastruktur', 'pelayanan_publik', 'ekonomi']);
 export const roleEnum = pgEnum('role', ['admin', 'user', 'moderator', 'inovator']);
@@ -410,7 +409,7 @@ export const rencanaAksiInDinda = dinda.table("rencana_aksi", {
   indikatorKeberhasilan: text("indikator_keberhasilan"),
   picPelaksana: varchar("pic_pelaksana", { length: 255 }),
   anggaran: bigint("anggaran", { mode: "number" }),
-  status: varchar({ length: 50 }),
+  tahap: varchar("tahap", { length: 50 }),
   progressPercentage: integer("progress_percentage"),
   catatanPelaksanaan: text("catatan_pelaksanaan"),
   hambatan: text("hambatan"),

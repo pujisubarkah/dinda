@@ -69,6 +69,7 @@
 
 <script setup>
 import { ref } from 'vue'
+definePageMeta({ layout: 'user' })
 
 const profil = ref({
   nama: "Ahmad Hidayat",
