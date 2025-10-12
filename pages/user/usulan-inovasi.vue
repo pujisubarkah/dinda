@@ -34,25 +34,58 @@
             <thead class="bg-gray-100">
               <tr>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Judul</th>
-         
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi</th>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stakeholder</th>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Penerima Manfaat</th>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Diajukan</th>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
-        
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
               <tr v-for="usulan in usulanList" :key="usulan.id" class="hover:bg-gray-50">
                 <td class="px-4 py-3 font-semibold text-gray-900">{{ usulan.ideInovasi || 'Tanpa Judul' }}</td>
-
                 <td class="px-4 py-3 text-gray-600 line-clamp-2">{{ usulan.deskripsiSingkat || 'Tidak ada deskripsi' }}</td>
                 <td class="px-4 py-3">{{ usulan.stakeholderInovasi || '-' }}</td>
                 <td class="px-4 py-3">{{ usulan.penerimaManfaat || '-' }}</td>
                 <td class="px-4 py-3">{{ formatDate(usulan.createdAt) }}</td>
-                <td class="px-4 py-3 text-gray-600 line-clamp-2">{{ komentarMap[usulan.id] || '-' }}</td>
-               
+                <td class="px-4 py-3">
+                  <template v-if="komentarMap[usulan.id]">
+                    <div class="mb-1 text-gray-600 line-clamp-2">{{ komentarMap[usulan.id].content }}</div>
+                    <div v-if="komentarMap[usulan.id].isApproved === true" class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-700 mr-2">
+                      Disetujui
+                    </div>
+                    <div v-else class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-red-100 text-red-700 mr-2">
+                      Menunggu Review
+                    </div>
+                    <button v-if="komentarMap[usulan.id].isApproved === true" @click="openLanjutModal(usulan)" class="ml-2 px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded-md text-xs font-semibold transition-colors">
+                      LANJUT RENCANA AKSI
+                    </button>
+                  </template>
+                  <template v-else>
+                    <div class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-red-100 text-red-700">
+                      Menunggu Review
+                    </div>
+                  </template>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="flex items-center space-x-2">
+                    <button 
+                      @click="editUsulan(usulan)" 
+                      class="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                      title="Edit Usulan"
+                    >
+                      <Pencil class="w-4 h-4" />
+                    </button>
+                    <button 
+                      @click="deleteUsulan(usulan.id)" 
+                      class="p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                      title="Hapus Usulan"
+                    >
+                      <Trash2 class="w-4 h-4" />
+                    </button>
+                  </div>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -68,7 +101,7 @@
             </svg>
           </button>
           <div class="px-6 py-4 bg-gradient-to-r from-teal-500 to-blue-600 rounded-t-2xl">
-            <h2 class="text-xl font-semibold text-white">Form Usulan Inovasi</h2>
+            <h2 class="text-xl font-semibold text-white">{{ isEditing ? 'Edit Usulan Inovasi' : 'Form Usulan Inovasi' }}</h2>
           </div>
           <form @submit.prevent="submitForm" class="p-6 space-y-6">
             <div>
@@ -111,12 +144,29 @@
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Mengirim...
+                  {{ isEditing ? 'Mengupdate...' : 'Mengirim...' }}
                 </span>
-                <span v-else>Ajukan Usulan</span>
+                <span v-else>{{ isEditing ? 'Update Usulan' : 'Ajukan Usulan' }}</span>
               </button>
             </div>
           </form>
+        </div>
+      </div>
+
+      <!-- Modal Rencana Aksi -->
+      <div v-if="showLanjutModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 relative animate-fade-in max-h-[90vh] overflow-y-auto">
+          <button @click="closeLanjutModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors z-10">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+          <RencanaAksi
+            :picPelaksana="lanjutData?.picPelaksana || lanjutData?.pic_pelaksana"
+            :ideInovasiId="lanjutData?.id"
+            @close="closeLanjutModal"
+            @submitted="handleRencanaAksiSubmitted"
+          />
         </div>
       </div>
 
@@ -131,8 +181,8 @@
   </div>
 </template>
 
-
 <script setup>
+import RencanaAksi from '~/components/rencana_aksi.vue'
 const komentarMap = ref({})
 definePageMeta({ layout: 'user' })
 import { ref, onMounted } from 'vue'
@@ -141,8 +191,12 @@ import { Pencil, Trash2 } from 'lucide-vue-next'
 const toast = useToast()
 
 const showModal = ref(false)
+const showLanjutModal = ref(false)
+const lanjutData = ref(null)
 const loading = ref(true)
 const usulanList = ref([])
+const isEditing = ref(false)
+const editingId = ref(null)
 const form = ref({
   latarBelakang: '',
   ideInovasi: '',
@@ -153,6 +207,22 @@ const form = ref({
   keterangan: '',
   kebaruan: ''
 })
+
+const openLanjutModal = (row) => {
+  lanjutData.value = row
+  showLanjutModal.value = true
+}
+
+const closeLanjutModal = () => {
+  showLanjutModal.value = false
+  lanjutData.value = null
+}
+
+const handleRencanaAksiSubmitted = () => {
+  closeLanjutModal()
+  fetchUsulanData()
+  toast.success('Rencana aksi berhasil disimpan!')
+}
 const isSubmitting = ref(false)
 
 const fetchUsulanData = async () => {
@@ -170,7 +240,7 @@ const fetchUsulanData = async () => {
         try {
           const komentarRes = await $fetch(`/api/ide_inovasi_comments?ide_inovasi_id=${usulan.id}&limit=1`)
           if (komentarRes.success && komentarRes.data.length > 0) {
-            map[usulan.id] = komentarRes.data[0].content
+            map[usulan.id] = komentarRes.data[0]
           } else {
             map[usulan.id] = null
           }
@@ -207,33 +277,97 @@ const submitForm = async () => {
     const token = localStorage.getItem('dinda_token')
     const userRes = await $fetch('/api/auth/me', { headers: { 'Authorization': `Bearer ${token}` } })
     if (!userRes.success || !userRes.data?.user) throw new Error('User tidak ditemukan')
-    const response = await $fetch('/api/ide-inovasi', {
-      method: 'POST',
-      body: {
-        latar_belakang: form.value.latarBelakang,
-        ide_inovasi: form.value.ideInovasi,
-        stakeholder_inovasi: form.value.stakeholderInovasi,
-        sumber_daya: form.value.sumberDaya,
-        penerima_manfaat: form.value.penerimaManfaat,
-        deskripsi_singkat: form.value.deskripsiSingkat,
-        keterangan: form.value.keterangan,
-        kebaruan: form.value.kebaruan,
-        created_by: userRes.data.user.id
+    
+    if (isEditing.value && editingId.value) {
+      // Update existing usulan
+      const response = await $fetch(`/api/ide-inovasi/${editingId.value}`, {
+        method: 'PUT',
+        body: {
+          latar_belakang: form.value.latarBelakang,
+          ide_inovasi: form.value.ideInovasi,
+          stakeholder_inovasi: form.value.stakeholderInovasi,
+          sumber_daya: form.value.sumberDaya,
+          penerima_manfaat: form.value.penerimaManfaat,
+          deskripsi_singkat: form.value.deskripsiSingkat,
+          keterangan: form.value.keterangan,
+          kebaruan: form.value.kebaruan
+        }
+      })
+      if (response.success) {
+        toast.success('Usulan inovasi berhasil diupdate!')
+        showModal.value = false
+        resetForm()
+        await fetchUsulanData()
+      } else {
+        toast.error('Gagal mengupdate usulan inovasi')
       }
-    })
-    if (response.success) {
-      toast.success('Anda telah berhasil mengajukan ide inovasi!')
-      showModal.value = false
-      resetForm()
-      await fetchUsulanData()
     } else {
-      toast.error('Gagal mengajukan usulan inovasi')
+      // Create new usulan
+      const response = await $fetch('/api/ide-inovasi', {
+        method: 'POST',
+        body: {
+          latar_belakang: form.value.latarBelakang,
+          ide_inovasi: form.value.ideInovasi,
+          stakeholder_inovasi: form.value.stakeholderInovasi,
+          sumber_daya: form.value.sumberDaya,
+          penerima_manfaat: form.value.penerimaManfaat,
+          deskripsi_singkat: form.value.deskripsiSingkat,
+          keterangan: form.value.keterangan,
+          kebaruan: form.value.kebaruan,
+          created_by: userRes.data.user.id
+        }
+      })
+      if (response.success) {
+        toast.success('Anda telah berhasil mengajukan ide inovasi!')
+        showModal.value = false
+        resetForm()
+        await fetchUsulanData()
+      } else {
+        toast.error('Gagal mengajukan usulan inovasi')
+      }
     }
   } catch (error) {
     toast.error('Terjadi kesalahan saat mengajukan usulan')
     console.error(error)
   } finally {
     isSubmitting.value = false
+  }
+}
+
+const editUsulan = (usulan) => {
+  isEditing.value = true
+  editingId.value = usulan.id
+  form.value = {
+    latarBelakang: usulan.latarBelakang || '',
+    ideInovasi: usulan.ideInovasi || '',
+    stakeholderInovasi: usulan.stakeholderInovasi || '',
+    sumberDaya: usulan.sumberDaya || '',
+    penerimaManfaat: usulan.penerimaManfaat || '',
+    deskripsiSingkat: usulan.deskripsiSingkat || '',
+    keterangan: usulan.keterangan || '',
+    kebaruan: usulan.kebaruan || ''
+  }
+  showModal.value = true
+}
+
+const deleteUsulan = async (id) => {
+  if (!confirm('Apakah Anda yakin ingin menghapus usulan ini?')) {
+    return
+  }
+
+  try {
+    const response = await $fetch(`/api/ide-inovasi/${id}`, {
+      method: 'DELETE'
+    })
+    if (response.success) {
+      toast.success('Usulan inovasi berhasil dihapus!')
+      await fetchUsulanData()
+    } else {
+      toast.error('Gagal menghapus usulan inovasi')
+    }
+  } catch (error) {
+    toast.error('Terjadi kesalahan saat menghapus usulan')
+    console.error(error)
   }
 }
 
@@ -248,6 +382,8 @@ const resetForm = () => {
     keterangan: '',
     kebaruan: ''
   }
+  isEditing.value = false
+  editingId.value = null
 }
 
 const closeModal = () => {
@@ -318,5 +454,13 @@ const downloadPDF = async () => {
   to {
     transform: rotate(360deg);
   }
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 </style>
