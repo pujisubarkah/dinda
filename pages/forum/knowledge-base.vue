@@ -87,46 +87,78 @@
 import { ref } from 'vue'
 import SidebarForum from '~/components/sidebar_forum.vue'
 
+
+import { onMounted } from 'vue'
+import { useUserStore } from '~/stores/user'
+
 const newThread = ref({ title: '', category: 'OPD', content: '' })
 const newComment = ref('')
+const threads = ref([])
+const loading = ref(false)
 
-const threads = ref([
-  {
-    id: 1,
-    title: "Ide Aplikasi Sampah Digital",
-    category: "Masyarakat",
-    author: "Andi",
-    comments: [{ user: "Budi", text: "Ide bagus! Bisa kerjasama dengan DLH" }],
-  },
-  {
-    id: 2,
-    title: "Sistem Smart Parkir di Kota Cilegon",
-    category: "Startup",
-    author: "Siti",
-    comments: [],
-  },
-])
+// Fetch threads and their posts
+const fetchThreads = async () => {
+  loading.value = true
+  // Get threads
+  const res = await $fetch('/api/forum_threads', { method: 'GET' })
+  if (res && res.success) {
+    // For each thread, fetch its posts
+    const threadList = await Promise.all(res.data.map(async (thread) => {
+      const postsRes = await $fetch('/api/forum_posts', {
+        method: 'GET',
+        query: { thread_id: thread.id }
+      })
+      return {
+        ...thread,
+        comments: postsRes && postsRes.success ? postsRes.data : []
+      }
+    }))
+    threads.value = threadList
+  }
+  loading.value = false
+}
+
+onMounted(fetchThreads)
+
+
+// Ambil user store Pinia
+const userStore = useUserStore()
+const getUserId = () => userStore.id || 1
 
 // Tambah Thread Baru
-const addThread = () => {
+const addThread = async () => {
   if (newThread.value.title && newThread.value.content) {
-    threads.value.push({
-      id: threads.value.length + 1,
-      title: newThread.value.title,
-      category: newThread.value.category,
-      author: "Anonim",
-      comments: [],
+    const res = await $fetch('/api/forum_threads', {
+      method: 'POST',
+      body: {
+        title: newThread.value.title,
+        content: newThread.value.content,
+        category_id: 1, // TODO: map category name to id
+        user_id: getUserId()
+      }
     })
-    newThread.value = { title: '', category: 'OPD', content: '' }
+    if (res && res.success) {
+      await fetchThreads()
+      newThread.value = { title: '', category: 'OPD', content: '' }
+    }
   }
 }
 
 // Tambah Komentar ke Thread
-const addComment = (threadId) => {
-  const thread = threads.value.find((t) => t.id === threadId)
-  if (thread && newComment.value) {
-    thread.comments.push({ user: "Pengguna", text: newComment.value })
-    newComment.value = ''
+const addComment = async (threadId) => {
+  if (newComment.value) {
+    const res = await $fetch('/api/forum_posts', {
+      method: 'POST',
+      body: {
+        thread_id: threadId,
+        content: newComment.value,
+        user_id: getUserId()
+      }
+    })
+    if (res && res.success) {
+      await fetchThreads()
+      newComment.value = ''
+    }
   }
 }
 </script>

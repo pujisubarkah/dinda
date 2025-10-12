@@ -1,4 +1,5 @@
 
+
 import { 
   pgTable, 
   pgSchema, 
@@ -337,24 +338,6 @@ export const competitionSubmissionsInDinda = dinda.table("competition_submission
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });
 
-// Knowledge Base
-export const knowledgeBaseInDinda = dinda.table("knowledge_base", {
-  id: serial().primaryKey(),
-  uuid: uuid().defaultRandom().unique().notNull(),
-  title: varchar({ length: 255 }).notNull(),
-  slug: varchar({ length: 255 }).unique(),
-  content: text().notNull(),
-  excerpt: text(),
-  categoryId: integer("category_id").references(() => forumCategoriesInDinda.id),
-  authorId: integer("author_id").references(() => usersInDinda.id),
-  tags: text(),
-  viewCount: integer("view_count").default(0),
-  isPublished: boolean("is_published").default(false),
-  isFeatured: boolean("is_featured").default(false),
-  publishedAt: timestamp("published_at", { withTimezone: true }),
-  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
-});
 
 // Activity Logs
 export const activityLogsInDinda = dinda.table("activity_logs", {
@@ -433,6 +416,58 @@ export const rencanaAksiInDinda = dinda.table("rencana_aksi", {
   hambatan: text("hambatan"),
   solusi: text("solusi"),
   createdBy: integer("created_by"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
+// Forum Posts
+export const forumPostsInDinda = dinda.table("forum_posts", {
+  id: serial().primaryKey(),
+  threadId: integer("thread_id").notNull(),
+  userId: integer("user_id").references(() => usersInDinda.id).notNull(),
+  parentId: integer("parent_id"),
+  content: text().notNull(),
+  isApproved: boolean("is_approved").default(false),
+  likeCount: integer("like_count").default(0),
+  attachments: jsonb("attachments"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
+// Forum Threads
+export const forumThreadsInDinda = dinda.table("forum_threads", {
+  id: serial().primaryKey(),
+  title: varchar({ length: 255 }).notNull(),
+  slug: varchar({ length: 255 }).unique().notNull(),
+  content: text().notNull(),
+  categoryId: integer("category_id").notNull(),
+  userId: integer("user_id").references(() => usersInDinda.id).notNull(),
+  isPinned: boolean("is_pinned").default(false),
+  isLocked: boolean("is_locked").default(false),
+  isApproved: boolean("is_approved").default(false),
+  viewCount: integer("view_count").default(0),
+  replyCount: integer("reply_count").default(0),
+  likeCount: integer("like_count").default(0),
+  lastReplyAt: timestamp("last_reply_at", { withTimezone: true }),
+  lastReplyBy: integer("last_reply_by"),
+  tags: text(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
+// Forum Questions (Pertanyaan)
+export const forumQuestionsInDinda = dinda.table("forum_questions", {
+  id: serial().primaryKey(),
+  userId: integer("user_id").references(() => usersInDinda.id),
+  nama: varchar({ length: 255 }),
+  email: varchar({ length: 255 }),
+  noTelepon: varchar("no_telepon", { length: 50 }),
+  judul: varchar({ length: 255 }).notNull(),
+  kategori: varchar({ length: 100 }),
+  prioritas: varchar({ length: 50 }),
+  deskripsi: text().notNull(),
+  tipe: varchar({ length: 50 }),
+  status: varchar({ length: 50 }),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });

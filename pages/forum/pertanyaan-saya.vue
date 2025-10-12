@@ -41,44 +41,57 @@
                 <span>💡 Bantuan & Contoh</span>
               </button>
             </div>
-            <form class="space-y-8" @submit.prevent="handleSubmit">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="md:col-span-2">
-                  <label class="flex items-center gap-2 text-base font-bold mb-3 text-gray-800">
-                    <span>📝</span> Judul Pertanyaan
-                  </label>
-                  <input v-model="judul" type="text" placeholder="Masukkan judul pertanyaan yang jelas dan spesifik..." class="input input-bordered w-full rounded-xl text-base border-2 border-gray-200 focus:border-orange-400 bg-white/90 p-4 shadow-md transition-all duration-200" />
-                </div>
-                <div>
-                  <label class="flex items-center gap-2 text-base font-bold mb-3 text-gray-800">
-                    <span>🏷️</span> Kategori Pertanyaan <span class="text-red-500">*</span>
-                  </label>
-                  <select v-model="kategori" class="select select-bordered w-full rounded-xl text-base border-2 border-gray-200 focus:border-orange-400 bg-white/90 p-4 shadow-md">
-                    <option value="" disabled>Pilih kategori pertanyaan</option>
-                    <option value="inovasi">💡 Inovasi Daerah</option>
-                    <option value="teknis">⚙️ Teknis & IT</option>
-                    <option value="administrasi">📋 Administrasi</option>
-                    <option value="umum">💬 Umum</option>
-                  </select>
-                  <div class="text-sm text-gray-500 mt-2 font-medium">Kategori membantu tim memberikan jawaban yang tepat</div>
-                </div>
-                <div>
-                  <label class="flex items-center gap-2 text-base font-bold mb-3 text-gray-800">
-                    <span>🎯</span> Prioritas
-                  </label>
-                  <select v-model="prioritas" class="select select-bordered w-full rounded-xl text-base border-2 border-gray-200 focus:border-orange-400 bg-white/90 p-4 shadow-md">
-                    <option value="rendah">🟢 Rendah</option>
-                    <option value="sedang" selected>🟡 Sedang</option>
-                    <option value="tinggi">🔴 Tinggi</option>
-                  </select>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="flex items-center gap-2 text-base font-bold mb-3 text-gray-800">
+                  <span>👤</span> Nama
+                </label>
+                <input v-model="nama" type="text" placeholder="Nama Anda" class="input input-bordered w-full rounded-xl text-base border-2 border-gray-200 focus:border-orange-400 bg-white/90 p-4 shadow-md transition-all duration-200" />
               </div>
+              <div>
+                <label class="flex items-center gap-2 text-base font-bold mb-3 text-gray-800">
+                  <span>✉️</span> Email
+                </label>
+                <input v-model="email" type="email" placeholder="Email aktif" class="input input-bordered w-full rounded-xl text-base border-2 border-gray-200 focus:border-orange-400 bg-white/90 p-4 shadow-md transition-all duration-200" />
+              </div>
+              <div class="md:col-span-2">
+                <label class="flex items-center gap-2 text-base font-bold mb-3 text-gray-800">
+                  <span>📝</span> Judul Pertanyaan
+                </label>
+                <input v-model="judul" type="text" placeholder="Masukkan judul pertanyaan yang jelas dan spesifik..." class="input input-bordered w-full rounded-xl text-base border-2 border-gray-200 focus:border-orange-400 bg-white/90 p-4 shadow-md transition-all duration-200" />
+              </div>
+              <div>
+                <label class="flex items-center gap-2 text-base font-bold mb-3 text-gray-800">
+                  <span>🏷️</span> Kategori Pertanyaan <span class="text-red-500">*</span>
+                </label>
+                <select v-model="kategori" class="select select-bordered w-full rounded-xl text-base border-2 border-gray-200 focus:border-orange-400 bg-white/90 p-4 shadow-md">
+                  <option value="" disabled>Pilih kategori pertanyaan</option>
+                  <option value="inovasi">💡 Inovasi Daerah</option>
+                  <option value="teknis">⚙️ Teknis & IT</option>
+                  <option value="administrasi">📋 Administrasi</option>
+                  <option value="umum">💬 Umum</option>
+                </select>
+                <div class="text-sm text-gray-500 mt-2 font-medium">Kategori membantu tim memberikan jawaban yang tepat</div>
+              </div>
+              <div>
+                <label class="flex items-center gap-2 text-base font-bold mb-3 text-gray-800">
+                  <span>🎯</span> Prioritas
+                </label>
+                <select v-model="prioritas" class="select select-bordered w-full rounded-xl text-base border-2 border-gray-200 focus:border-orange-400 bg-white/90 p-4 shadow-md">
+                  <option value="rendah">🟢 Rendah</option>
+                  <option value="sedang" selected>🟡 Sedang</option>
+                  <option value="tinggi">🔴 Tinggi</option>
+                </select>
+              </div>
+            </div>
               <div>
                 <label class="flex items-center gap-2 text-base font-bold mb-3 text-gray-800">
                   <span>📄</span> Detail Pertanyaan
                 </label>
                 <textarea v-model="deskripsi" rows="8" placeholder="Jelaskan pertanyaan Anda secara detail:&#10;- Apa yang sedang Anda coba lakukan?&#10;- Masalah apa yang Anda hadapi?&#10;- Langkah apa yang sudah Anda coba?&#10;- Informasi tambahan yang relevan" class="textarea textarea-bordered w-full rounded-xl text-base border-2 border-gray-200 focus:border-orange-400 bg-white/90 p-4 shadow-md resize-none"></textarea>
               </div>
+              
+            
               <div class="bg-orange-50/50 rounded-2xl p-6 border border-orange-200">
                 <label class="flex items-start gap-3 text-base cursor-pointer">
                   <input type="checkbox" v-model="setuju" class="checkbox checkbox-warning mt-1 scale-125" />
@@ -97,7 +110,6 @@
                   </span>
                 </button>
               </div>
-            </form>
           </div>
         </div>
       <!-- Modal Aturan Pengajuan Pertanyaan -->
@@ -242,29 +254,44 @@ const judul = ref('')
 const kategori = ref('')
 const prioritas = ref('sedang')
 const deskripsi = ref('')
+const nama = ref('')
+const email = ref('')
 const setuju = ref(false)
 const showAturan = ref(false)
 const showBantuan = ref(false)
 
-function handleSubmit() {
+async function handleSubmit() {
   if (!setuju.value || !kategori.value) return
-  
-  // TODO: Kirim data ke backend
+
   const data = {
+    nama: nama.value,
+    email: email.value,
     judul: judul.value,
     kategori: kategori.value,
     prioritas: prioritas.value,
     deskripsi: deskripsi.value
   }
-  
-  console.log('Data pertanyaan:', data)
-  alert('🎉 Pertanyaan berhasil dikirim! Tim DINDA akan segera merespons.')
-  
-  // Reset form
-  judul.value = ''
-  kategori.value = ''
-  prioritas.value = 'sedang'
-  deskripsi.value = ''
-  setuju.value = false
+
+  try {
+    const res = await $fetch('/api/forum_questions', {
+      method: 'POST',
+      body: data
+    })
+    if (res && res.success) {
+      alert('🎉 Pertanyaan berhasil dikirim! Tim DINDA akan segera merespons.')
+      // Reset form
+      judul.value = ''
+      kategori.value = ''
+      prioritas.value = 'sedang'
+      deskripsi.value = ''
+      nama.value = ''
+      email.value = ''
+      setuju.value = false
+    } else {
+      alert('Gagal mengirim pertanyaan. Coba lagi nanti.')
+    }
+  } catch (e) {
+    alert('Gagal mengirim pertanyaan. Coba lagi nanti.')
+  }
 }
 </script>
