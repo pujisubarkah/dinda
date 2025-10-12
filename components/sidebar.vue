@@ -49,6 +49,14 @@
         </div>
         <span class="group-hover:font-bold">Verifikasi User</span>
       </NuxtLink>
+
+      <!-- Verifikasi Ide Inovasi Menu -->
+      <NuxtLink to="/admin/verifikasi-ide-inovasi" class="group flex items-center gap-3 px-4 py-3 rounded-lg font-semibold hover:bg-gradient-to-r hover:from-yellow-400 hover:to-yellow-500 hover:text-green-900 transition-all duration-300 transform hover:scale-105">
+        <div class="w-8 h-8 bg-pink-400 rounded-lg flex items-center justify-center text-white group-hover:bg-white group-hover:text-pink-600 transition-colors">
+          <span class="text-lg">💡</span>
+        </div>
+        <span class="group-hover:font-bold">Verifikasi Ide Inovasi</span>
+      </NuxtLink>
     </nav>
 
     <!-- Admin Profile Section -->

@@ -1,204 +1,148 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <div class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-      <!-- Header -->
-      <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">Usulan Inovasi</h1>
-        <p class="mt-2 text-gray-600">
-          Ajukan ide inovasi Anda untuk meningkatkan pelayanan publik
-        </p>
+    <div class="max-w-6xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <div class="mb-8 flex items-center justify-between">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900">Usulan Inovasi</h1>
+          <p class="mt-2 text-gray-600">Daftar usulan inovasi yang telah Anda ajukan</p>
+        </div>
+        <button @click="showModal = true" class="px-6 py-2 bg-gradient-to-r from-teal-500 to-blue-600 text-white rounded-md hover:from-teal-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors font-semibold shadow-lg">
+          + Input Usulan Inovasi
+        </button>
       </div>
 
-      <!-- Form Card -->
-      <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+      <!-- Table Usulan Inovasi -->
+      <div class="bg-white rounded-lg shadow overflow-hidden">
         <div class="px-6 py-4 bg-gradient-to-r from-teal-500 to-blue-600">
-          <h2 class="text-xl font-semibold text-white">Form Usulan Inovasi</h2>
+          <h2 class="text-xl font-semibold text-white">Daftar Usulan Inovasi</h2>
         </div>
-
-        <form @submit.prevent="submitForm" class="p-6 space-y-6">
-          <!-- Latar Belakang -->
-          <div>
-            <label for="latarBelakang" class="block text-sm font-medium text-gray-700 mb-2">
-              Latar Belakang <span class="text-red-500">*</span>
-            </label>
-            <textarea
-              id="latarBelakang"
-              v-model="form.latarBelakang"
-              rows="4"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-              placeholder="Jelaskan latar belakang masalah yang mendorong ide inovasi ini..."
-              required
-            ></textarea>
-          </div>
-
-          <!-- Ide Inovasi -->
-          <div>
-            <label for="ideInovasi" class="block text-sm font-medium text-gray-700 mb-2">
-              Ide Inovasi <span class="text-red-500">*</span>
-            </label>
-            <textarea
-              id="ideInovasi"
-              v-model="form.ideInovasi"
-              rows="4"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-              placeholder="Deskripsikan ide inovasi yang Anda usulkan..."
-              required
-            ></textarea>
-          </div>
-
-          <!-- Stakeholder Inovasi -->
-          <div>
-            <label for="stakeholderInovasi" class="block text-sm font-medium text-gray-700 mb-2">
-              Stakeholder Inovasi <span class="text-red-500">*</span>
-            </label>
-            <textarea
-              id="stakeholderInovasi"
-              v-model="form.stakeholderInovasi"
-              rows="3"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-              placeholder="Sebutkan pihak-pihak yang terlibat atau berkepentingan dengan inovasi ini..."
-              required
-            ></textarea>
-          </div>
-
-          <!-- Sumber Daya -->
-          <div>
-            <label for="sumberDaya" class="block text-sm font-medium text-gray-700 mb-2">
-              Sumber Daya <span class="text-red-500">*</span>
-            </label>
-            <textarea
-              id="sumberDaya"
-              v-model="form.sumberDaya"
-              rows="3"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-              placeholder="Jelaskan sumber daya yang dibutuhkan (SDM, anggaran, teknologi, dll)..."
-              required
-            ></textarea>
-          </div>
-
-          <!-- Penerima Manfaat -->
-          <div>
-            <label for="penerimaManfaat" class="block text-sm font-medium text-gray-700 mb-2">
-              Penerima Manfaat <span class="text-red-500">*</span>
-            </label>
-            <textarea
-              id="penerimaManfaat"
-              v-model="form.penerimaManfaat"
-              rows="3"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-              placeholder="Sebutkan siapa yang akan merasakan manfaat dari inovasi ini..."
-              required
-            ></textarea>
-          </div>
-
-          <!-- Deskripsi Singkat -->
-          <div>
-            <label for="deskripsiSingkat" class="block text-sm font-medium text-gray-700 mb-2">
-              Deskripsi Singkat <span class="text-red-500">*</span>
-            </label>
-            <textarea
-              id="deskripsiSingkat"
-              v-model="form.deskripsiSingkat"
-              rows="2"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-              placeholder="Ringkasan singkat ide inovasi dalam 1-2 kalimat..."
-              required
-            ></textarea>
-          </div>
-
-          <!-- Keterangan -->
-          <div>
-            <label for="keterangan" class="block text-sm font-medium text-gray-700 mb-2">
-              Keterangan Tambahan
-            </label>
-            <textarea
-              id="keterangan"
-              v-model="form.keterangan"
-              rows="3"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-              placeholder="Informasi tambahan yang perlu disampaikan..."
-            ></textarea>
-          </div>
-
-          <!-- Kebaruan -->
-          <div>
-            <label for="kebaruan" class="block text-sm font-medium text-gray-700 mb-2">
-              Kebaruan/Inovasi
-            </label>
-            <textarea
-              id="kebaruan"
-              v-model="form.kebaruan"
-              rows="3"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-              placeholder="Jelaskan aspek kebaruan atau inovasi dari usulan ini..."
-            ></textarea>
-          </div>
-
-          <!-- Action Buttons -->
-          <div class="flex justify-end space-x-4 pt-6 border-t">
-            <button
-              type="button"
-              @click="resetForm"
-              class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors"
-            >
-              Reset
-            </button>
-            <button
-              type="submit"
-              :disabled="isSubmitting"
-              class="px-6 py-2 bg-gradient-to-r from-teal-500 to-blue-600 text-white rounded-md hover:from-teal-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              <span v-if="isSubmitting" class="flex items-center">
-                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Mengirim...
-              </span>
-              <span v-else>Ajukan Usulan</span>
-            </button>
-          </div>
-        </form>
-      </div>
-
-      <!-- Success/Error Messages -->
-      <div v-if="successMessage" class="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-md">
-        <div class="flex">
-          <div class="flex-shrink-0">
-            <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+        <div v-if="loading" class="p-8 text-center">
+          <div class="inline-flex items-center">
+            <svg class="animate-spin -ml-1 mr-3 h-8 w-8 text-teal-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
+            <span class="text-gray-600">Memuat data...</span>
           </div>
-          <div class="ml-3">
-            <p class="text-sm font-medium">{{ successMessage }}</p>
-          </div>
+        </div>
+        <div v-else-if="usulanList.length === 0" class="p-8 text-center text-gray-500">
+          <div class="text-6xl mb-4">📝</div>
+          <p class="text-lg font-medium">Belum ada usulan inovasi</p>
+        </div>
+        <div v-else class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-100">
+              <tr>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Judul</th>
+         
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stakeholder</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Penerima Manfaat</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Diajukan</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
+        
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr v-for="usulan in usulanList" :key="usulan.id" class="hover:bg-gray-50">
+                <td class="px-4 py-3 font-semibold text-gray-900">{{ usulan.ideInovasi || 'Tanpa Judul' }}</td>
+
+                <td class="px-4 py-3 text-gray-600 line-clamp-2">{{ usulan.deskripsiSingkat || 'Tidak ada deskripsi' }}</td>
+                <td class="px-4 py-3">{{ usulan.stakeholderInovasi || '-' }}</td>
+                <td class="px-4 py-3">{{ usulan.penerimaManfaat || '-' }}</td>
+                <td class="px-4 py-3">{{ formatDate(usulan.createdAt) }}</td>
+                <td class="px-4 py-3 text-gray-600 line-clamp-2">{{ komentarMap[usulan.id] || '-' }}</td>
+               
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
-      <div v-if="errorMessage" class="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
-        <div class="flex">
-          <div class="flex-shrink-0">
-            <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+      <!-- Modal Form Usulan Inovasi -->
+      <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 relative animate-fade-in max-h-[90vh] overflow-y-auto">
+          <button @click="closeModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors z-10">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
+          </button>
+          <div class="px-6 py-4 bg-gradient-to-r from-teal-500 to-blue-600 rounded-t-2xl">
+            <h2 class="text-xl font-semibold text-white">Form Usulan Inovasi</h2>
           </div>
-          <div class="ml-3">
-            <p class="text-sm font-medium">{{ errorMessage }}</p>
-          </div>
+          <form @submit.prevent="submitForm" class="p-6 space-y-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Latar Belakang <span class="text-red-500">*</span></label>
+              <textarea v-model="form.latarBelakang" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500" required></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Ide Inovasi <span class="text-red-500">*</span></label>
+              <textarea v-model="form.ideInovasi" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500" required></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Stakeholder Inovasi <span class="text-red-500">*</span></label>
+              <textarea v-model="form.stakeholderInovasi" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500" required></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Sumber Daya <span class="text-red-500">*</span></label>
+              <textarea v-model="form.sumberDaya" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500" required></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Penerima Manfaat <span class="text-red-500">*</span></label>
+              <textarea v-model="form.penerimaManfaat" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500" required></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi Singkat <span class="text-red-500">*</span></label>
+              <textarea v-model="form.deskripsiSingkat" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500" required></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan Tambahan</label>
+              <textarea v-model="form.keterangan" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Kebaruan/Inovasi</label>
+              <textarea v-model="form.kebaruan" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"></textarea>
+            </div>
+            <div class="flex justify-end space-x-4 pt-6 border-t">
+              <button type="button" @click="resetForm" class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors">Reset</button>
+              <button type="submit" :disabled="isSubmitting" class="px-6 py-2 bg-gradient-to-r from-teal-500 to-blue-600 text-white rounded-md hover:from-teal-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                <span v-if="isSubmitting" class="flex items-center">
+                  <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Mengirim...
+                </span>
+                <span v-else>Ajukan Usulan</span>
+              </button>
+            </div>
+          </form>
         </div>
+      </div>
+
+      <!-- Download PDF Button -->
+      <div class="mt-8">
+        <button @click="downloadPDF" class="inline-flex items-center gap-2 px-4 py-2 bg-white text-teal-700 font-semibold rounded-md shadow hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors">
+          <svg xmlns='http://www.w3.org/2000/svg' class='w-5 h-5' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3'/></svg>
+          Download PDF
+        </button>
       </div>
     </div>
   </div>
 </template>
 
+
 <script setup>
-definePageMeta({
-  layout: 'user'
-})
+const komentarMap = ref({})
+definePageMeta({ layout: 'user' })
+import { ref, onMounted } from 'vue'
+import { useToast } from 'vue-toastification'
+import { Pencil, Trash2 } from 'lucide-vue-next'
+const toast = useToast()
 
-import { ref, onMounted, nextTick, watch } from 'vue'
-
-// Reactive form data
+const showModal = ref(false)
+const loading = ref(true)
+const usulanList = ref([])
 const form = ref({
   latarBelakang: '',
   ideInovasi: '',
@@ -209,63 +153,60 @@ const form = ref({
   keterangan: '',
   kebaruan: ''
 })
-
-// State management
 const isSubmitting = ref(false)
-const successMessage = ref('')
-const errorMessage = ref('')
 
-// Get current user from auth
-const user = ref(null)
-
-onMounted(async () => {
+const fetchUsulanData = async () => {
   try {
-    // Get token from localStorage (or wherever you store it)
-    const token = localStorage.getItem('auth-token')
-    
-    if (token) {
-      const response = await $fetch('/api/auth/me', {
-        headers: {
-          'Authorization': `Bearer ${token}`
+    loading.value = true
+    const token = localStorage.getItem('dinda_token')
+    const userRes = await $fetch('/api/auth/me', { headers: { 'Authorization': `Bearer ${token}` } })
+    if (!userRes.success || !userRes.data?.user) throw new Error('User tidak ditemukan')
+    const response = await $fetch(`/api/ide-inovasi/user/${userRes.data.user.id}`)
+    if (response.success) {
+      usulanList.value = response.data
+      // Fetch komentar terbaru untuk setiap usulan
+      const map = {}
+      await Promise.all(response.data.map(async (usulan) => {
+        try {
+          const komentarRes = await $fetch(`/api/ide_inovasi_comments?ide_inovasi_id=${usulan.id}&limit=1`)
+          if (komentarRes.success && komentarRes.data.length > 0) {
+            map[usulan.id] = komentarRes.data[0].content
+          } else {
+            map[usulan.id] = null
+          }
+        } catch {
+          map[usulan.id] = null
         }
-      })
-      
-      if (response.success) {
-        user.value = response.data.user
-      }
+      }))
+      komentarMap.value = map
     }
   } catch (error) {
-    console.error('Error fetching user:', error)
-    // Redirect to login if not authenticated
-    await navigateTo('/login')
+    toast.error('Gagal memuat data usulan inovasi')
+    usulanList.value = []
+    komentarMap.value = {}
+  } finally {
+    loading.value = false
   }
+}
+
+onMounted(() => {
+  fetchUsulanData()
 })
 
-// Submit form
 const submitForm = async () => {
   if (isSubmitting.value) return
-
-  // Clear previous messages
-  successMessage.value = ''
-  errorMessage.value = ''
-
   // Validate required fields
   const requiredFields = ['latarBelakang', 'ideInovasi', 'stakeholderInovasi', 'sumberDaya', 'penerimaManfaat', 'deskripsiSingkat']
   const missingFields = requiredFields.filter(field => !form.value[field].trim())
-  
   if (missingFields.length > 0) {
-    errorMessage.value = 'Harap lengkapi semua field yang wajib diisi'
+    toast.error('Harap lengkapi semua field yang wajib diisi')
     return
   }
-
-  if (!user.value) {
-    errorMessage.value = 'Anda harus login terlebih dahulu'
-    return
-  }
-
   isSubmitting.value = true
-
   try {
+    const token = localStorage.getItem('dinda_token')
+    const userRes = await $fetch('/api/auth/me', { headers: { 'Authorization': `Bearer ${token}` } })
+    if (!userRes.success || !userRes.data?.user) throw new Error('User tidak ditemukan')
     const response = await $fetch('/api/ide-inovasi', {
       method: 'POST',
       body: {
@@ -277,31 +218,25 @@ const submitForm = async () => {
         deskripsi_singkat: form.value.deskripsiSingkat,
         keterangan: form.value.keterangan,
         kebaruan: form.value.kebaruan,
-        created_by: user.value.id
+        created_by: userRes.data.user.id
       }
     })
-
     if (response.success) {
-      successMessage.value = 'Usulan inovasi berhasil diajukan!'
+      toast.success('Anda telah berhasil mengajukan ide inovasi!')
+      showModal.value = false
       resetForm()
-      
-      // Auto scroll to success message
-      nextTick(() => {
-        document.querySelector('.bg-green-100')?.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'center' 
-        })
-      })
+      await fetchUsulanData()
+    } else {
+      toast.error('Gagal mengajukan usulan inovasi')
     }
   } catch (error) {
-    console.error('Error submitting form:', error)
-    errorMessage.value = error.data?.message || 'Terjadi kesalahan saat mengajukan usulan'
+    toast.error('Terjadi kesalahan saat mengajukan usulan')
+    console.error(error)
   } finally {
     isSubmitting.value = false
   }
 }
 
-// Reset form
 const resetForm = () => {
   form.value = {
     latarBelakang: '',
@@ -313,19 +248,54 @@ const resetForm = () => {
     keterangan: '',
     kebaruan: ''
   }
-  successMessage.value = ''
-  errorMessage.value = ''
 }
 
-// Auto-hide messages after 5 seconds
-watch([successMessage, errorMessage], () => {
-  if (successMessage.value || errorMessage.value) {
-    setTimeout(() => {
-      successMessage.value = ''
-      errorMessage.value = ''
-    }, 5000)
-  }
-})
+const closeModal = () => {
+  showModal.value = false
+  resetForm()
+}
+
+const formatDate = (dateString) => {
+  if (!dateString) return '-'
+  const date = new Date(dateString)
+  return date.toLocaleDateString('id-ID', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  })
+}
+
+const downloadPDF = async () => {
+  const jsPDF = (await import('jspdf')).default
+  const autoTable = (await import('jspdf-autotable')).default
+  const doc = new jsPDF()
+  const columns = [
+    { header: 'Judul', dataKey: 'judul' },
+    { header: 'Status', dataKey: 'status' },
+    { header: 'Deskripsi', dataKey: 'deskripsi' },
+    { header: 'Stakeholder', dataKey: 'stakeholder' },
+    { header: 'Penerima Manfaat', dataKey: 'penerimaManfaat' },
+    { header: 'Tanggal Diajukan', dataKey: 'tanggal' },
+    { header: 'Keterangan', dataKey: 'keterangan' }
+  ]
+  const rows = usulanList.value.map(u => ({
+    judul: u.ideInovasi || 'Tanpa Judul',
+    status: u.status || 'Dalam Review',
+    deskripsi: u.deskripsiSingkat || '-',
+    stakeholder: u.stakeholderInovasi || '-',
+    penerimaManfaat: u.penerimaManfaat || '-',
+    tanggal: formatDate(u.createdAt),
+    keterangan: u.keterangan || '-'
+  }))
+  autoTable(doc, {
+    head: [columns.map(col => col.header)],
+    body: rows.map(row => columns.map(col => row[col.dataKey])),
+    styles: { font: 'helvetica', fontSize: 10 },
+    headStyles: { fillColor: [13, 148, 136] },
+    margin: { top: 20 }
+  })
+  doc.save('usulan-inovasi.pdf')
+}
 </script>
 
 <style scoped>

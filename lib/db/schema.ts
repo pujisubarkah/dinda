@@ -82,6 +82,7 @@ export const kecamatanInDinda = dinda.table("kecamatan", {
   id: bigint({ mode: "number" }).primaryKey().notNull(),
   nama: varchar({ length: 255 }).notNull(),
   kode: varchar({ length: 20 }),
+  svgPath: text("svg_path"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 });
 
@@ -397,4 +398,17 @@ export const notificationsInDinda = dinda.table("notifications", {
   isRead: boolean("is_read").default(false),
   readAt: timestamp("read_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+// Ide Inovasi Comments
+export const ideInovasiCommentsInDinda = dinda.table("ide_inovasi_comments", {
+  id: serial().primaryKey(),
+  ideInovasiId: integer("ide_inovasi_id").references(() => ideInovasiInDinda.id).notNull(),
+  userId: integer("user_id").references(() => usersInDinda.id).notNull(),
+  parentId: integer("parent_id"),
+  content: text().notNull(),
+  isApproved: boolean("is_approved").default(false),
+  likeCount: integer("like_count").default(0),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });
