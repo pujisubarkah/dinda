@@ -220,7 +220,7 @@
       
       <!-- Peta Inovasi Component -->
       <div class="max-w-7xl mx-auto">
-        <PetaInovasi />
+  <Kecamatan />
       </div>
     </section>
 
@@ -266,7 +266,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import PetaInovasi from '~/components/PetaInovasi.vue'
+import Kecamatan from '~/components/kecamatan.vue'
 
 // Set page title and meta
 useHead({

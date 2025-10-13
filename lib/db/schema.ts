@@ -1,3 +1,4 @@
+
 import { 
   pgTable, 
   pgSchema, 
@@ -82,75 +83,40 @@ export const sdgsInDinda = dinda.table("sdgs", {
 export const kecamatanInDinda = dinda.table("kecamatan", {
   id: bigint({ mode: "number" }).primaryKey().notNull(),
   nama: varchar({ length: 255 }).notNull(),
-  kode: varchar({ length: 20 }),
   svgPath: text("svg_path"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 });
 
 // Inovator
 export const inovatorInDinda = dinda.table("inovator", {
-  id: serial().primaryKey(),
-  userId: integer("user_id").references(() => usersInDinda.id),
-  inovator: text().notNull(),
+  id: integer("id").primaryKey().notNull(),
+  inovator: text("inovator"),
   agencyIdPanrb: integer("agency_id_panrb"),
-  idKabkot: integer("id_kabkot").notNull(),
-  idProvinsi: integer("id_provinsi").notNull(),
-  longlat: varchar({ length: 100 }),
-  alamat: text(),
-  telepon: varchar({ length: 20 }),
-  website: varchar({ length: 255 }),
-  bio: text(),
-  expertise: text(),
-  idKecamatan: bigint("id_kecamatan", { mode: "number" }).references(() => kecamatanInDinda.id),
-  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+  idKabkot: integer("id_kabkot"),
+  idProvinsi: integer("id_provinsi"),
+  longlat: varchar("longlat", { length: 255 }),
+  alamat: varchar("alamat", { length: 255 }),
+  idKecamatan: bigint("id_kecamatan", { mode: "number" }),
 });
 
 // Inovasi
 export const inovasiInDinda = dinda.table("inovasi", {
-  id: serial().primaryKey(),
-  uuid: uuid().defaultRandom().unique().notNull(),
-  createdAt: timestamp("created_at", { precision: 6, withTimezone: true, mode: 'string' }),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
-  judulInovasi: text("judul_inovasi").notNull(),
-  slug: varchar({ length: 255 }).unique(),
-  // OPD/Instansi di Kota Cilegon
-  opd: varchar({ length: 255 }), // Organisasi Perangkat Daerah
-  urusan: text(), // Urusan pemerintahan yang ditangani
-  deskripsi: text().notNull(),
-  latarBelakang: text("latar_belakang"), // Background masalah
-  tujuan: text(), // Tujuan inovasi
-  manfaat: text(), // Manfaat yang diharapkan
-  tahapPelaksanaan: text("tahap_pelaksanaan"), // Tahapan implementasi
-  dampak: text(),
-  tahun: varchar({ length: 4 }),
-  status: statusEnum().default('draft'),
-  kategori: kategoriEnum().notNull(),
-  // Lokasi spesifik di Kota Cilegon
-  idKecamatan: bigint("id_kecamatan", { mode: "number" }).references(() => kecamatanInDinda.id),
-  lokasi: text(), // Alamat/lokasi spesifik implementasi
-  // Referensi inovator
-  inovatorId: integer("inovator_id").references(() => inovatorInDinda.id),
-  // SDGs alignment
-  sdgsId: integer("sdgs_id").references(() => sdgsInDinda.id),
-  // Media dan dokumentasi
-  gambar: jsonb(), // Array gambar/foto
-  dokumen: jsonb(), // Dokumen pendukung
-  video: varchar({ length: 255 }), // Link video presentasi/demo
-  // Metadata
-  tags: text(), // Tags untuk kategorisasi
-  sumberDana: varchar("sumber_dana", { length: 255 }), // Sumber pendanaan
-  anggaranDiperlukan: bigint("anggaran_diperlukan", { mode: "number" }), // Budget needed
-  targetPenerima: text("target_penerima"), // Target beneficiaries
-  indikatorKeberhasilan: text("indikator_keberhasilan"), // Success indicators
-  // Engagement metrics
-  viewCount: integer("view_count").default(0),
-  likeCount: integer("like_count").default(0),
-  downloadCount: integer("download_count").default(0), // Document downloads
-  // Publishing
-  isPublished: boolean("is_published").default(false),
-  publishedAt: timestamp("published_at", { withTimezone: true }),
-  isFeatured: boolean("is_featured").default(false), // Featured innovation
+  id: integer("id").primaryKey().notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }),
+  judulInovasi: text("judul_inovasi"),
+  kld: text("kld"),
+  urusan: text("urusan"),
+  deskripsi: text("deskripsi"),
+  tahun: text("tahun"),
+  idProvinsi: integer("id_provinsi"),
+  idKabkot: integer("id_kabkot"),
+  inovator: text("inovator"),
+  sdgs: integer("sdgs"),
+  agencyIdPanrb: bigint("agency_id_panrb", { mode: "number" }),
+  inovatorId: bigint("inovator_id", { mode: "number" }),
+  idKecamatan: bigint("id_kecamatan", { mode: "number" }),
+  thumbUrl: varchar("thumb_url", { length: 255 }),
+  videoUrl: varchar("video_url", { length: 255 }),
 });
 
 // Forum Categories
@@ -470,3 +436,4 @@ export const forumQuestionsInDinda = dinda.table("forum_questions", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });
+
