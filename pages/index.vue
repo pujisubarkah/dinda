@@ -80,7 +80,7 @@
             <h2 class="text-2xl font-bold text-teal-700 mb-2">Daftarkan Ide Inovasi</h2>
             <p class="text-gray-600">Wujudkan inovasi Anda bersama DINDA Cilegon</p>
           </div>
-          <NuxtLink to="/inkubasi" class="w-full bg-gradient-to-r from-teal-500 to-teal-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-teal-600 hover:to-teal-700 transition-all duration-300 transform hover:scale-105 shadow-lg block text-center">
+          <NuxtLink to="/inovasi" class="w-full bg-gradient-to-r from-teal-500 to-teal-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-teal-600 hover:to-teal-700 transition-all duration-300 transform hover:scale-105 shadow-lg block text-center">
             🚀 Mulai Inkubasi
           </NuxtLink>
         </div>
@@ -144,7 +144,7 @@
               <NuxtLink to="/galeri" class="bg-gradient-to-r from-teal-500 to-teal-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:from-teal-600 hover:to-teal-700 transition-all duration-300 transform hover:scale-105 shadow-lg text-center">
                 🖼️ Jelajahi Galeri Inovasi
               </NuxtLink>
-              <NuxtLink to="/inkubasi" class="border-2 border-teal-500 text-teal-700 px-8 py-4 rounded-xl font-bold text-lg hover:bg-teal-500 hover:text-white transition-all duration-300 transform hover:scale-105 shadow-lg text-center">
+              <NuxtLink to="/inovasi" class="border-2 border-teal-500 text-teal-700 px-8 py-4 rounded-xl font-bold text-lg hover:bg-teal-500 hover:text-white transition-all duration-300 transform hover:scale-105 shadow-lg text-center">
                 🚀 Daftarkan Ide Anda
               </NuxtLink>
             </div>

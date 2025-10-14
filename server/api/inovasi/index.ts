@@ -1,4 +1,4 @@
-import { inovasiInDinda, inovatorInDinda } from '~/lib/db/schema';
+import { inovasiInDinda, inovatorInDinda, sdgsInDinda } from '~/lib/db/schema';
 import { db } from '~/lib/db';
 import { eq } from 'drizzle-orm';
 
@@ -6,15 +6,17 @@ export default defineEventHandler(async (event) => {
   const method = event.node.req.method;
 
   if (method === 'GET') {
-    // Join inovasi with inovator
+    // Join inovasi with inovator and sdgs
     const inovasi = await db.select()
       .from(inovasiInDinda)
-      .leftJoin(inovatorInDinda, eq(inovasiInDinda.inovatorId, inovatorInDinda.id));
+      .leftJoin(inovatorInDinda, eq(inovasiInDinda.inovatorId, inovatorInDinda.id))
+      .leftJoin(sdgsInDinda, eq(inovasiInDinda.sdgs, sdgsInDinda.id));
 
-    // Format response: only selected fields from inovasi, nest inovator as 'inovatorData'
+    // Format response: only selected fields from inovasi, nest inovator and sdgs data
     const data = inovasi.map(row => {
-      const { inovasi: inovasiRow, inovator: inovatorRow } = row;
+      const { inovasi: inovasiRow, inovator: inovatorRow, sdgs: sdgsRow } = row;
       return {
+        id: inovasiRow.id,
         judulInovasi: inovasiRow.judulInovasi,
         urusan: inovasiRow.urusan,
         deskripsi: inovasiRow.deskripsi,
@@ -22,7 +24,10 @@ export default defineEventHandler(async (event) => {
         inovator: inovasiRow.inovator,
         sdgs: inovasiRow.sdgs,
         inovatorId: inovasiRow.inovatorId,
+        thumbUrl: inovasiRow.thumbUrl,
+        videoUrl: inovasiRow.videoUrl,
         inovatorData: inovatorRow || null,
+        sdgsData: sdgsRow || null,
       };
     });
     return { success: true, data };

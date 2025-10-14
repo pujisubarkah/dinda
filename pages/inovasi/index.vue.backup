@@ -1,0 +1,827 @@
+<template>
+  <div class="min-h-screen bg-gradient-to-br from-teal-50 via-emerald-50 to-yellow-50">
+    <!-- Header Section -->
+    <div class="bg-white/80 backdrop-blur-sm shadow-sm border-b border-teal-100">
+      <div class="max-w-7xl mx-auto px-6 py-6">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div>
+            <h1 class="text-3xl font-bold text-teal-800 flex items-center gap-3">
+              <i class="fas fa-map-marked-alt text-yellow-500"></i>
+              Peta Sebaran Inovasi
+            </h1>
+            <p class="text-teal-600 mt-1">Eksplorasi inovasi daerah dan lokasinya di Kota Cilegon</p>
+          </div>
+          <button @click="showForm = true" 
+            class="bg-gradient-to-r from-teal-600 to-emerald-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+            <i class="fas fa-plus mr-2"></i>Tambah Inovasi
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 py-8">
+      <!-- Map Container -->
+      <div class="bg-white rounded-2xl shadow-xl border border-teal-100 overflow-hidden mb-8">
+        <div class="bg-gradient-to-r from-teal-600 to-emerald-600 text-white px-6 py-4">
+          <h2 class="text-xl font-semibold flex items-center gap-2">
+            <i class="fas fa-globe text-yellow-400"></i>
+            Peta Sebaran Inovator
+          </h2>
+        </div>
+        <div class="relative">
+          <div id="map" class="h-96 w-full bg-gray-100"></div>
+          <div v-if="isLoadingMap" class="absolute inset-0 bg-white/80 flex items-center justify-center">
+            <div class="text-teal-600">
+              <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
+              <p>Memuat peta...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Control Section -->
+      <div class="bg-white rounded-2xl shadow-xl border border-teal-100 mb-8 p-6">
+        <h3 class="text-lg font-semibold text-teal-800 mb-4 flex items-center gap-2">
+          <i class="fas fa-filter text-yellow-500"></i>
+          Filter & Pencarian
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Search Bar -->
+          <div class="relative">
+            <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-teal-400"></i>
+            <input 
+              v-model="searchQuery"
+              type="text" 
+              placeholder="Cari inovasi..."
+              class="w-full pl-12 pr-4 py-3 border-2 border-teal-100 rounded-xl focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-100 transition-all"
+            >
+          </div>
+          
+          <!-- Category Filter -->
+          <select 
+            v-model="selectedCategory"
+            class="w-full px-4 py-3 border-2 border-teal-100 rounded-xl focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-100 transition-all bg-white"
+          >
+            <option value="">Semua Kategori</option>
+            <option value="Teknologi">Teknologi</option>
+            <option value="Digital">Digital</option>
+            <option value="Lingkungan">Lingkungan</option>
+            <option value="Infrastruktur">Infrastruktur</option>
+          </select>
+
+          <!-- Status Filter -->
+          <select 
+            v-model="selectedStatus"
+            class="w-full px-4 py-3 border-2 border-teal-100 rounded-xl focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-100 transition-all bg-white"
+          >
+            <option value="">Semua Status</option>
+            <option value="Ide Baru">Ide Baru</option>
+            <option value="Sedang Proses">Sedang Proses</option>
+            <option value="Uji Coba">Uji Coba</option>
+            <option value="Selesai">Selesai</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Innovation List -->
+      <div class="bg-white rounded-2xl shadow-xl border border-teal-100">
+        <div class="bg-gradient-to-r from-yellow-400 to-amber-400 text-gray-800 px-6 py-4">
+          <h2 class="text-xl font-semibold flex items-center gap-2">
+            <i class="fas fa-lightbulb text-white"></i>
+            Daftar Inovasi ({{ filteredInovasi.length }})
+          </h2>
+          <div v-if="apiData?.debug" class="text-sm mt-2 bg-white/20 px-3 py-2 rounded">
+            <strong>Debug:</strong> Total: {{ apiData.debug.totalRecords }}, 
+            Dengan Koordinat: {{ apiData.debug.recordsWithCoordinates }}, 
+            Markers: {{ markers.length }}
+          </div>
+        </div>w-50">
+    <!-- Header Section -->
+    <div class="bg-white/80 backdrop-blur-sm shadow-sm border-b border-teal-100">
+      <div class="max-w-7xl mx-auto px-6 py-6">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div>
+            <h1 class="text-3xl font-bold text-teal-800 flex items-center gap-3">
+              <i class="fas fa-map-marked-alt text-yellow-500"></i>
+              Peta Sebaran Inovasi
+            </h1>
+            <p class="text-teal-600 mt-1">Eksplorasi inovasi daerah dan lokasinya di Kota Cilegon</p>
+          </div>
+          <button @click="showForm = true" 
+            class="bg-gradient-to-r from-teal-600 to-emerald-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+            <i class="fas fa-plus mr-2"></i>Tambah Inovasi
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 py-8">
+      <!-- Map Container -->
+      <div class="bg-white rounded-2xl shadow-xl border border-teal-100 overflow-hidden mb-8">
+        <div class="bg-gradient-to-r from-teal-600 to-emerald-600 text-white px-6 py-4">
+          <h2 class="text-xl font-semibold flex items-center gap-2">
+            <i class="fas fa-globe text-yellow-400"></i>
+            Peta Sebaran Inovator
+          </h2>
+        </div>
+        <div class="relative">
+          <div id="map" class="h-96 w-full bg-gray-100"></div>
+          <div v-if="isLoadingMap" class="absolute inset-0 bg-white/80 flex items-center justify-center">
+            <div class="text-teal-600">
+              <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
+              <p>Memuat peta...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Control Section -->
+      <div class="bg-white rounded-2xl shadow-xl border border-teal-100 mb-8 p-6">
+        <h3 class="text-lg font-semibold text-teal-800 mb-4 flex items-center gap-2">
+          <i class="fas fa-filter text-yellow-500"></i>
+          Filter & Pencarian
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Search Bar -->
+          <div class="relative">
+            <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-teal-400"></i>
+            <input 
+              v-model="searchQuery"
+              type="text" 
+              placeholder="Cari inovasi..."
+              class="w-full pl-12 pr-4 py-3 border-2 border-teal-100 rounded-xl focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-100 transition-all"
+            >
+          </div>
+          
+          <!-- Category Filter -->
+          <select 
+            v-model="selectedCategory"
+            class="w-full px-4 py-3 border-2 border-teal-100 rounded-xl focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-100 transition-all bg-white"
+          >
+            <option value="">Semua Kategori</option>
+            <option value="Teknologi">Teknologi</option>
+            <option value="Digital">Digital</option>
+            <option value="Lingkungan">Lingkungan</option>
+            <option value="Infrastruktur">Infrastruktur</option>
+          </select>
+
+          <!-- Status Filter -->
+          <select 
+            v-model="selectedStatus"
+            class="w-full px-4 py-3 border-2 border-teal-100 rounded-xl focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-100 transition-all bg-white"
+          >
+            <option value="">Semua Status</option>
+            <option value="Ide Baru">Ide Baru</option>
+            <option value="Sedang Proses">Sedang Proses</option>
+            <option value="Uji Coba">Uji Coba</option>
+            <option value="Selesai">Selesai</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Innovation Table -->
+      <div class="bg-white rounded-2xl shadow-xl border border-teal-100 overflow-hidden">
+        <div class="bg-gradient-to-r from-yellow-400 to-amber-400 text-gray-800 px-6 py-4">
+          <h2 class="text-xl font-semibold flex items-center gap-2">
+            <i class="fas fa-table text-white"></i>
+            Daftar Inovasi ({{ filteredInovasi.length }})
+          </h2>
+        </div>
+        
+        <div v-if="isLoading" class="p-8 text-center">
+          <i class="fas fa-spinner fa-spin text-3xl text-teal-400 mb-4"></i>
+          <p class="text-teal-600">Memuat data inovasi...</p>
+        </div>
+
+        <div v-else-if="filteredInovasi.length === 0" class="p-8 text-center">
+          <i class="fas fa-search text-4xl text-gray-300 mb-4"></i>
+          <p class="text-gray-500">Tidak ada inovasi yang ditemukan</p>
+        </div>
+
+        <div v-else class="overflow-x-auto">
+          <table class="w-full">
+            <!-- Table Header -->
+            <thead class="bg-teal-50 border-b border-teal-100">
+              <tr>
+                <th class="px-6 py-4 text-left text-xs font-semibold text-teal-700 uppercase tracking-wider">No</th>
+                <th class="px-6 py-4 text-left text-xs font-semibold text-teal-700 uppercase tracking-wider">Judul Inovasi</th>
+                <th class="px-6 py-4 text-left text-xs font-semibold text-teal-700 uppercase tracking-wider">Inovator</th>
+                <th class="px-6 py-4 text-left text-xs font-semibold text-teal-700 uppercase tracking-wider">SDGs</th>
+                <th class="px-6 py-4 text-left text-xs font-semibold text-teal-700 uppercase tracking-wider">Urusan</th>
+                <th class="px-6 py-4 text-left text-xs font-semibold text-teal-700 uppercase tracking-wider">Tahun</th>
+                <th class="px-6 py-4 text-left text-xs font-semibold text-teal-700 uppercase tracking-wider">Lokasi</th>
+                <th class="px-6 py-4 text-left text-xs font-semibold text-teal-700 uppercase tracking-wider">Aksi</th>
+              </tr>
+            </thead>
+            
+            <!-- Table Body -->
+            <tbody class="bg-white divide-y divide-teal-50">
+              <tr 
+                v-for="(inovasi, index) in filteredInovasi" 
+                :key="inovasi.id || index"
+                :class="['hover:bg-teal-50 transition-colors cursor-pointer', selectedInovasi?.id === inovasi.id ? 'bg-teal-100' : '']"
+                @click="highlightInovasi(inovasi)"
+              >
+                <!-- Nomor -->
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                  {{ index + 1 }}
+                </td>
+                
+                <!-- Judul Inovasi -->
+                <td class="px-6 py-4 text-sm text-gray-900">
+                  <div class="max-w-xs">
+                    <div class="font-semibold text-teal-800 truncate">{{ inovasi.judulInovasi }}</div>
+                    <div class="text-gray-500 text-xs mt-1 line-clamp-2">{{ inovasi.deskripsi }}</div>
+                  </div>
+                </td>
+                
+                <!-- Inovator -->
+                <td class="px-6 py-4 text-sm text-gray-900">
+                  <div class="flex items-center gap-2">
+                    <i class="fas fa-user text-teal-400"></i>
+                    <span class="font-medium">{{ inovasi.inovatorData?.inovator || 'Tidak diketahui' }}</span>
+                  </div>
+                </td>
+                
+                <!-- SDGs -->
+                <td class="px-6 py-4 text-sm">
+                  <div v-if="inovasi.sdgs && getSdgsData(inovasi.sdgs)" class="flex items-center gap-2">
+                    <img 
+                      v-if="getSdgsData(inovasi.sdgs).image" 
+                      :src="getSdgsData(inovasi.sdgs).image" 
+                      :alt="'SDG ' + getSdgsData(inovasi.sdgs).goal"
+                      class="w-10 h-10 object-contain rounded-lg border bg-white"
+                    >
+                    <div v-else class="w-8 h-8 bg-blue-100 rounded flex items-center justify-center">
+                      <span class="text-blue-600 text-xs font-bold">{{ inovasi.sdgs }}</span>
+                    </div>
+                    <div>
+                      <div class="font-medium text-blue-800 text-xs">Goal {{ getSdgsData(inovasi.sdgs).goal }}</div>
+                      <div class="text-gray-500 text-xs truncate max-w-24">{{ getSdgsData(inovasi.sdgs).title }}</div>
+                    </div>
+                  </div>
+                  <div v-else-if="inovasi.sdgs" class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-blue-100 rounded flex items-center justify-center">
+                      <span class="text-blue-600 text-xs font-bold">{{ inovasi.sdgs }}</span>
+                    </div>
+                    <span class="text-xs text-gray-700">Goal {{ inovasi.sdgs }}</span>
+                  </div>
+                  <div v-else class="text-gray-400 text-xs">
+                    <i class="fas fa-minus"></i>
+                  </div>
+                </td>
+                
+                <!-- Urusan -->
+                <td class="px-6 py-4 text-sm">
+                  <span class="inline-flex px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">
+                    {{ inovasi.urusan || 'Tidak dikategorikan' }}
+                  </span>
+                </td>
+                
+                <!-- Tahun -->
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {{ inovasi.tahun }}
+                </td>
+                
+                <!-- Lokasi -->
+                <td class="px-6 py-4 text-sm">
+                  <div v-if="inovasi.inovatorData?.longlat" class="flex items-center gap-1 text-green-600">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span class="text-xs">Tersedia</span>
+                  </div>
+                  <div v-else class="text-gray-400 text-xs">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Tidak ada</span>
+                  </div>
+                </td>
+                
+                <!-- Actions -->
+                <td class="px-6 py-4 text-sm">
+                  <div class="flex items-center gap-1">
+                    <button 
+                      v-if="inovasi.inovatorData?.longlat"
+                      @click.stop="focusOnMap(inovasi.inovatorData.longlat)"
+                      class="bg-teal-100 hover:bg-teal-200 text-teal-700 p-2 rounded-lg text-xs transition-colors"
+                      title="Lihat di Peta"
+                    >
+                      <i class="fas fa-map-marker-alt"></i>
+                    </button>
+                    <button 
+                      @click.stop="viewDetails(inovasi)"
+                      class="bg-yellow-100 hover:bg-yellow-200 text-yellow-700 p-2 rounded-lg text-xs transition-colors"
+                      title="Lihat Detail"
+                    >
+                      <i class="fas fa-eye"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Timeline Inkubasi -->
+    <div v-if="showTimeline" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+      <div class="bg-white rounded-xl shadow-lg p-8 max-w-4xl w-full relative max-h-[90vh] overflow-y-auto">
+        <button @click="showTimeline = false" class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-xl">&times;</button>
+        <h2 class="text-3xl font-bold text-green-700 mb-6 text-center">🚀 Langkah-Langkah Inkubasi Inovasi</h2>
+        
+        <!-- Timeline Steps -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div v-for="(step, idx) in steps" :key="idx" class="flex flex-col items-center text-center">
+            <div :class="['w-20 h-20 rounded-full flex items-center justify-center mb-3 shadow-lg', step.active ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-500']">
+              <span class="text-3xl">{{ step.icon }}</span>
+            </div>
+            <div class="font-bold text-green-700 text-lg">{{ step.title }}</div>
+            <div class="text-sm text-gray-600 mt-2">{{ step.desc }}</div>
+          </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="text-center border-t pt-6">
+          <p class="text-gray-700 mb-4">Siap untuk memulai perjalanan inovasi Anda?</p>
+          <button @click="showTimeline = false; showForm = true" class="bg-green-600 text-white px-8 py-3 rounded-full font-bold shadow hover:bg-green-700 transition">
+            Daftarkan Ide Inovasi Sekarang
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Form Pendaftaran -->
+    <div v-if="showForm" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+      <div class="bg-white rounded-xl shadow-lg p-8 max-w-lg w-full relative">
+        <button @click="showForm = false" class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-xl">&times;</button>
+        <h2 class="text-2xl font-bold text-green-700 mb-4">Form Pendaftaran Inovasi</h2>
+        <form @submit.prevent="submitForm" class="space-y-4">
+          <div>
+            <label class="block text-sm font-semibold text-green-700 mb-1">Nama Inovasi</label>
+            <input v-model="form.nama" type="text" placeholder="Nama Inovasi" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400" required />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-green-700 mb-1">Deskripsi</label>
+            <textarea v-model="form.deskripsi" placeholder="Deskripsi singkat inovasi" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400" rows="3" required></textarea>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-green-700 mb-1">Kategori</label>
+              <select v-model="form.kategori" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-yellow-400" required>
+                <option value="">Pilih Kategori</option>
+                <option value="Teknologi">Teknologi</option>
+                <option value="Digital">Digital</option>
+                <option value="Lingkungan">Lingkungan</option>
+                <option value="Infrastruktur">Infrastruktur</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-green-700 mb-1">OPD</label>
+              <input v-model="form.opd" type="text" placeholder="Nama OPD" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-yellow-400" required />
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-green-700 mb-1">Kontak Pengusul</label>
+            <input v-model="form.kontak" type="text" placeholder="Email/HP" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400" required />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-green-700 mb-1">Upload Dokumen Pendukung</label>
+            <input type="file" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400" />
+          </div>
+          <button type="submit" class="w-full bg-green-600 text-white py-2 rounded font-bold hover:bg-green-700 transition">Kirim Ide</button>
+        </form>
+        <div v-if="formSuccess" class="mt-4 text-green-700 font-bold">Ide berhasil didaftarkan!</div>
+      </div>
+    </div>
+
+    <!-- Progress Tracker Sederhana -->
+    <div class="bg-white border border-yellow-300 rounded-xl shadow p-6 mb-10">
+      <h3 class="font-semibold text-green-700 mb-4">Progress Tracker</h3>
+      <div class="flex flex-col gap-4">
+        <div v-for="(row, idx) in rows" :key="row.id" class="bg-gray-50 rounded-lg border border-yellow-200 p-4 shadow">
+          <div class="flex justify-between items-center mb-2">
+            <div class="font-bold text-green-800">{{ row.nama }}</div>
+            <div class="text-xs text-gray-500">{{ row.status }}</div>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="bg-gradient-to-r from-green-400 to-green-700 h-2 rounded-full transition-all duration-700" :style="{ width: row.progress + '%' }"></div>
+          </div>
+          <div class="flex justify-between text-xs mt-1">
+            <span class="text-gray-600">Mentor: {{ row.mentor }}</span>
+            <span class="text-green-700 font-bold">{{ row.progress }}%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Ilustrasi & CTA -->
+    <div class="flex flex-col md:flex-row items-center justify-between mb-10 gap-8">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Inkubasi" class="w-32 h-32 mx-auto md:mx-0 drop-shadow-lg" />
+      <div class="flex-1 text-center md:text-left">
+        <h1 class="text-4xl font-extrabold text-green-700 mb-2">Gabung Inkubasi Inovasi!</h1>
+        <p class="text-yellow-600 mb-4">Kembangkan ide inovasi Anda bersama mentor terbaik dan ekosistem kolaboratif.</p>
+        <NuxtLink to="/" class="inline-block bg-yellow-400 text-green-900 px-8 py-3 rounded-full font-bold shadow hover:bg-yellow-300 transition">Kembali ke Beranda</NuxtLink>
+      </div>
+    </div>
+    <!-- Header -->
+    <div class="mb-6">
+      <h1 class="text-3xl font-bold text-green-800">🌱 Inkubasi Inovasi</h1>
+      <p class="text-yellow-600">Pantau perkembangan ide inovasi yang sedang diinkubasi</p>
+    </div>
+
+    <!-- Statistik Ringkas -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+      <div class="bg-gradient-to-br from-green-200 to-green-400 border-2 border-green-600 rounded-xl p-6 text-center shadow-lg">
+        <h2 class="text-3xl font-extrabold text-green-800 animate-bounce">24</h2>
+        <p class="text-base text-green-900 font-semibold">Total Ide</p>
+      </div>
+      <div class="bg-gradient-to-br from-yellow-100 to-yellow-400 border-2 border-yellow-400 rounded-xl p-6 text-center shadow-lg">
+        <h2 class="text-3xl font-extrabold text-yellow-700 animate-bounce">10</h2>
+        <p class="text-base text-yellow-900 font-semibold">Sedang Proses</p>
+      </div>
+      <div class="bg-gradient-to-br from-emerald-100 to-emerald-400 border-2 border-emerald-400 rounded-xl p-6 text-center shadow-lg">
+        <h2 class="text-3xl font-extrabold text-emerald-700 animate-bounce">5</h2>
+        <p class="text-base text-emerald-900 font-semibold">Selesai</p>
+      </div>
+    </div>
+
+    <!-- Kanban Board Inkubasi -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+      <div v-for="(col, idx) in columns" :key="idx" class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+        <h3 class="font-semibold text-green-700 mb-3">{{ col.title }}</h3>
+        <div v-for="card in col.items" :key="card.id" class="bg-white rounded-lg border border-yellow-300 p-3 mb-3 shadow">
+          <p class="font-semibold text-green-800">{{ card.nama }}</p>
+          <p class="text-xs text-gray-600">{{ card.opd }}</p>
+          <div class="w-full bg-gray-200 rounded-full h-2 mt-2 overflow-hidden">
+            <div class="bg-gradient-to-r from-green-400 to-green-700 h-2 rounded-full transition-all duration-700" :style="{ width: card.progress + '%' }"></div>
+          </div>
+          <p class="text-xs text-right text-green-700 mt-1 font-bold">{{ card.progress }}%</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kartu Inkubasi Modern -->
+    <div class="bg-white border border-yellow-300 rounded-xl shadow p-6">
+      <h3 class="font-semibold text-green-700 mb-6">🚀 Proses Seleksi & Kurasi Ide</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div v-for="row in rows" :key="row.id" class="bg-gradient-to-br from-green-50 to-yellow-50 border-2 border-green-200 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <h4 class="font-bold text-green-800 text-lg">{{ row.nama }}</h4>
+              <p class="text-sm text-gray-600">{{ row.opd }}</p>
+            </div>
+            <div class="text-right">
+              <span class="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full">{{ row.mentor }}</span>
+            </div>
+          </div>
+          
+          <!-- Status Badge -->
+          <div class="mb-4">
+            <span :class="[
+              'px-3 py-1 rounded-full text-sm font-semibold',
+              row.status === 'Ide Baru' ? 'bg-blue-100 text-blue-700' : '',
+              row.status === 'Sedang Proses' ? 'bg-yellow-100 text-yellow-700' : '',
+              row.status === 'Uji Coba' ? 'bg-purple-100 text-purple-700' : '',
+              row.status === 'Selesai' ? 'bg-green-100 text-green-700' : ''
+            ]">
+              {{ row.status }}
+            </span>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="mb-4">
+            <div class="flex justify-between text-sm mb-1">
+              <span class="text-gray-600">Progress</span>
+              <span class="text-green-700 font-bold">{{ row.progress }}%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-3">
+              <div class="bg-gradient-to-r from-green-400 to-green-600 h-3 rounded-full transition-all duration-700" :style="{ width: row.progress + '%' }"></div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex gap-2">
+            <button v-if="row.status === 'Ide Baru'" 
+              @click="updateStatus(row, 'Sedang Proses')" 
+              class="flex-1 bg-yellow-400 text-yellow-900 px-3 py-2 rounded-lg font-semibold hover:bg-yellow-300 transition text-sm">
+              ✅ Seleksi
+            </button>
+            <button v-if="row.status === 'Sedang Proses'" 
+              @click="updateStatus(row, 'Uji Coba')" 
+              class="flex-1 bg-purple-400 text-purple-900 px-3 py-2 rounded-lg font-semibold hover:bg-purple-300 transition text-sm">
+              🔍 Kurasi
+            </button>
+            <button v-if="row.status === 'Uji Coba'" 
+              @click="updateStatus(row, 'Selesai')" 
+              class="flex-1 bg-green-400 text-green-900 px-3 py-2 rounded-lg font-semibold hover:bg-green-300 transition text-sm">
+              🎉 Selesaikan
+            </button>
+            <button v-if="row.status === 'Selesai'" 
+              class="flex-1 bg-gray-200 text-gray-600 px-3 py-2 rounded-lg font-semibold text-sm cursor-not-allowed">
+              ✨ Completed
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { reactive, ref, computed, onMounted, nextTick, watch } from 'vue'
+
+// SEO Meta
+useSeoMeta({
+  title: 'Peta Inovasi - DINDA Cilegon',
+  description: 'Eksplorasi peta sebaran inovasi daerah di Kota Cilegon dengan visualisasi interaktif'
+})
+
+// Reactive State
+const showForm = ref(false)
+const showTimeline = ref(false)
+const formSuccess = ref(false)
+const form = ref({ nama: '', opd: '', deskripsi: '', kategori: '', kontak: '' })
+
+const isLoading = ref(true)
+const isLoadingMap = ref(true)
+const inovasiData = ref([])
+const map = ref(null)
+const markers = ref([])
+
+// Filter state
+const searchQuery = ref('')
+const selectedCategory = ref('')
+const selectedStatus = ref('')
+const selectedInovasi = ref(null)
+
+// Fetch data inovasi dan SDGs
+const { data: apiData } = await useFetch('/api/debug/inovasi')
+const { data: sdgsData } = await useFetch('/api/sdgs')
+
+// Create SDGs lookup map
+const sdgsMap = ref(new Map())
+if (sdgsData.value?.success) {
+  sdgsData.value.data.forEach(sdg => {
+    sdgsMap.value.set(sdg.goal, sdg)
+  })
+  console.log('SDGs loaded:', sdgsMap.value.size)
+}
+
+// Process inovasi data
+if (apiData.value?.success) {
+  inovasiData.value = apiData.value.data
+  console.log('Loaded inovasi data:', inovasiData.value)
+  console.log('Total inovasi:', inovasiData.value.length)
+  
+  // Log coordinates dan SDGs
+  inovasiData.value.forEach((item, index) => {
+    console.log(`Inovasi ${index}: ${item.judulInovasi}`)
+    console.log(`  - Coordinates: ${item.inovatorData?.longlat}`)
+    console.log(`  - SDGs ID: ${item.sdgs}`)
+    console.log(`  - SDGs Data:`, sdgsMap.value.get(item.sdgs))
+  })
+  
+  isLoading.value = false
+} else {
+  console.error('Failed to load inovasi data:', apiData.value)
+}
+
+// Computed filtered data
+const filteredInovasi = computed(() => {
+  return inovasiData.value.filter(inovasi => {
+    const matchesSearch = !searchQuery.value || 
+      inovasi.judulInovasi?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      inovasi.deskripsi?.toLowerCase().includes(searchQuery.value.toLowerCase())
+    
+    const matchesCategory = !selectedCategory.value || 
+      inovasi.urusan?.toLowerCase().includes(selectedCategory.value.toLowerCase())
+    
+    const matchesStatus = !selectedStatus.value || 
+      getRandomStatus().includes(selectedStatus.value)
+    
+    return matchesSearch && matchesCategory && matchesStatus
+  })
+})
+
+// Random status generator (untuk demo)
+const statusOptions = ['Ide Baru', 'Sedang Proses', 'Uji Coba', 'Selesai']
+const getRandomStatus = () => {
+  return statusOptions[Math.floor(Math.random() * statusOptions.length)]
+}
+
+// Status badge styling
+const getStatusBadgeClass = (status) => {
+  const statusMap = {
+    'Ide Baru': 'bg-blue-100 text-blue-700',
+    'Sedang Proses': 'bg-yellow-100 text-yellow-700',
+    'Uji Coba': 'bg-purple-100 text-purple-700',
+    'Selesai': 'bg-green-100 text-green-700'
+  }
+  return statusMap[status] || 'bg-gray-100 text-gray-700'
+}
+
+// SDGs helper function
+const getSdgsData = (sdgsId) => {
+  return sdgsMap.value.get(sdgsId) || null
+}
+
+// Leaflet Map Functions
+const initMap = async () => {
+  if (typeof window === 'undefined' || !window.L) return
+  
+  await nextTick()
+  
+  if (map.value) {
+    map.value.remove()
+  }
+  
+  // Initialize map centered on Cilegon
+  map.value = window.L.map('map').setView([-6.0175, 106.0641], 12)
+  
+  // Add tile layer
+  window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map.value)
+  
+  // Add markers for each inovator with coordinates
+  isLoadingMap.value = false
+  
+  // Add markers after map is loaded and data is available
+  setTimeout(() => {
+    addMarkersToMap()
+  }, 100)
+}
+
+const addMarkersToMap = () => {
+  if (!map.value) {
+    console.log('Map not initialized yet')
+    return
+  }
+  
+  console.log('Adding markers to map, total inovasi:', filteredInovasi.value.length)
+  
+  // Clear existing markers
+  markers.value.forEach(marker => map.value.removeLayer(marker))
+  markers.value = []
+  
+  let markersAdded = 0
+  
+  // Add new markers
+  filteredInovasi.value.forEach((inovasi, index) => {
+    console.log(`Processing inovasi ${index}:`, inovasi.judulInovasi, 'longlat:', inovasi.inovatorData?.longlat)
+    
+    if (inovasi.inovatorData?.longlat) {
+      const coords = parseCoordinates(inovasi.inovatorData.longlat)
+      if (coords) {
+        console.log(`Creating marker for ${inovasi.judulInovasi} at:`, coords)
+        
+        const marker = window.L.marker(coords)
+          .bindPopup(`
+            <div class="p-2 min-w-64">
+              <h3 class="font-bold text-teal-800 mb-2">${inovasi.judulInovasi}</h3>
+              <p class="text-sm text-gray-600 mb-2">${inovasi.inovatorData.inovator}</p>
+              <p class="text-xs text-gray-500 mb-2">${inovasi.deskripsi?.substring(0, 100)}...</p>
+              <div class="flex gap-1 text-xs">
+                <span class="bg-teal-100 text-teal-700 px-2 py-1 rounded">${inovasi.urusan}</span>
+                <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded">${inovasi.tahun}</span>
+              </div>
+            </div>
+          `)
+          .addTo(map.value)
+        
+        marker.on('click', () => {
+          selectedInovasi.value = inovasi
+        })
+        
+        markers.value.push(marker)
+        markersAdded++
+      }
+    }
+  })
+  
+  console.log(`Added ${markersAdded} markers to map`)
+}
+
+// Parse coordinate string (assuming format like "lat,lng" or "lng,lat")
+const parseCoordinates = (longlat) => {
+  if (!longlat) {
+    console.log('No coordinates provided:', longlat)
+    return null
+  }
+  
+  try {
+    const coords = longlat.split(',').map(coord => parseFloat(coord.trim()))
+    console.log('Parsing coordinates:', longlat, 'result:', coords)
+    
+    if (coords.length >= 2 && !isNaN(coords[0]) && !isNaN(coords[1])) {
+      // Check if coordinates are in reasonable range for Indonesia
+      const lat = coords[0]
+      const lng = coords[1]
+      
+      // Indonesia coordinate ranges approximately
+      if (lat >= -11 && lat <= 6 && lng >= 95 && lng <= 141) {
+        console.log('Valid coordinates (lat, lng):', [lat, lng])
+        return [lat, lng] // [lat, lng] for Leaflet
+      } else if (lng >= -11 && lng <= 6 && lat >= 95 && lat <= 141) {
+        // Swapped coordinates - longlat format
+        console.log('Valid coordinates (swapped lng, lat):', [lng, lat])
+        return [lng, lat] // [lat, lng] for Leaflet
+      }
+    }
+  } catch (e) {
+    console.error('Error parsing coordinates:', longlat, e)
+  }
+  
+  console.log('Invalid coordinates:', longlat)
+  return null
+}
+
+// Map interaction functions
+const focusOnMap = (longlat) => {
+  const coords = parseCoordinates(longlat)
+  if (coords && map.value) {
+    map.value.setView(coords, 15)
+    // Find and open popup for this coordinate
+    markers.value.forEach(marker => {
+      const markerCoords = marker.getLatLng()
+      if (Math.abs(markerCoords.lat - coords[0]) < 0.001 && Math.abs(markerCoords.lng - coords[1]) < 0.001) {
+        marker.openPopup()
+      }
+    })
+  }
+}
+
+const highlightInovasi = (inovasi) => {
+  selectedInovasi.value = inovasi
+  if (inovasi.inovatorData?.longlat) {
+    focusOnMap(inovasi.inovatorData.longlat)
+  }
+}
+
+const viewDetails = (inovasi) => {
+  // Could open a modal or navigate to detail page
+  alert(`Detail: ${inovasi.judulInovasi}`)
+}
+
+const submitForm = () => {
+  // Simulasi submit form
+  formSuccess.value = true
+  setTimeout(() => {
+    formSuccess.value = false
+    showForm.value = false
+  }, 2000)
+}
+
+// Watch filtered data to update map markers
+watch(filteredInovasi, () => {
+  if (map.value) {
+    addMarkersToMap()
+  }
+})
+
+// Initialize map when component is mounted
+onMounted(() => {
+  // Wait for Leaflet to load
+  const checkLeaflet = () => {
+    if (typeof window !== 'undefined' && window.L) {
+      initMap()
+    } else {
+      setTimeout(checkLeaflet, 100)
+    }
+  }
+  checkLeaflet()
+})
+</script>
+
+<style scoped>
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Custom Leaflet marker styling */
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  padding: 0;
+}
+
+/* Map loading animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+</style>

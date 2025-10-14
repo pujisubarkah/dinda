@@ -67,8 +67,8 @@
           <div class="space-y-2 text-sm">
             <h4 class="font-semibold text-white mb-3" style="text-shadow: 1px 1px 2px rgba(128, 128, 128, 0.8);">Layanan</h4>
             <div class="text-gray-200">
-              <a href="/dashboard" class="block hover:text-white transition-colors mb-1" style="text-shadow: 1px 1px 1px rgba(128, 128, 128, 0.5);">Dashboard Inovasi</a>
-              <a href="/inkubasi" class="block hover:text-white transition-colors mb-1" style="text-shadow: 1px 1px 1px rgba(128, 128, 128, 0.5);">Inkubasi Inovasi</a>
+              <a href="/galeri" class="block hover:text-white transition-colors mb-1" style="text-shadow: 1px 1px 1px rgba(128, 128, 128, 0.5);">Galeri Inovasi</a>
+              <a href="/inovasi" class="block hover:text-white transition-colors mb-1" style="text-shadow: 1px 1px 1px rgba(128, 128, 128, 0.5);">Ide Inovasi</a>
               <a href="/lomba" class="block hover:text-white transition-colors mb-1" style="text-shadow: 1px 1px 1px rgba(128, 128, 128, 0.5);">Lomba Inovasi</a>
               <a href="/forum" class="block hover:text-white transition-colors" style="text-shadow: 1px 1px 1px rgba(128, 128, 128, 0.5);">Forum Diskusi</a>
             </div>

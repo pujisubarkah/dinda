@@ -40,8 +40,8 @@
             <NuxtLink to="/galeri" class="nav-link">
               Galeri
             </NuxtLink>
-            <NuxtLink to="/inkubasi" class="nav-link">
-              Inkubasi
+            <NuxtLink to="/inovasi" class="nav-link">
+              Inovasi
             </NuxtLink>
             <NuxtLink to="/forum" class="nav-link">
               Forum
