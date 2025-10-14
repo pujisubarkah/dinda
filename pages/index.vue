@@ -1,21 +1,41 @@
 <template>
   <div>
-    <section
-      class="w-full py-16 flex items-center justify-center"
+    <!-- Modern Header Banner with Original Background -->
+    <section 
+      class="relative w-full py-16 flex items-center justify-center overflow-hidden"
       style="background-image: url('https://cilegon.go.id/assets/images/bgtagline.jpg'); background-size: cover; background-repeat: no-repeat; background-attachment: fixed; background-position: center;"
     >
-      <div class="max-w-6xl w-full grid grid-cols-1 md:grid-cols-3 gap-8 text-center text-white">
-        <div class="flex flex-col items-center justify-center">
-          <span class="text-5xl font-light mb-2">8</span>
-          <h3 class="text-lg font-light mt-2">KECAMATAN</h3>
+      <!-- Modern overlay untuk readability -->
+      <div class="absolute inset-0 bg-gradient-to-br from-black/40 via-black/30 to-black/50"></div>
+      
+      <!-- Subtle pattern overlay -->
+      <div class="absolute inset-0 opacity-10">
+        <div class="absolute top-0 left-0 w-full h-full bg-pattern opacity-30"></div>
+      </div>
+
+      <!-- Content Container -->
+      <div class="relative z-10 max-w-6xl mx-auto px-6 text-center">
+        <div class="text-white">
+          <!-- Main Title Section -->
+          <div class="mb-6">
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-black mb-4 leading-tight">
+              <span class="text-white drop-shadow-2xl">DINDA CILEGON</span>
+            </h1>
+            <h2 class="text-xl md:text-2xl lg:text-3xl font-bold text-white/95 mb-3 drop-shadow-lg">
+              Dashboard Inovasi Daerah Kota Cilegon
+            </h2>
+            <p class="text-lg md:text-xl text-white/90 font-medium italic drop-shadow-lg">
+              Mewujudkan Cilegon Maju, Sejahtera dan Berkelanjutan
+            </p>
+          </div>
         </div>
-        <div class="flex flex-col items-center justify-center">
-          <p class="text-lg font-semibold mt-2 mb-2">MEWUJUDKAN CILEGON MAJU, SEJAHTERA DAN BERKELANJUTAN</p>
-        </div>
-        <div class="flex flex-col items-center justify-center">
-          <span class="text-5xl font-light mb-2">43</span>
-          <h3 class="text-lg font-light mt-2">KELURAHAN</h3>
-        </div>
+      </div>
+
+      <!-- Bottom decorative wave -->
+      <div class="absolute bottom-0 left-0 right-0">
+        <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block w-full h-8 fill-white">
+          <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"></path>
+        </svg>
       </div>
     </section>
 
@@ -47,12 +67,7 @@
         <div class="absolute bottom-20 left-1/3 w-40 h-40 bg-green-300 rounded-full blur-3xl animate-pulse delay-2000"></div>
       </div>
 
-      <!-- Floating Action Button -->
-      <button @click="showModal = true" class="absolute top-8 right-8 z-20 bg-gradient-to-r from-teal-500 to-teal-600 text-white px-8 py-4 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 pulse-ring">
-        <span class="flex items-center">
-          💡 Punya Ide Inovasi?
-        </span>
-      </button>
+
 
       <!-- Modal Ide Inovasi -->
       <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
@@ -77,6 +92,7 @@
           
           <!-- Left Content -->
           <div class="text-left">
+            
             <div class="inline-flex items-center bg-teal-100 text-teal-700 px-4 py-2 rounded-full text-sm font-semibold mb-6">
               🌟 Platform Inovasi Terdepan
             </div>
@@ -139,20 +155,20 @@
             <!-- Stats Cards Floating -->
             <div class="grid grid-cols-2 gap-4 mb-8">
               <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                <div class="text-3xl font-black text-teal-600 mb-2">12.8K+</div>
+                <div class="text-3xl font-black text-teal-600 mb-2">200+</div>
                 <div class="text-sm text-gray-600">💡 Ide Inovasi</div>
               </div>
               <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                <div class="text-3xl font-black text-blue-600 mb-2">120</div>
-                <div class="text-sm text-gray-600">🏛️ Daerah Terlibat</div>
+                <div class="text-3xl font-black text-blue-600 mb-2">8</div>
+                <div class="text-sm text-gray-600">🏛️ Kecamatan Terlibat</div>
               </div>
               <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                <div class="text-3xl font-black text-green-600 mb-2">500+</div>
+                <div class="text-3xl font-black text-green-600 mb-2">100+</div>
                 <div class="text-sm text-gray-600">👥 Inovator Aktif</div>
               </div>
               <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                <div class="text-3xl font-black text-purple-600 mb-2">200+</div>
-                <div class="text-sm text-gray-600">🎯 Program Inkubasi</div>
+                <div class="text-3xl font-black text-purple-600 mb-2">20+</div>
+                <div class="text-sm text-gray-600">🎯 Organisasi Daerah</div>
               </div>
             </div>
 
@@ -196,56 +212,23 @@
     </section>
 
    
-
-    <!-- Statistik & Peta Inovasi -->
     <section class="py-12 bg-green-50">
-      <div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center mb-10">
-        <div class="p-6 bg-white rounded-xl shadow border-2 border-yellow-400">
-          <h2 class="text-3xl font-bold text-green-700">12.810+</h2>
-          <p class="text-sm text-gray-600">Ide Inovasi</p>
-        </div>
-        <div class="p-6 bg-white rounded-xl shadow border-2 border-yellow-400">
-          <h2 class="text-3xl font-bold text-green-700">120</h2>
-          <p class="text-sm text-gray-600">Daerah Terlibat</p>
-        </div>
-        <div class="p-6 bg-white rounded-xl shadow border-2 border-yellow-400">
-          <h2 class="text-3xl font-bold text-green-700">500+</h2>
-          <p class="text-sm text-gray-600">Inovator Aktif</p>
-        </div>
-        <div class="p-6 bg-white rounded-xl shadow border-2 border-yellow-400">
-          <h2 class="text-3xl font-bold text-green-700">200+</h2>
-          <p class="text-sm text-gray-600">Program Inkubasi</p>
-        </div>
-      </div>
-      
       <!-- Peta Inovasi Component -->
       <div class="max-w-7xl mx-auto">
-  <Kecamatan />
+        <Kecamatan />
+      </div>
+      
+      <!-- Floating Action Button -->
+      <div class="flex justify-center mt-8 mb-6">
+        <button @click="showModal = true" class="bg-gradient-to-r from-teal-500 to-teal-600 text-white px-8 py-4 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 pulse-ring">
+          <span class="flex items-center">
+            💡 Punya Ide Inovasi?
+          </span>
+        </button>
       </div>
     </section>
 
-    <!-- Galeri Inovasi Terbaru -->
-    <section class="py-12 max-w-7xl mx-auto px-6">
-      <h2 class="text-2xl font-bold text-green-800 mb-6">Inovasi Terbaru</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-white border border-yellow-300 rounded-xl shadow p-4">
-          <h3 class="font-semibold text-green-700">Sistem Pertanian Cerdas</h3>
-          <p class="text-sm text-gray-600">Kategori: Teknologi</p>
-        </div>
-        <div class="bg-white border border-yellow-300 rounded-xl shadow p-4">
-          <h3 class="font-semibold text-green-700">Aplikasi Layanan Publik</h3>
-          <p class="text-sm text-gray-600">Kategori: Digital</p>
-        </div>
-        <div class="bg-white border border-yellow-300 rounded-xl shadow p-4">
-          <h3 class="font-semibold text-green-700">Energi Terbarukan Desa</h3>
-          <p class="text-sm text-gray-600">Kategori: Lingkungan</p>
-        </div>
-      </div>
-      <div class="text-center mt-6">
-        <NuxtLink to="/galeri" class="text-green-700 hover:text-yellow-500 font-semibold">Lihat Semua →</NuxtLink>
-      </div>
-    </section>
-
+    
   <!-- CTA dihapus, tombol sudah dipindahkan ke atas Hero section -->
 
      <!-- Kontak dan Maps -->
@@ -337,5 +320,36 @@ html {
 
 .hover\:-translate-y-2:hover {
   transform: translateY(-8px);
+}
+
+/* Modern Header Banner Styles */
+.bg-pattern {
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 2px, transparent 2px),
+    radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 2px, transparent 2px);
+  background-size: 40px 40px;
+  background-position: 0 0, 20px 20px;
+}
+
+/* Enhanced backdrop blur */
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Text shadow for better readability */
+.drop-shadow-lg {
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.drop-shadow-2xl {
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.5)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+/* Smooth transitions for interactive elements */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
 }
 </style>

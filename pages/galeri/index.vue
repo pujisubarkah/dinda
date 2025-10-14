@@ -2,7 +2,7 @@
   <div class="max-w-7xl mx-auto px-6 py-10">
     <!-- Header -->
     <div class="text-center mb-12">
-      <h1 class="text-4xl font-bold bg-gradient-to-r from-teal-600 to-teal-700 bg-clip-text text-transparent mb-4">� Galeri Video Inovasi</h1>
+      <h1 class="text-4xl font-bold bg-gradient-to-r from-teal-600 to-teal-700 bg-clip-text text-transparent mb-4">🎬 Galeri Video Inovasi</h1>
       <p class="text-xl text-gray-600">Dokumentasi kegiatan dan inovasi Kota Cilegon</p>
       <div class="mt-4 inline-flex items-center bg-teal-50 text-teal-700 px-4 py-2 rounded-full text-sm font-semibold">
         <span v-if="loading">📹 Memuat video...</span>

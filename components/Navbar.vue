@@ -23,10 +23,6 @@
                 DINDA CILEGON
               </span>
             </div>
-            <p class="text-sm md:text-base text-white font-semibold hidden lg:block mt-1" 
-               style="text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4), 0px 0px 4px rgba(255, 255, 255, 0.2);">
-              ( Dashboard Inovasi Daerah Kota Cilegon )
-            </p>
             <p class="text-xs md:text-sm text-blue-100 italic hidden lg:block font-medium" 
                style="text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3), 0px 0px 3px rgba(173, 216, 230, 0.5);">
               Wahana Informasi & Akselerasi Inovasi Kota Cilegon
