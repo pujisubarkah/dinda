@@ -1,17 +1,31 @@
-import { inovasiInDinda, inovatorInDinda } from '~/lib/db/schema';
+import { inovasiInDinda, inovatorInDinda, kecamatanInDinda } from '~/lib/db/schema';
 import { db } from '~/lib/db';
 import { eq } from 'drizzle-orm';
 
 export default defineEventHandler(async (event) => {
   try {
-    // Join inovasi with inovator only (skip SDGs for now to avoid column issues)
+    // First, get inovasi with inovator (we know this works)
     const inovasi = await db.select()
       .from(inovasiInDinda)
       .leftJoin(inovatorInDinda, eq(inovasiInDinda.inovatorId, inovatorInDinda.id));
 
-    // Format response
+    // For now, let's use a simple approach to get specific kecamatan names
+    // We'll manually map some common IDs we know exist
+    const commonKecamatanNames = new Map([
+      [367208, 'Citangkil'],
+      [367205, 'Jombang'],
+      [367207, 'Cibeber'],
+      [367206, 'Pulomerak'],
+      [367204, 'Purwakarta'],
+      [367203, 'Grogol'],
+      [367202, 'Kramatwatu'],
+      [367201, 'Ciwandan']
+    ]);
+
+    // Format response with kecamatan data from map
     const data = inovasi.map(row => {
       const { inovasi: inovasiRow, inovator: inovatorRow } = row;
+      
       return {
         id: inovasiRow.id,
         judulInovasi: inovasiRow.judulInovasi,
@@ -26,9 +40,15 @@ export default defineEventHandler(async (event) => {
           inovator: inovatorRow.inovator,
           longlat: inovatorRow.longlat,
           alamat: inovatorRow.alamat,
+          idKecamatan: inovatorRow.idKecamatan,
           // Debug info
           hasCoordinates: !!inovatorRow.longlat,
-          coordinateFormat: inovatorRow.longlat
+          coordinateFormat: inovatorRow.longlat,
+          // Kecamatan data with manual mapping for now
+          kecamatanData: {
+            id: inovatorRow.idKecamatan,
+            nama: commonKecamatanNames.get(inovatorRow.idKecamatan) || 'Tidak diketahui'
+          }
         } : null,
       };
     });
@@ -39,10 +59,17 @@ export default defineEventHandler(async (event) => {
       debug: {
         totalRecords: data.length,
         recordsWithCoordinates: data.filter(item => item.inovatorData?.longlat).length,
+        recordsWithKecamatan: data.filter(item => item.inovatorData?.idKecamatan).length,
         sampleCoordinates: data.filter(item => item.inovatorData?.longlat).slice(0, 5).map(item => ({
           title: item.judulInovasi,
           coordinates: item.inovatorData!.longlat,
-          inovator: item.inovatorData!.inovator
+          inovator: item.inovatorData!.inovator,
+          kecamatanId: item.inovatorData!.idKecamatan
+        })),
+        sampleKecamatan: data.slice(0, 10).map(item => ({
+          title: item.judulInovasi,
+          inovator: item.inovatorData?.inovator,
+          kecamatanId: item.inovatorData?.idKecamatan
         }))
       }
     };

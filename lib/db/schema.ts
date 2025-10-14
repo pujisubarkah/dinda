@@ -75,8 +75,6 @@ export const sdgsInDinda = dinda.table("sdgs", {
   tujuanKe: smallint("tujuan_ke"),
   sdgs: text(),
   image: text(),
-  deskripsi: text(),
-  target: text(),
 });
 
 // Kecamatan

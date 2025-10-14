@@ -52,33 +52,36 @@
             <input 
               v-model="searchQuery"
               type="text" 
-              placeholder="Cari inovasi..."
+              placeholder="Cari judul inovasi, deskripsi, atau nama inovator..."
               class="w-full pl-12 pr-4 py-3 border-2 border-teal-100 rounded-xl focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-100 transition-all"
             >
           </div>
           
-          <!-- Category Filter -->
+          <!-- Kecamatan Filter -->
           <select 
             v-model="selectedCategory"
             class="w-full px-4 py-3 border-2 border-teal-100 rounded-xl focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-100 transition-all bg-white"
           >
-            <option value="">Semua Kategori</option>
-            <option value="Teknologi">Teknologi</option>
-            <option value="Digital">Digital</option>
-            <option value="Lingkungan">Lingkungan</option>
-            <option value="Infrastruktur">Infrastruktur</option>
+            <option value="">Semua Kecamatan</option>
+            <option value="Cibeber">Kecamatan Cibeber</option>
+            <option value="Cilegon">Kecamatan Cilegon</option>
+            <option value="Citangkil">Kecamatan Citangkil</option>
+            <option value="Ciwandan">Kecamatan Ciwandan</option>
+            <option value="Jombang">Kecamatan Jombang</option>
+            <option value="Pulomerak">Kecamatan Pulomerak</option>
+            <option value="Purwakarta">Kecamatan Purwakarta</option>
+            <option value="Grogol">Kecamatan Grogol</option>
           </select>
 
-          <!-- Status Filter -->
+          <!-- SDGs Filter -->
           <select 
-            v-model="selectedStatus"
+            v-model="selectedSdgs"
             class="w-full px-4 py-3 border-2 border-teal-100 rounded-xl focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-100 transition-all bg-white"
           >
-            <option value="">Semua Status</option>
-            <option value="Ide Baru">Ide Baru</option>
-            <option value="Sedang Proses">Sedang Proses</option>
-            <option value="Uji Coba">Uji Coba</option>
-            <option value="Selesai">Selesai</option>
+            <option value="">Semua SDGs</option>
+            <option v-for="[id, sdg] in sdgsMap" :key="id" :value="id">
+              SDG {{ sdg.tujuanKe || id }}: {{ sdg.sdgs }}
+            </option>
           </select>
         </div>
       </div>
@@ -127,9 +130,8 @@
                 <th class="px-6 py-3 text-left text-xs font-medium text-teal-800 uppercase tracking-wider">Judul Inovasi</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-teal-800 uppercase tracking-wider">Inovator</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-teal-800 uppercase tracking-wider">SDGs</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-teal-800 uppercase tracking-wider">Urusan</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-teal-800 uppercase tracking-wider">Kecamatan</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-teal-800 uppercase tracking-wider">Tahun</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-teal-800 uppercase tracking-wider">Lokasi</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-teal-800 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
@@ -149,9 +151,9 @@
                 
                 <!-- Judul Inovasi -->
                 <td class="px-6 py-4 text-sm text-gray-900">
-                  <div class="max-w-xs">
-                    <div class="font-semibold text-teal-800 truncate">{{ inovasi.judulInovasi }}</div>
-                    <div class="text-gray-500 text-xs mt-1 line-clamp-2">{{ inovasi.deskripsi }}</div>
+                  <div class="max-w-sm">
+                    <div class="font-semibold text-teal-800 leading-tight mb-2 whitespace-normal break-words">{{ inovasi.judulInovasi }}</div>
+                    <div class="text-gray-500 text-xs leading-tight whitespace-normal break-words">{{ inovasi.deskripsi }}</div>
                   </div>
                 </td>
                 
@@ -165,36 +167,45 @@
                 
                 <!-- SDGs -->
                 <td class="px-6 py-4 text-sm">
-                  <div v-if="inovasi.sdgs && getSdgsData(inovasi.sdgs)" class="flex items-center gap-2">
+                  <div v-if="inovasi.sdgs && getSdgsData(inovasi.sdgs)" class="flex items-center gap-3">
                     <img 
                       v-if="getSdgsData(inovasi.sdgs).image" 
                       :src="getSdgsData(inovasi.sdgs).image" 
-                      :alt="'SDG ' + getSdgsData(inovasi.sdgs).goal"
-                      class="w-10 h-10 object-contain rounded-lg border bg-white"
+                      :alt="'SDG ' + getSdgsData(inovasi.sdgs).sdgs"
+                      class="w-12 h-12 object-contain rounded-lg shadow-sm border border-gray-200"
+                      :title="getSdgsData(inovasi.sdgs).sdgs"
                     >
-                    <div v-else class="w-8 h-8 bg-blue-100 rounded flex items-center justify-center">
-                      <span class="text-blue-600 text-xs font-bold">{{ inovasi.sdgs }}</span>
+                    <div v-else class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-sm">
+                      <span class="text-white text-xs font-bold">{{ inovasi.sdgs }}</span>
                     </div>
-                    <div>
-                      <div class="font-medium text-blue-800 text-xs">Goal {{ getSdgsData(inovasi.sdgs).goal }}</div>
-                      <div class="text-gray-500 text-xs truncate max-w-24">{{ getSdgsData(inovasi.sdgs).title }}</div>
+                    <div class="min-w-0 flex-1">
+                      <div class="font-semibold text-blue-800 text-xs leading-tight">
+                        {{ getSdgsData(inovasi.sdgs).sdgs || `SDG ${inovasi.sdgs}` }}
+                      </div>
                     </div>
                   </div>
-                  <div v-else-if="inovasi.sdgs" class="flex items-center gap-2">
-                    <div class="w-8 h-8 bg-blue-100 rounded flex items-center justify-center">
-                      <span class="text-blue-600 text-xs font-bold">{{ inovasi.sdgs }}</span>
+                  <div v-else-if="inovasi.sdgs" class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-gray-400 to-gray-500 rounded-lg flex items-center justify-center shadow-sm">
+                      <span class="text-white text-xs font-bold">{{ inovasi.sdgs }}</span>
                     </div>
-                    <span class="text-xs text-gray-700">Goal {{ inovasi.sdgs }}</span>
+                    <div class="min-w-0 flex-1">
+                      <div class="font-semibold text-gray-700 text-xs leading-tight">
+                        SDG {{ inovasi.sdgs }}
+                      </div>
+                    </div>
                   </div>
-                  <div v-else class="text-gray-400 text-xs">
+                  <div v-else class="text-gray-400 text-xs flex items-center justify-center h-12">
                     <i class="fas fa-minus"></i>
                   </div>
                 </td>
                 
-                <!-- Urusan -->
+                <!-- Kecamatan -->
                 <td class="px-6 py-4 text-sm">
-                  <span class="inline-flex px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">
-                    {{ inovasi.urusan || 'Tidak dikategorikan' }}
+                  <span 
+                    :class="getKecamatanColor(inovasi.inovatorData?.kecamatanData?.nama || 'Tidak diketahui')"
+                    class="inline-flex px-2 py-1 text-xs font-medium rounded-full"
+                  >
+                    Kecamatan {{ inovasi.inovatorData?.kecamatanData?.nama || 'Tidak diketahui' }}
                   </span>
                 </td>
                 
@@ -203,33 +214,18 @@
                   {{ inovasi.tahun }}
                 </td>
                 
-                <!-- Lokasi -->
-                <td class="px-6 py-4 text-sm">
-                  <div v-if="inovasi.inovatorData?.longlat" class="flex items-center gap-1 text-green-600">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span class="text-xs">Tersedia</span>
-                  </div>
-                  <div v-else class="text-gray-400 text-xs">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>Tidak ada</span>
-                  </div>
-                </td>
-                
                 <!-- Actions -->
                 <td class="px-6 py-4 text-sm">
-                  <div class="flex items-center gap-1">
+                  <div class="flex items-center justify-center">
                     <button 
-                      v-if="inovasi.inovatorData?.longlat"
-                      @click.stop="focusOnMap(inovasi.inovatorData.longlat)"
-                      class="bg-teal-100 hover:bg-teal-200 text-teal-700 px-2 py-1 rounded text-xs font-medium transition-colors"
-                      title="Lihat di Peta"
-                    >
-                      <i class="fas fa-map-marker-alt"></i>
-                    </button>
-                    <button 
-                      @click.stop="viewDetails(inovasi)"
-                      class="bg-yellow-100 hover:bg-yellow-200 text-yellow-700 px-2 py-1 rounded text-xs font-medium transition-colors"
-                      title="Lihat Detail"
+                      @click.stop="inovasi.inovatorData?.longlat ? focusOnMap(inovasi.inovatorData.longlat) : viewDetails(inovasi)"
+                      :class="[
+                        'px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+                        inovasi.inovatorData?.longlat 
+                          ? 'bg-teal-100 hover:bg-teal-200 text-teal-700' 
+                          : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                      ]"
+                      :title="inovasi.inovatorData?.longlat ? 'Lihat di Peta' : 'Lihat Detail'"
                     >
                       <i class="fas fa-eye"></i>
                     </button>
@@ -390,7 +386,7 @@ const markers = ref([])
 // Filter state
 const searchQuery = ref('')
 const selectedCategory = ref('')
-const selectedStatus = ref('')
+const selectedSdgs = ref('')
 const selectedInovasi = ref(null)
 
 // Pagination state
@@ -409,6 +405,7 @@ if (sdgsData.value?.success) {
     sdgsMap.value.set(sdg.id, sdg) // Use sdg.id as key
   })
   console.log('SDGs loaded:', sdgsMap.value.size)
+  console.log('Sample SDG data:', sdgsData.value.data[0]) // Debug: check SDG structure
 }
 
 // Process inovasi data
@@ -416,6 +413,13 @@ if (apiData.value?.success) {
   inovasiData.value = apiData.value.data
   console.log('Loaded inovasi data:', inovasiData.value.length)
   console.log('Debug info:', apiData.value.debug)
+  
+  // Debug: Check structure of inovasi data
+  if (inovasiData.value.length > 0) {
+    console.log('Sample inovasi structure:', inovasiData.value[0])
+    console.log('Sample inovatorData:', inovasiData.value[0]?.inovatorData)
+    console.log('Sample kecamatanData:', inovasiData.value[0]?.inovatorData?.kecamatanData)
+  }
   
   // Log sample data
   if (apiData.value.debug?.sampleCoordinates) {
@@ -431,14 +435,21 @@ if (apiData.value?.success) {
 // Computed filtered data
 const filteredInovasi = computed(() => {
   return inovasiData.value.filter(inovasi => {
+    // Enhanced search: judul inovasi, deskripsi, atau nama inovator
     const matchesSearch = !searchQuery.value || 
       inovasi.judulInovasi?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      inovasi.deskripsi?.toLowerCase().includes(searchQuery.value.toLowerCase())
+      inovasi.deskripsi?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      inovasi.inovatorData?.inovator?.toLowerCase().includes(searchQuery.value.toLowerCase())
     
+    // Filter by kecamatan
     const matchesCategory = !selectedCategory.value || 
-      inovasi.urusan?.toLowerCase().includes(selectedCategory.value.toLowerCase())
+      inovasi.inovatorData?.kecamatanData?.nama?.toLowerCase().includes(selectedCategory.value.toLowerCase())
     
-    return matchesSearch && matchesCategory
+    // Filter by SDGs
+    const matchesSdgs = !selectedSdgs.value || 
+      (inovasi.sdgs && inovasi.sdgs.toString() === selectedSdgs.value.toString())
+    
+    return matchesSearch && matchesCategory && matchesSdgs
   })
 })
 
@@ -465,6 +476,44 @@ const paginationInfo = computed(() => {
 // SDGs helper function
 const getSdgsData = (sdgsId) => {
   return sdgsMap.value.get(sdgsId) || null
+}
+
+// Kecamatan color helper function
+const getKecamatanColor = (kecamatanName) => {
+  const colors = {
+    'Cibeber': 'bg-blue-100 text-blue-800',
+    'Cilegon': 'bg-green-100 text-green-800',
+    'Citangkil': 'bg-purple-100 text-purple-800',
+    'Ciwandan': 'bg-pink-100 text-pink-800',
+    'Jombang': 'bg-indigo-100 text-indigo-800',
+    'Pulomerak': 'bg-red-100 text-red-800',
+    'Purwakarta': 'bg-orange-100 text-orange-800',
+    'Gerogol': 'bg-cyan-100 text-cyan-800',
+    'Tidak diketahui': 'bg-gray-100 text-gray-800'
+  }
+  
+  // Jika kecamatan tidak ada dalam daftar, generate warna berdasarkan hash nama
+  if (!colors[kecamatanName]) {
+    const hash = kecamatanName.split('').reduce((a, b) => {
+      a = ((a << 5) - a) + b.charCodeAt(0)
+      return a & a
+    }, 0)
+    
+    const colorList = [
+      'bg-emerald-100 text-emerald-800',
+      'bg-teal-100 text-teal-800',
+      'bg-sky-100 text-sky-800',
+      'bg-violet-100 text-violet-800',
+      'bg-fuchsia-100 text-fuchsia-800',
+      'bg-rose-100 text-rose-800',
+      'bg-amber-100 text-amber-800',
+      'bg-lime-100 text-lime-800'
+    ]
+    
+    return colorList[Math.abs(hash) % colorList.length]
+  }
+  
+  return colors[kecamatanName]
 }
 
 // Leaflet Map Functions
@@ -536,7 +585,7 @@ const addMarkersToMap = () => {
                 <p class="text-sm text-gray-600 mb-2"><i class="fas fa-user"></i> ${inovasi.inovatorData.inovator || 'Tidak diketahui'}</p>
                 <p class="text-xs text-gray-500 mb-2">${(inovasi.deskripsi || '').substring(0, 100)}...</p>
                 <div class="flex gap-1 text-xs">
-                  <span class="bg-teal-100 text-teal-700 px-2 py-1 rounded">${inovasi.urusan || 'N/A'}</span>
+                  <span class="bg-teal-100 text-teal-700 px-2 py-1 rounded">Kecamatan ${inovasi.inovatorData?.kecamatanData?.nama || 'N/A'}</span>
                   <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded">${inovasi.tahun || 'N/A'}</span>
                 </div>
                 <div class="mt-2 text-xs text-gray-500">
@@ -619,7 +668,7 @@ const highlightInovasi = (inovasi) => {
 
 const viewDetails = (inovasi) => {
   // Could open a modal or navigate to detail page
-  alert(`Detail: ${inovasi.judulInovasi}\n\nInovator: ${inovasi.inovatorData?.inovator || 'Tidak diketahui'}\nUrusan: ${inovasi.urusan}\nTahun: ${inovasi.tahun}\n\n${inovasi.deskripsi}`)
+  alert(`Detail: ${inovasi.judulInovasi}\n\nInovator: ${inovasi.inovatorData?.inovator || 'Tidak diketahui'}\nKecamatan: ${inovasi.inovatorData?.kecamatanData?.nama || 'Tidak diketahui'}\nTahun: ${inovasi.tahun}\n\n${inovasi.deskripsi}`)
 }
 
 // Pagination functions
@@ -682,7 +731,7 @@ watch(filteredInovasi, () => {
 }, { deep: true })
 
 // Reset to first page when filters change
-watch([searchQuery, selectedCategory, selectedStatus], () => {
+watch([searchQuery, selectedCategory, selectedSdgs], () => {
   currentPage.value = 1
 })
 
@@ -703,14 +752,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
 /* Custom Leaflet marker styling */
 .leaflet-popup-content-wrapper {
   border-radius: 12px;
