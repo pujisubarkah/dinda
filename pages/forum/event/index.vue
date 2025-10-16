@@ -415,18 +415,16 @@ const formatDate = (dateString) => {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
-    day: 'numeric',
-    timeZone: 'Asia/Jakarta' // GMT+7 (WIB)
+    day: 'numeric'
   })
 }
 
 const formatTime = (dateString) => {
   if (!dateString) return '-'
   const date = new Date(dateString)
-  return date.toLocaleTimeString('id-ID', {
+  return date.toLocaleTimeString('en-EN', {
     hour: '2-digit',
-    minute: '2-digit',
-    timeZone: 'Asia/Jakarta' // GMT+7 (WIB)
+    minute: '2-digit'
   }) + ' WIB'
 }
 
