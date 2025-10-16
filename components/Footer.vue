@@ -1,5 +1,5 @@
 <template>
-  <footer class="py-12" style="background: linear-gradient(135deg, #20B2AA 0%, #20B2AA 100%);">
+  <footer class="py-12" style="background: linear-gradient(135deg, #17B3A9 0%, #0FA39B 100%);">
     <div class="max-w-7xl mx-auto px-6">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Logo & Brand -->

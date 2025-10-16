@@ -1,5 +1,5 @@
 <template>
-  <nav class="text-white shadow-lg border-b-2 border-gray-400 h-20 md:h-24 flex items-center" style="background: linear-gradient(to right, #20B2AA, #20B2AA);">
+  <nav class="text-white shadow-lg border-b-2 border-gray-400 h-20 md:h-24 flex items-center" style="background: linear-gradient(to right, #17B3A9, #0FA39B);">
     <div class="w-full px-0">
       <div class="flex items-center justify-between h-full pl-1 pr-4 sm:pl-2 sm:pr-6 lg:pl-3 lg:pr-8">
         <!-- Logo dan Text di pojok kiri -->
@@ -54,7 +54,7 @@
           <!-- User/Profile -->
           <div class="hidden md:flex items-center space-x-4">
             <div v-if="!isLoggedIn">
-              <button @click="showLoginModal = true" class="bg-gray-100 px-6 py-2.5 rounded-lg font-semibold hover:bg-gray-200 hover:shadow-lg transition-all duration-200 transform hover:scale-105" style="color: #20B2AA;">
+                <button @click="showLoginModal = true" class="bg-gray-100 px-6 py-2.5 rounded-lg font-semibold hover:bg-gray-200 hover:shadow-lg transition-all duration-200 transform hover:scale-105" style="color: #17B3A9;">
                 Login
               </button>
             </div>
@@ -78,7 +78,7 @@
           
           <!-- Mobile Menu - Hanya untuk HP kecil -->
           <div class="md:hidden flex items-center">
-            <button v-if="!isLoggedIn" @click="showLoginModal = true" class="bg-gray-100 px-4 py-2 rounded-lg font-semibold hover:bg-gray-200 transition-all duration-200 mr-3" style="color: #20B2AA;">
+            <button v-if="!isLoggedIn" @click="showLoginModal = true" class="bg-gray-100 px-4 py-2 rounded-lg font-semibold hover:bg-gray-200 transition-all duration-200 mr-3" style="color: #17B3A9;">
               Login
             </button>
             <div v-else class="flex items-center space-x-2 mr-3">
@@ -99,7 +99,7 @@
     </div>
 
     <!-- Mobile Menu - Hanya untuk HP kecil -->
-    <div v-if="isOpen" class="md:hidden px-6 py-4 space-y-3 border-t shadow-lg" style="background-color: #20B2AA; border-color: #20B2AA;">
+  <div v-if="isOpen" class="md:hidden px-6 py-4 space-y-3 border-t shadow-lg" style="background-color: #17B3A9; border-color: #17B3A9;">
       <NuxtLink to="/" @click="isOpen = false" class="block py-3 px-4 rounded-lg text-white font-medium hover:text-gray-200 transition-all duration-200 hover-tosca nav-text-outline">
         🏠 Home
       </NuxtLink>

@@ -45,8 +45,8 @@
 					<textarea v-model="form.indikatorKeberhasilan" class="textarea textarea-bordered w-full focus:ring-2 focus:ring-teal-400" rows="2" placeholder="Indikator keberhasilan rencana aksi..."></textarea>
 				</div>
 				<div>
-					<label class="block font-semibold mb-1">PIC Pelaksana</label>
-					<input v-model="form.picPelaksana" type="text" class="input input-bordered w-full focus:ring-2 focus:ring-teal-400" placeholder="Nama PIC pelaksana..." />
+					<label class="block font-semibold mb-1">Innovator</label>
+					<input v-model="form.picPelaksana" type="text" class="input input-bordered w-full focus:ring-2 focus:ring-teal-400" placeholder="Nama innovator..." />
 				</div>
 				<div>
 					<label class="block font-semibold mb-1">Anggaran</label>
@@ -68,8 +68,8 @@
 			</div>
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 				<div class="md:col-span-2">
-					<label class="block font-semibold mb-1">Catatan Pelaksanaan</label>
-					<textarea v-model="form.catatanPelaksanaan" class="textarea textarea-bordered w-full focus:ring-2 focus:ring-teal-400" rows="2" placeholder="Catatan pelaksanaan..." />
+					<label class="block font-semibold mb-1">Catatan</label>
+					<textarea v-model="form.catatanPelaksanaan" class="textarea textarea-bordered w-full focus:ring-2 focus:ring-teal-400" rows="2" placeholder="Catatan..." />
 				</div>
 				<div>
 					<label class="block font-semibold mb-1">Hambatan</label>

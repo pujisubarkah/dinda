@@ -316,6 +316,16 @@ export const activityLogsInDinda = dinda.table("activity_logs", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 });
 
+// Chat Messages
+export const chatMessagesInDinda = dinda.table("chat_messages", {
+  id: serial().primaryKey(),
+  room: varchar("room", { length: 100 }).default('global').notNull(),
+  userId: integer("user_id").references(() => usersInDinda.id),
+  message: text("message").notNull(),
+  metadata: jsonb("metadata"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
 // Ide Inovasi (Innovation Ideas)
 export const ideInovasiInDinda = dinda.table("ide_inovasi", {
   id: serial().primaryKey(),

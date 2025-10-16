@@ -70,6 +70,7 @@
                   'hover': hoverKecamatan?.id === kecamatan.id,
                   'highlighted': highlightedKecamatans.includes(kecamatan.id)
                 }]"
+                :fill="getRegionFill(kecamatan.id)"
                 @click="handleKecamatanClick(kecamatan)"
                 @mouseenter="handleKecamatanHover(kecamatan)"
                 @mouseleave="handleKecamatanLeave"
@@ -97,6 +98,16 @@
             <button @click="resetView" class="control-btn" title="Reset Zoom">
               <span>⟲</span>
             </button>
+            <!-- Legend showing gradient by inovasi count -->
+            <div class="legend" v-if="legendBuckets.length > 0">
+              <div class="legend-title">Inovasi per Kecamatan</div>
+              <div class="legend-strip">
+                <div v-for="b in legendBuckets" :key="b.label" class="legend-item">
+                  <div class="swatch" :style="{ background: b.color }"></div>
+                  <div class="label">{{ b.label }}</div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- Loading Overlay -->
@@ -397,6 +408,67 @@ const displayedInovasi = computed(() => {
 // Computed untuk menghitung jumlah inovasi yang terfilter
 const filteredInovasiCount = computed(() => {
   return displayedInovasi.value.length
+})
+
+// Compute inovasi counts per kecamatan using allInovasi
+const inovasiCountsByKecamatan = computed(() => {
+  const map = new Map()
+  (allInovasi.value || []).forEach(item => {
+    const kid = item.inovatorData?.idKecamatan || item.idKecamatan || null
+    const key = kid ? String(kid) : 'unknown'
+    map.set(key, (map.get(key) || 0) + 1)
+  })
+  return map
+})
+
+// Helper: color scale from green (few) to red (many). We'll use HSL interpolation.
+function countToColor(count, min, max){
+  // Use a tosca/teal palette (hijau tosca)
+  // Background for zero (very light tosca)
+  if (count === 0) return '#e8fbf9'
+  const ratio = max === min ? 1 : (count - min) / (max - min)
+  // Keep hue around teal/cyan (≈175). Interpolate lightness from very light -> darker tosca
+  const hue = 175
+  const saturation = 65
+  const lightness = Math.round(92 - 57 * ratio) // 92% -> ~35%
+  return `hsl(${hue} ${saturation}% ${lightness}%)`
+}
+
+// Derived values for min/max counts
+const inovasiMinMax = computed(() => {
+  // Defensive: inovasiCountsByKecamatan.value may be undefined during SSR or early lifecycle
+  const countsMap = inovasiCountsByKecamatan.value || new Map()
+  const values = Array.from(countsMap.values())
+  if (!values || values.length === 0) return { min: 0, max: 0 }
+  return { min: Math.min(...values), max: Math.max(...values) }
+})
+
+// Fill for a region by kecamatan id
+function getRegionFill(kecamatanId){
+  try{
+    const key = String(kecamatanId)
+    const cnt = inovasiCountsByKecamatan.value.get(key) || 0
+    const { min, max } = inovasiMinMax.value
+    return countToColor(cnt, min, max)
+  }catch(e){
+    return '#17B3A9'
+  }
+}
+
+// Legend buckets (e.g., 4 buckets)
+const legendBuckets = computed(() => {
+  const { min, max } = inovasiMinMax.value
+  if (max === 0) return []
+  const buckets = 4
+  const step = Math.ceil((max - min) / buckets) || 1
+  const arr = []
+  for(let i=0;i<buckets;i++){
+    const low = min + i * step
+    const high = i === buckets-1 ? max : (low + step - 1)
+    const mid = Math.round((low + high) / 2)
+    arr.push({ label: `${low}${high>low ? ' - '+high : ''}`, color: countToColor(mid, min, max) })
+  }
+  return arr
 })
 
 // ViewBox calculation - auto fit ke semua kecamatan dengan error handling
@@ -745,7 +817,7 @@ watch(() => apiResponse.value, async (newData) => {
 
 .search-input:focus {
   outline: none;
-  border-color: #20B2AA;
+  border-color: #17B3A9;
 }
 
 .filter-box {
@@ -766,15 +838,15 @@ watch(() => apiResponse.value, async (newData) => {
 
 .kecamatan-filter:focus {
   outline: none;
-  border-color: #20B2AA;
+  border-color: #17B3A9;
 }
 
 .kecamatan-filter:hover {
-  border-color: #20B2AA;
+  border-color: #17B3A9;
 }
 
 .stat-badge {
-  background: #20B2AA;
+  background: #17B3A9;
   color: white;
   padding: 8px 16px;
   border-radius: 20px;
@@ -808,7 +880,7 @@ watch(() => apiResponse.value, async (newData) => {
   align-items: center;
   padding: 20px;
   border-bottom: 1px solid #f0f0f0;
-  background: linear-gradient(135deg, #20B2AA, #1E9C96);
+  background: linear-gradient(135deg, #17B3A9, #0FA39B);
   color: white;
   border-radius: 12px 12px 0 0;
 }
@@ -853,12 +925,12 @@ watch(() => apiResponse.value, async (newData) => {
   border-radius: 10px;
   padding: 16px;
   transition: all 0.3s ease;
-  border-left: 4px solid #20B2AA;
+  border-left: 4px solid #17B3A9;
 }
 
 .innovation-card:hover {
-  box-shadow: 0 4px 12px rgba(32, 178, 170, 0.15);
-  border-left-color: #1E9C96;
+  box-shadow: 0 4px 12px rgba(23, 179, 169, 0.15);
+  border-left-color: #0FA39B;
   transform: translateY(-2px);
 }
 
@@ -880,7 +952,7 @@ watch(() => apiResponse.value, async (newData) => {
 }
 
 .innovation-year {
-  background: #20B2AA;
+  background: #17B3A9;
   color: white;
   padding: 4px 10px;
   border-radius: 12px;
@@ -969,7 +1041,7 @@ watch(() => apiResponse.value, async (newData) => {
   width: 30px;
   height: 30px;
   border: 3px solid #f3f3f3;
-  border-top: 3px solid #20B2AA;
+  border-top: 3px solid #17B3A9;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 15px;
@@ -981,7 +1053,7 @@ watch(() => apiResponse.value, async (newData) => {
 
 .retry-btn-small {
   padding: 8px 16px;
-  background: #20B2AA;
+  background: #17B3A9;
   color: white;
   border: none;
   border-radius: 6px;
@@ -993,7 +1065,7 @@ watch(() => apiResponse.value, async (newData) => {
 }
 
 .retry-btn-small:hover {
-  background: #1E9C96;
+  background: #0FA39B;
 }
 
 .no-innovation-data {
@@ -1314,6 +1386,14 @@ watch(() => apiResponse.value, async (newData) => {
   font-weight: 600;
   margin-top: 5px;
 }
+
+/* Legend */
+.legend { margin-top: 10px; min-width: 200px }
+.legend-title { font-size: 12px; font-weight: 700; color: #2c3e50; margin-bottom: 6px }
+.legend-strip { display:flex; flex-direction:column; gap:6px }
+.legend-item { display:flex; gap:8px; align-items:center }
+.legend-item .swatch { width: 36px; height: 14px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.06) }
+.legend-item .label { font-size: 12px; color: #556; }
 
 /* Info Panel */
 .info-panel {
