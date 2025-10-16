@@ -415,7 +415,8 @@ const formatDate = (dateString) => {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
+    timeZone: 'Asia/Jakarta' // GMT+7 (WIB)
   })
 }
 
@@ -424,8 +425,9 @@ const formatTime = (dateString) => {
   const date = new Date(dateString)
   return date.toLocaleTimeString('id-ID', {
     hour: '2-digit',
-    minute: '2-digit'
-  })
+    minute: '2-digit',
+    timeZone: 'Asia/Jakarta' // GMT+7 (WIB)
+  }) + ' WIB'
 }
 
 const getStatusText = (status) => {
