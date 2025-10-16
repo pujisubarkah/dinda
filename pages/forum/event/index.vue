@@ -62,7 +62,7 @@
               <option value="">Semua Status</option>
               <option value="upcoming">Akan Datang</option>
               <option value="ongoing">Sedang Berlangsung</option>
-              <option value="completed">Selesai</option>
+              <option value="finished">Selesai</option>
             </select>
           </div>
         </div>
@@ -432,7 +432,7 @@ const getStatusText = (status) => {
   const statusMap = {
     'upcoming': 'Akan Datang',
     'ongoing': 'Sedang Berlangsung',
-    'completed': 'Selesai'
+    'finished': 'Selesai'
   }
   return statusMap[status] || status
 }
@@ -441,7 +441,7 @@ const getStatusBadgeClass = (status) => {
   const classMap = {
     'upcoming': 'bg-blue-100 text-blue-800',
     'ongoing': 'bg-green-100 text-green-800',
-    'completed': 'bg-gray-100 text-gray-800'
+    'finished': 'bg-gray-100 text-gray-800'
   }
   return classMap[status] || 'bg-gray-100 text-gray-800'
 }
