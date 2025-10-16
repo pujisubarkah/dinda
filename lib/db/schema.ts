@@ -435,3 +435,24 @@ export const forumQuestionsInDinda = dinda.table("forum_questions", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });
 
+// Webinar Events
+export const webinarEventsInDinda = dinda.table("webinar_events", {
+  id: serial().primaryKey(),
+  kodeEvent: varchar("kode_event", { length: 50 }),
+  title: varchar({ length: 255 }).notNull(),
+  description: text(),
+  imageUrl: varchar("image_url", { length: 500 }),
+  category: varchar({ length: 100 }),
+  dateStart: timestamp("date_start", { withTimezone: true }),
+  dateEnd: timestamp("date_end", { withTimezone: true }),
+  durationHours: integer("duration_hours"),
+  platform: varchar({ length: 100 }),
+  meetingLink: varchar("meeting_link", { length: 500 }),
+  speaker: varchar({ length: 255 }),
+  organizer: varchar({ length: 255 }),
+  status: varchar({ length: 50 }),
+  totalParticipants: integer("total_participants").default(0),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+

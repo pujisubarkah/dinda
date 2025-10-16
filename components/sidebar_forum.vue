@@ -11,28 +11,28 @@
     </div>
     <nav class="space-y-3 flex-1">
       <NuxtLink
-        to="/forum/knowledge-base"
+        to="/forum/diskusi"
         class="group flex items-center gap-3 px-4 py-3 rounded-xl font-semibold hover:bg-gradient-to-r hover:from-teal-500 hover:to-teal-600 hover:text-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
         style="text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);"
       >
         <span class="text-lg">📚</span>
-        <span class="group-hover:font-bold">Knowledge Base</span>
+        <span class="group-hover:font-bold">Diskusi</span>
       </NuxtLink>
       <NuxtLink
-        to="/forum/pertanyaan-saya"
+        to="/forum/helpdesk"
         class="group flex items-center gap-3 px-4 py-3 rounded-xl font-semibold hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-600 hover:text-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
         style="text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);"
       >
         <span class="text-lg">❓</span>
-        <span class="group-hover:font-bold">Pertanyaan Saya</span>
+        <span class="group-hover:font-bold">Helpdesk</span>
       </NuxtLink>
       <NuxtLink
-        to="/forum/webinar"
+        to="/forum/event"
         class="group flex items-center gap-3 px-4 py-3 rounded-xl font-semibold hover:bg-gradient-to-r hover:from-purple-500 hover:to-purple-600 hover:text-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
         style="text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);"
       >
         <span class="text-lg">🎥</span>
-        <span class="group-hover:font-bold">Webinar</span>
+        <span class="group-hover:font-bold">Event</span>
       </NuxtLink>
       <NuxtLink
         to="/forum/informasi"
@@ -40,7 +40,7 @@
         style="text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);"
       >
         <span class="text-lg">ℹ️</span>
-        <span class="group-hover:font-bold">Informasi</span>
+        <span class="group-hover:font-bold">FAQ</span>
       </NuxtLink>
     </nav>
     <div class="mt-auto pt-8 border-t border-white/10">

@@ -6,9 +6,18 @@
     <main class="flex-1 p-8">
       <div class="max-w-6xl mx-auto px-6 py-10">
         <!-- Header -->
-        <div class="mb-6">
-          <h1 class="text-3xl font-bold text-green-800">💬 Forum Inovasi Kota Cilegon</h1>
-          <p class="text-yellow-600">Tempat berdiskusi, berbagi ide, dan membangun kolaborasi</p>
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center gap-3 mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-yellow-500 rounded-full flex items-center justify-center shadow-lg">
+              <span class="text-2xl">💬</span>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-green-800 via-yellow-700 to-green-600 bg-clip-text text-transparent">
+              Forum Inovasi
+            </h1>
+          </div>
+          <p class="text-gray-700 text-lg font-medium">
+            🚀 Tempat berdiskusi, berbagi ide, dan membangun kolaborasi untuk Kota Cilegon
+          </p>
         </div>
 
         <!-- Form Buat Diskusi Baru -->

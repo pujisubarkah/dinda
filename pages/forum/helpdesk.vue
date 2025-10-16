@@ -17,11 +17,11 @@
               <span class="text-2xl">❓</span>
             </div>
             <h1 class="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-orange-800 via-yellow-700 to-green-600 bg-clip-text text-transparent">
-              Forum Pertanyaan
+              Helpdesk
             </h1>
           </div>
           <p class="text-gray-700 text-lg font-medium">
-            💬 Ajukan pertanyaan dan dapatkan bantuan dari tim DINDA
+            💬 Ajukan pertanyaan dan dapatkan bantuan dari tim DINDA, Solusi akan dikirimkan melalui email.
           </p>
         </div>
 

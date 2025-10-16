@@ -47,7 +47,9 @@ export default defineEventHandler(async (event) => {
           // Kecamatan data with manual mapping for now
           kecamatanData: {
             id: inovatorRow.idKecamatan,
-            nama: commonKecamatanNames.get(inovatorRow.idKecamatan) || 'Tidak diketahui'
+            nama: inovatorRow.idKecamatan !== null
+              ? commonKecamatanNames.get(inovatorRow.idKecamatan) || 'Tidak diketahui'
+              : 'Tidak diketahui'
           }
         } : null,
       };
