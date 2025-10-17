@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { rencanaAksiInDinda } from '~/lib/db/schema';
-import { desc, like, and, eq } from 'drizzle-orm';
+import { desc, like, and, eq, count } from 'drizzle-orm';
 import jwt from 'jsonwebtoken';
 
 if (!process.env.DATABASE_URL) {
@@ -23,10 +23,13 @@ export default defineEventHandler(async (event) => {
   if (method === 'GET') {
     try {
       const query = getQuery(event);
-      const { ide_inovasi_id, search, limit = 10, offset = 0, status } = query;
+      const { ide_inovasi_id, search, limit = 10, offset = 0, status, created_by, group_by } = query as any;
       let whereConditions = [];
       if (ide_inovasi_id) {
         whereConditions.push(eq(rencanaAksiInDinda.ideInovasiId, Number(ide_inovasi_id)));
+      }
+      if (created_by) {
+        whereConditions.push(eq(rencanaAksiInDinda.createdBy, Number(created_by)));
       }
       if (status) {
         whereConditions.push(eq(rencanaAksiInDinda.tahap, String(status)));
@@ -34,6 +37,40 @@ export default defineEventHandler(async (event) => {
       if (search && search !== '') {
         whereConditions.push(like(rencanaAksiInDinda.judulAksi, `%${search}%`));
       }
+      // If group_by=created_by requested, aggregate counts per createdBy using DB
+      if (group_by === 'created_by') {
+        const whereClause = whereConditions.length > 0 ? and(...whereConditions) : undefined;
+
+        // Get counts per createdBy
+        const groups = await db
+          .select({ createdBy: rencanaAksiInDinda.createdBy, cnt: count() })
+          .from(rencanaAksiInDinda)
+          .where(whereClause)
+          .groupBy(rencanaAksiInDinda.createdBy)
+          .orderBy(desc(count()))
+          .limit(Number(limit))
+          .offset(Number(offset));
+
+        // Map to friendly response
+        const result = groups.map((g: any) => ({ createdBy: g.createdBy ?? null, count: Number(g.cnt) }));
+
+        // If client asked for items per group, fetch them (note: may be multiple queries)
+        const { include_items } = query as any;
+        if (include_items === 'true' || include_items === true) {
+          for (const grp of result) {
+            const items = await db
+              .select()
+              .from(rencanaAksiInDinda)
+              .where(and(...(whereConditions || []), eq(rencanaAksiInDinda.createdBy, grp.createdBy)))
+              .orderBy(desc(rencanaAksiInDinda.createdAt));
+            // attach items to group
+            (grp as any).items = items;
+          }
+        }
+
+        return { success: true, data: result, totalGroups: result.length };
+      }
+
       const data = await db
         .select()
         .from(rencanaAksiInDinda)
