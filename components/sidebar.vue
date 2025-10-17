@@ -40,7 +40,7 @@
         <div class="w-8 h-8 bg-teal-400 rounded-lg flex items-center justify-center text-white group-hover:bg-white group-hover:text-teal-600 transition-colors">
           <span class="text-lg">🏛️</span>
         </div>
-  <span class="group-hover:font-bold break-words leading-tight">Master OPD/Pelajar/Mahasiswa/Masyarakat</span>
+  <span class="group-hover:font-bold break-words leading-tight">Master Kelompok Inovator</span>
       </NuxtLink>
       
       <!-- Verifikasi User Menu -->
