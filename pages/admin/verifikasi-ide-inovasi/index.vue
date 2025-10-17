@@ -9,8 +9,18 @@
           <h1 class="text-3xl font-bold text-gray-900 mb-0">Verifikasi Usulan Inovasi</h1>
           <p class="text-gray-500 text-sm">Tinjau, verifikasi, dan beri komentar pada usulan inovasi yang masuk.</p>
         </div>
+        <button @click="downloadExcel" :disabled="pdfGenerating" class="ml-auto px-4 py-2 bg-gradient-to-r from-blue-500 to-teal-500 text-white rounded-md hover:from-blue-600 hover:to-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 transition-colors font-semibold shadow-lg flex items-center gap-2">
+          <template v-if="pdfGenerating">
+            <svg class="animate-spin w-5 h-5" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
+            Membuat Excel...
+          </template>
+          <template v-else>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+            Download Excel
+          </template>
+        </button>
       </div>
-      <div class="bg-white rounded-2xl shadow-2xl border border-blue-100 overflow-x-auto">
+      <div id="pdf-content" class="bg-white rounded-2xl shadow-2xl border border-blue-100 overflow-x-auto">
         <table class="min-w-full divide-y divide-blue-100">
           <thead class="bg-gradient-to-r from-blue-50 to-teal-50">
             <tr>
@@ -102,6 +112,7 @@ const showModal = ref(false)
 const selectedUsulan = ref(null)
 const verifikasiKomentar = ref('')
 const statusVerifikasi = ref(true)
+const pdfGenerating = ref(false)
 
 const fetchUsulan = async () => {
   try {
@@ -182,6 +193,94 @@ const formatDate = (dateString) => {
     year: 'numeric'
   })
 }
+
+const downloadExcel = async () => {
+  if (typeof window === 'undefined') {
+    toast.error('Export hanya tersedia di browser')
+    return
+  }
+
+  if (!Array.isArray(usulanList.value) || usulanList.value.length === 0) {
+    toast.error('Tidak ada data untuk diexport')
+    return
+  }
+
+  // Prepare data for export (used by both Excel and CSV fallback)
+  const header = ['Judul', 'Deskripsi', 'Stakeholder', 'Penerima Manfaat', 'Pengusul', 'OPD', 'Tanggal', 'Keterangan']
+  const rows = usulanList.value.map(i => [
+    i.ideInovasi || '',
+    i.deskripsiSingkat || '',
+    i.stakeholderInovasi || '',
+    i.penerimaManfaat || '',
+    i.creatorName || '',
+    i.creatorOpd || '',
+    formatDate(i.createdAt) || '',
+    (verifikasiKomentar?.value ? verifikasiKomentar.value[i.id] : '') || ''
+  ])
+
+  pdfGenerating.value = true
+  try {
+  const mod = await import('xlsx')
+  const XLSX = mod?.default || mod
+
+    const ws = XLSX.utils.aoa_to_sheet([header, ...rows])
+    // Auto width (simple approximation)
+    const maxWidths = [0,0,0,0,0,0,0,0]
+    const all = [header, ...rows]
+    for (const r of all) {
+      r.forEach((cell, idx) => {
+        const len = String(cell || '').length
+        if (len > maxWidths[idx]) maxWidths[idx] = len
+      })
+    }
+    ws['!cols'] = maxWidths.map(w => ({ wch: Math.min(Math.max(w, 10), 40) }))
+
+    const wb = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(wb, ws, 'Verifikasi')
+
+    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
+    const blob = new Blob([wbout], { type: 'application/octet-stream' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'verifikasi-usulan-inovasi.xlsx'
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    URL.revokeObjectURL(url)
+    toast.success('Excel berhasil diunduh')
+  } catch (err) {
+    console.error('Excel export error, falling back to CSV', err)
+    // Fallback: generate CSV
+    try {
+      const csvRows = [header, ...rows].map(r => r.map(cell => {
+        const s = String(cell || '')
+        // escape quotes
+        if (s.includes(',') || s.includes('"') || s.includes('\n')) {
+          return '"' + s.replace(/"/g, '""') + '"'
+        }
+        return s
+      }).join(','))
+      const csvContent = csvRows.join('\n')
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'verifikasi-usulan-inovasi.csv'
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      URL.revokeObjectURL(url)
+      toast.success('CSV berhasil diunduh sebagai fallback')
+    } catch (err2) {
+      console.error('CSV fallback failed', err2)
+      toast.error('Gagal mengekspor data')
+    }
+  } finally {
+    pdfGenerating.value = false
+  }
+}
+
 </script>
 
 <style scoped>

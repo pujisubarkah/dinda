@@ -25,6 +25,12 @@ export const statusEnum = pgEnum('status', ['draft', 'review', 'approved', 'reje
 export const kategoriEnum = pgEnum('kategori', ['teknologi', 'digital', 'lingkungan', 'infrastruktur', 'pelayanan_publik', 'ekonomi']);
 export const roleEnum = pgEnum('role', ['admin', 'user', 'moderator', 'inovator']);
 export const jenisPelatihanEnum = pgEnum('jenis_pelatihan', ['webinar', 'workshop', 'seminar', 'training']);
+// Jenis Inovasi (for ide_inovasi)
+export const jenisInovasiEnum = pgEnum('jenis_inovasi', [
+  'Inovasi Teknologi Tepat Guna',
+  'Tata Kelola Pemerintah',
+  'Pelayanan Publik'
+]);
 
 // Users & Authentication
 export const usersInDinda = dinda.table("users", {
@@ -333,6 +339,8 @@ export const ideInovasiInDinda = dinda.table("ide_inovasi", {
   ideInovasi: text("ide_inovasi"),
   stakeholderInovasi: text("stakeholder_inovasi"),
   sumberDaya: text("sumber_daya"),
+  // jenisInovasi: new enum column describing the innovation type
+  jenisInovasi: jenisInovasiEnum("jenis_inovasi"),
   penerimaManfaat: text("penerima_manfaat"),
   deskripsiSingkat: text("deskripsi_singkat"),
   keterangan: text(),
@@ -383,6 +391,10 @@ export const rencanaAksiInDinda = dinda.table("rencana_aksi", {
   indikatorKeberhasilan: text("indikator_keberhasilan"),
   picPelaksana: varchar("pic_pelaksana", { length: 255 }),
   anggaran: bigint("anggaran", { mode: "number" }),
+  // file_upload: store uploaded file path(s) or metadata as plain text (CSV/JSON string)
+  file_upload: text("file_upload"),
+  // link_publikasi: optional publication link related to the rencana aksi (article, blog, portal)
+  linkPublikasi: text("link_publikasi"),
   tahap: varchar("tahap", { length: 50 }),
   progressPercentage: integer("progress_percentage"),
   catatanPelaksanaan: text("catatan_pelaksanaan"),

@@ -1,37 +1,39 @@
 <template>
-  <div v-if="!closed" class="chat-widget" :class="{ 'collapsed': collapsed }">
-    <div class="chat-header">
-      <div class="left">
-        <button class="collapse-btn" @click="toggleCollapsed" :title="collapsed ? 'Buka chat' : 'Minimize chat'">
-          <span v-if="collapsed">🔽</span>
-          <span v-else>🔼</span>
-        </button>
-        <h3 v-if="!collapsed">Chat - {{ room }}</h3>
-      </div>
-      <div class="right" style="display:flex;gap:8px;align-items:center;">
-        <button v-if="!collapsed" @click="clearMessages" class="clear-btn">Clear</button>
-        <button v-if="!collapsed" @click="closeChat" class="close-btn" title="Tutup chat">✖</button>
-      </div>
-    </div>
-
-    <div v-show="!collapsed" class="chat-messages" ref="messagesWrap">
-      <div v-for="m in messages" :key="m.id" class="chat-message">
-        <div class="meta">
-          <strong>{{ (m.user && m.user.name) || ('User ' + (m.userId || 'anon')) }}</strong>
-          <span class="ts">{{ formatTs(m.createdAt) }}</span>
+  <div v-if="isAuthenticated">
+    <div v-if="!closed" class="chat-widget" :class="{ 'collapsed': collapsed }">
+      <div class="chat-header">
+        <div class="left">
+          <button class="collapse-btn" @click="toggleCollapsed" :title="collapsed ? 'Buka chat' : 'Minimize chat'">
+            <span v-if="collapsed">🔽</span>
+            <span v-else>🔼</span>
+          </button>
+          <h3 v-if="!collapsed">Chat - {{ room }}</h3>
         </div>
-        <div class="text">{{ m.message }}</div>
+        <div class="right" style="display:flex;gap:8px;align-items:center;">
+          <button v-if="!collapsed" @click="clearMessages" class="clear-btn">Clear</button>
+          <button v-if="!collapsed" @click="closeChat" class="close-btn" title="Tutup chat">✖</button>
+        </div>
       </div>
+
+      <div v-show="!collapsed" class="chat-messages" ref="messagesWrap">
+        <div v-for="m in messages" :key="m.id" class="chat-message">
+          <div class="meta">
+            <strong>{{ (m.user && m.user.name) || ('User ' + (m.userId || 'anon')) }}</strong>
+            <span class="ts">{{ formatTs(m.createdAt) }}</span>
+          </div>
+          <div class="text">{{ m.message }}</div>
+        </div>
+      </div>
+
+      <form v-show="!collapsed" @submit.prevent="send" class="chat-input">
+        <input v-model="newMessage" placeholder="Tulis pesan..." :disabled="!isAuthenticated" />
+        <button :disabled="sending || !newMessage.trim() || !isAuthenticated">Kirim</button>
+      </form>
+
+      <div v-if="!isAuthenticated && !collapsed" class="px-3 pb-3 text-xs text-gray-500">Silakan login untuk mengirim pesan.</div>
     </div>
-
-    <form v-show="!collapsed" @submit.prevent="send" class="chat-input">
-      <input v-model="newMessage" placeholder="Tulis pesan..." :disabled="!isAuthenticated" />
-      <button :disabled="sending || !newMessage.trim() || !isAuthenticated">Kirim</button>
-    </form>
-
-    <div v-if="!isAuthenticated && !collapsed" class="px-3 pb-3 text-xs text-gray-500">Silakan login untuk mengirim pesan.</div>
+    <button v-else class="chat-opener-btn" @click="openChat" title="Buka chat">Tanya Kami</button>
   </div>
-  <button v-else class="chat-opener-btn" @click="openChat" title="Buka chat">Ask Me</button>
 </template>
 
 <script setup>
@@ -66,13 +68,27 @@ function formatTs(v){
 
 async function fetchMessages(){
   try{
-    const res = await $fetch(`/api/chat?room=${encodeURIComponent(room)}`)
+    const token = localStorage.getItem('dinda_token')
+    if(!token){
+      console.warn('No token available for chat')
+      messages.value = []
+      return
+    }
+    const res = await $fetch(`/api/chat?room=${encodeURIComponent(room)}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
     if(res?.success) messages.value = res.data || []
     // scroll to bottom
     nextTick(()=>{
       if(messagesWrap.value) messagesWrap.value.scrollTop = messagesWrap.value.scrollHeight
     })
-  }catch(e){ console.error(e) }
+  }catch(e){ 
+    console.error(e)
+    // If authentication fails, clear messages
+    if(e?.status === 401) {
+      messages.value = []
+    }
+  }
 }
 
 async function send(){

@@ -113,6 +113,15 @@
               <textarea v-model="form.ideInovasi" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500" required></textarea>
             </div>
             <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Inovasi</label>
+              <select v-model="form.jenisInovasi" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+                <option value="">-- Pilih Jenis Inovasi --</option>
+                <option value="Inovasi Teknologi Tepat Guna">Inovasi Teknologi Tepat Guna</option>
+                <option value="Tata Kelola Pemerintah">Tata Kelola Pemerintah</option>
+                <option value="Pelayanan Publik">Pelayanan Publik</option>
+              </select>
+            </div>
+            <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">Stakeholder Inovasi <span class="text-red-500">*</span></label>
               <textarea v-model="form.stakeholderInovasi" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500" required></textarea>
             </div>
@@ -205,7 +214,8 @@ const form = ref({
   penerimaManfaat: '',
   deskripsiSingkat: '',
   keterangan: '',
-  kebaruan: ''
+  kebaruan: '',
+  jenisInovasi: ''
 })
 
 const openLanjutModal = (row) => {
@@ -290,7 +300,8 @@ const submitForm = async () => {
           penerima_manfaat: form.value.penerimaManfaat,
           deskripsi_singkat: form.value.deskripsiSingkat,
           keterangan: form.value.keterangan,
-          kebaruan: form.value.kebaruan
+          kebaruan: form.value.kebaruan,
+          jenis_inovasi: form.value.jenisInovasi
         }
       })
       if (response.success) {
@@ -314,6 +325,7 @@ const submitForm = async () => {
           deskripsi_singkat: form.value.deskripsiSingkat,
           keterangan: form.value.keterangan,
           kebaruan: form.value.kebaruan,
+          jenis_inovasi: form.value.jenisInovasi,
           created_by: userRes.data.user.id
         }
       })
@@ -345,7 +357,8 @@ const editUsulan = (usulan) => {
     penerimaManfaat: usulan.penerimaManfaat || '',
     deskripsiSingkat: usulan.deskripsiSingkat || '',
     keterangan: usulan.keterangan || '',
-    kebaruan: usulan.kebaruan || ''
+    kebaruan: usulan.kebaruan || '',
+    jenisInovasi: usulan.jenisInovasi || usulan.jenis_inovasi || ''
   }
   showModal.value = true
 }
@@ -380,7 +393,8 @@ const resetForm = () => {
     penerimaManfaat: '',
     deskripsiSingkat: '',
     keterangan: '',
-    kebaruan: ''
+    kebaruan: '',
+    jenisInovasi: ''
   }
   isEditing.value = false
   editingId.value = null

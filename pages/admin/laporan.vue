@@ -134,6 +134,74 @@
       </div>
     </div>
 
+    <!-- Custom Report Modal -->
+    <div v-if="showCustomReport" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div class="bg-white rounded-xl shadow-lg w-full max-w-3xl p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xl font-semibold">Custom Report</h3>
+          <button @click="showCustomReport = false" class="text-gray-500">✖</button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label class="block text-sm font-medium mb-1">Periode</label>
+            <select v-model="reportConfig.period" class="w-full px-3 py-2 border rounded">
+              <option value="week">Mingguan</option>
+              <option value="month">Bulanan</option>
+              <option value="quarter">Triwulan</option>
+              <option value="year">Tahunan</option>
+              <option value="custom">Custom Range</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Format Export</label>
+            <select v-model="reportConfig.format" class="w-full px-3 py-2 border rounded">
+              <option value="pdf">PDF</option>
+              <option value="excel">Excel</option>
+              <option value="word">Word</option>
+              <option value="html">HTML</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Template</label>
+            <select v-model="reportConfig.template" class="w-full px-3 py-2 border rounded">
+              <option value="executive">Executive Summary</option>
+              <option value="detailed">Detailed Report</option>
+              <option value="statistical">Statistical Analysis</option>
+              <option value="presentation">Presentation</option>
+            </select>
+          </div>
+          <div v-if="reportConfig.period === 'custom'">
+            <label class="block text-sm font-medium mb-1">Tanggal Mulai</label>
+            <input v-model="reportConfig.startDate" type="date" class="w-full px-3 py-2 border rounded" />
+            <label class="block text-sm font-medium mb-1 mt-2">Tanggal Akhir</label>
+            <input v-model="reportConfig.endDate" type="date" class="w-full px-3 py-2 border rounded" />
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-2">Sections</label>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="flex items-center"><input type="checkbox" v-model="reportConfig.sections.summary" class="mr-2" /> Executive Summary</label>
+            <label class="flex items-center"><input type="checkbox" v-model="reportConfig.sections.statistics" class="mr-2" /> Statistik</label>
+            <label class="flex items-center"><input type="checkbox" v-model="reportConfig.sections.charts" class="mr-2" /> Charts</label>
+            <label class="flex items-center"><input type="checkbox" v-model="reportConfig.sections.table" class="mr-2" /> Tabel Data</label>
+            <label class="flex items-center"><input type="checkbox" v-model="reportConfig.sections.opd" class="mr-2" /> Performa OPD</label>
+            <label class="flex items-center"><input type="checkbox" v-model="reportConfig.sections.trends" class="mr-2" /> Tren</label>
+            <label class="flex items-center"><input type="checkbox" v-model="reportConfig.sections.recommendations" class="mr-2" /> Rekomendasi</label>
+            <label class="flex items-center"><input type="checkbox" v-model="reportConfig.sections.appendix" class="mr-2" /> Appendix</label>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-3">
+          <button @click="showCustomReport = false" class="px-4 py-2 border rounded">Batal</button>
+          <button @click="previewReport(true)" class="px-4 py-2 bg-blue-600 text-white rounded">Preview</button>
+          <button @click="generateReport(true)" class="px-4 py-2 bg-green-600 text-white rounded">Generate & Download</button>
+          <button @click="saveTemplate(true)" class="px-4 py-2 bg-yellow-500 text-white rounded">Save Template</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Recent Reports -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
       <!-- Generated Reports History -->
@@ -278,55 +346,269 @@ const reportStats = ref({
 })
 
 // Methods
-const generateQuickReport = (type) => {
-  isGenerating.value = true
-  generatingProgress.value = 0
-  
-  // Simulate report generation
-  const interval = setInterval(() => {
-    generatingProgress.value += 10
-    if (generatingProgress.value >= 100) {
-      clearInterval(interval)
-      isGenerating.value = false
-      generatingProgress.value = 0
-      
-      // Add to recent reports
-      const newReport = {
-        id: Date.now(),
-        title: `Laporan ${type} - ${new Date().toLocaleDateString()}`,
-        type: type,
-        date: new Date().toLocaleDateString(),
-        format: 'pdf'
+const generateQuickReport = async (type) => {
+  // map quick action to period
+  const map = { monthly: 'month', quarterly: 'quarter', yearly: 'year', weekly: 'week' }
+  reportConfig.period = map[type] || 'month'
+  // Prefer Excel for quick exports
+  reportConfig.format = 'excel'
+  try {
+    await generateReport()
+    recentReports.value.unshift({ id: Date.now(), title: `Laporan ${type} - ${new Date().toLocaleDateString()}`, type, date: new Date().toLocaleDateString(), format: reportConfig.format })
+  } catch (err) {
+    console.error('generateQuickReport error', err)
+    alert('Gagal membuat laporan cepat')
+  }
+}
+
+// helper: compute start/end for given period
+const getRangeFromPeriod = (period) => {
+  const now = new Date()
+  let start, end
+  switch (period) {
+    case 'week': {
+      const day = now.getDay() || 7
+      start = new Date(now)
+      start.setDate(now.getDate() - day + 1)
+      start.setHours(0,0,0,0)
+      end = new Date(start)
+      end.setDate(start.getDate() + 6)
+      end.setHours(23,59,59,999)
+      break
+    }
+    case 'month': {
+      start = new Date(now.getFullYear(), now.getMonth(), 1)
+      end = new Date(now.getFullYear(), now.getMonth()+1, 0)
+      end.setHours(23,59,59,999)
+      break
+    }
+    case 'quarter': {
+      const q = Math.floor(now.getMonth()/3)
+      start = new Date(now.getFullYear(), q*3, 1)
+      end = new Date(now.getFullYear(), q*3 + 3, 0)
+      end.setHours(23,59,59,999)
+      break
+    }
+    case 'year': {
+      start = new Date(now.getFullYear(), 0, 1)
+      end = new Date(now.getFullYear(), 11, 31)
+      end.setHours(23,59,59,999)
+      break
+    }
+    default:
+      if (reportConfig.startDate && reportConfig.endDate) {
+        start = new Date(reportConfig.startDate); start.setHours(0,0,0,0)
+        end = new Date(reportConfig.endDate); end.setHours(23,59,59,999)
+      } else {
+        start = new Date(now.getFullYear(), now.getMonth(), 1)
+        end = new Date(now.getFullYear(), now.getMonth()+1, 0); end.setHours(23,59,59,999)
       }
-      recentReports.value.unshift(newReport)
-      
-      alert(`Laporan ${type} berhasil di-generate!`)
-    }
-  }, 200)
+  }
+  return { start, end }
 }
 
-const generateReport = () => {
+const fetchInovasiForRange = async (start, end) => {
+  try {
+    const res = await $fetch('/api/inovasi')
+    const items = (res && res.success && Array.isArray(res.data)) ? res.data : (Array.isArray(res) ? res : [])
+    return items.filter(i => {
+      // Prefer explicit createdAt/created_at/date; fall back to tahun (as Jan 1st of that year)
+      let d = null
+      if (i.createdAt || i.created_at || i.date) {
+        d = new Date(i.createdAt || i.created_at || i.date)
+      } else if (i.tahun) {
+        // tahun might be string like "2024" — use start of year as fallback
+        const y = String(i.tahun).slice(0,4)
+        d = new Date(`${y}-01-01T00:00:00`)
+      }
+      if (!d || isNaN(d.getTime())) {
+        // if we can't determine date, try to match by tahun range when possible
+        if (i.tahun) {
+          const y = parseInt(String(i.tahun).slice(0,4))
+          return y >= start.getFullYear() && y <= end.getFullYear()
+        }
+        return false
+      }
+      return d >= start && d <= end
+    })
+  } catch (err) {
+    console.error('fetchInovasiForRange error', err)
+    return []
+  }
+}
+
+const generateReport = async (fromModal = false) => {
+  if (reportConfig.period === 'custom') {
+    if (!reportConfig.startDate || !reportConfig.endDate) { alert('Silakan isi tanggal untuk periode custom'); return }
+    if (new Date(reportConfig.startDate) > new Date(reportConfig.endDate)) { alert('Tanggal mulai tidak boleh setelah tanggal akhir'); return }
+  }
+
   isGenerating.value = true
-  generatingProgress.value = 0
-  
-  // Simulate custom report generation
-  const interval = setInterval(() => {
-    generatingProgress.value += 15
-    if (generatingProgress.value >= 100) {
-      clearInterval(interval)
-      isGenerating.value = false
-      generatingProgress.value = 0
-      alert('Laporan custom berhasil di-generate!')
+  generatingProgress.value = 5
+  try {
+    const { start, end } = getRangeFromPeriod(reportConfig.period)
+    generatingProgress.value = 15
+    const data = await fetchInovasiForRange(start, end)
+    generatingProgress.value = 50
+
+    // Map `/api/inovasi` shape to report columns
+    const header = ['ID', 'Judul Inovasi', 'Deskripsi', 'Tahun', 'Inovator', 'Inovator ID', 'Kecamatan ID', 'Provinsi ID', 'Alamat', 'LongLat', 'SDGs Tujuan', 'SDGs Nama', 'ThumbUrl', 'VideoUrl', 'Tanggal Sumber']
+    const rows = data.map(i => {
+      // determine a best-effort date for display
+      let itemDate = null
+      if (i.createdAt || i.created_at || i.date) itemDate = new Date(i.createdAt || i.created_at || i.date)
+      else if (i.tahun) itemDate = new Date(String(i.tahun).slice(0,4) + '-01-01T00:00:00')
+      const tanggalSumber = (itemDate && !isNaN(itemDate.getTime())) ? itemDate.toLocaleDateString('id-ID') : (i.tahun || '')
+
+      return [
+        i.id ?? '',
+        i.judulInovasi ?? i.title ?? '',
+        i.deskripsi ?? i.deskripsiSingkat ?? i.description ?? '',
+        i.tahun ?? '',
+        i.inovator ?? i.creatorName ?? i.creator ?? '',
+        i.inovatorId ?? '',
+        (i.inovatorData && i.inovatorData.idKecamatan) || (i.inovatorData && i.inovatorData.id_kecamatan) || '',
+        (i.inovatorData && i.inovatorData.idProvinsi) || (i.inovatorData && i.inovatorData.id_provinsi) || '',
+        (i.inovatorData && i.inovatorData.alamat) || '',
+        (i.inovatorData && i.inovatorData.longlat) || '',
+        (i.sdgsData && (i.sdgsData.tujuanKe ?? i.sdgs)) || i.sdgs || '',
+        (i.sdgsData && i.sdgsData.sdgs) || '',
+        i.thumbUrl || '',
+        i.videoUrl || '',
+        tanggalSumber
+      ]
+    })
+
+    if (reportConfig.format === 'excel') {
+      try {
+        const mod = await import('xlsx')
+        const XLSX = mod?.default || mod
+        const ws = XLSX.utils.aoa_to_sheet([header, ...rows])
+        ws['!cols'] = header.map((h, idx) => ({ wch: Math.min(Math.max((rows.reduce((m, r) => Math.max(m, String(r[idx] || '').length), h.length)), 10), 60) }))
+        const wb = XLSX.utils.book_new()
+        XLSX.utils.book_append_sheet(wb, ws, 'Laporan')
+        const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
+        const blob = new Blob([wbout], { type: 'application/octet-stream' })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = `laporan-inovasi-${reportConfig.period}-${(new Date()).toISOString().slice(0,10)}.xlsx`
+        document.body.appendChild(a)
+        a.click()
+        a.remove()
+        URL.revokeObjectURL(url)
+        generatingProgress.value = 100
+        toast && toast.success && toast.success('Excel berhasil diunduh')
+      } catch (err) {
+        console.error('Excel export failed', err)
+        // CSV fallback
+        const csvRows = [header, ...rows].map(r => r.map(cell => {
+          const s = String(cell || '')
+          if (s.includes(',') || s.includes('"') || s.includes('\n')) return '"' + s.replace(/"/g, '""') + '"'
+          return s
+        }).join(','))
+        const csvContent = csvRows.join('\n')
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = `laporan-inovasi-${reportConfig.period}.csv`
+        document.body.appendChild(a)
+        a.click()
+        a.remove()
+        URL.revokeObjectURL(url)
+        toast && toast.success && toast.success('CSV berhasil diunduh sebagai fallback')
+      }
+    } else if (reportConfig.format === 'pdf') {
+      // open preview window and attempt html2pdf
+      const previewHtml = buildPreviewHtml(header, rows)
+      const newWin = window.open('', '_blank')
+      newWin.document.write(previewHtml)
+      newWin.document.close()
+      const mod = await import('html2pdf.js').catch(() => null)
+      if (mod) {
+        try { await mod.default().from(newWin.document.body).save() } catch(e){ console.warn('html2pdf failed', e) }
+      } else {
+        alert('Preview terbuka; gunakan Print -> Save as PDF untuk menyimpan')
+      }
+    } else {
+      // html or unsupported -> preview
+      const previewHtml = buildPreviewHtml(header, rows)
+      const newWin = window.open('', '_blank')
+      newWin.document.write(previewHtml)
+      newWin.document.close()
     }
-  }, 300)
+  } catch (err) {
+    console.error('generateReport error', err)
+    alert('Gagal meng-generate laporan')
+  } finally {
+    isGenerating.value = false
+    generatingProgress.value = 0
+  }
 }
 
-const previewReport = () => {
-  alert('Preview laporan akan ditampilkan di tab baru')
+const buildPreviewHtml = (header, rows) => {
+  const styles = `<style>body{font-family:Arial,Helvetica,sans-serif;padding:20px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ddd;padding:8px}th{background:#f3f4f6}</style>`
+  const headerRow = '<tr>' + header.map(h => `<th>${h}</th>`).join('') + '</tr>'
+  const bodyRows = rows.map(r => '<tr>' + r.map(c => `<td>${escapeHtml(String(c||''))}</td>`).join('') + '</tr>').join('')
+  return `<!doctype html><html><head><meta charset="utf-8"><title>Preview Laporan</title>${styles}</head><body><h2>Laporan Inovasi</h2><p>Periode: ${reportConfig.period} ${reportConfig.period === 'custom' ? '(' + reportConfig.startDate + ' - ' + reportConfig.endDate + ')' : ''}</p><table>${headerRow}${bodyRows}</table></body></html>`
 }
 
-const saveTemplate = () => {
-  alert('Template laporan berhasil disimpan!')
+const previewReport = async (fromModal = false) => {
+  try {
+    const { start, end } = getRangeFromPeriod(reportConfig.period)
+    const data = await fetchInovasiForRange(start, end)
+    // Same mapping for preview
+    const header = ['ID', 'Judul Inovasi', 'Deskripsi', 'Tahun', 'Inovator', 'Inovator ID', 'Kecamatan ID', 'Provinsi ID', 'Alamat', 'LongLat', 'SDGs Tujuan', 'SDGs Nama', 'ThumbUrl', 'VideoUrl', 'Tanggal Sumber']
+    const rows = data.map(i => {
+      let itemDate = null
+      if (i.createdAt || i.created_at || i.date) itemDate = new Date(i.createdAt || i.created_at || i.date)
+      else if (i.tahun) itemDate = new Date(String(i.tahun).slice(0,4) + '-01-01T00:00:00')
+      const tanggalSumber = (itemDate && !isNaN(itemDate.getTime())) ? itemDate.toLocaleDateString('id-ID') : (i.tahun || '')
+      return [
+        i.id ?? '',
+        i.judulInovasi ?? i.title ?? '',
+        i.deskripsi ?? i.deskripsiSingkat ?? i.description ?? '',
+        i.tahun ?? '',
+        i.inovator ?? i.creatorName ?? i.creator ?? '',
+        i.inovatorId ?? '',
+        (i.inovatorData && i.inovatorData.idKecamatan) || (i.inovatorData && i.inovatorData.id_kecamatan) || '',
+        (i.inovatorData && i.inovatorData.idProvinsi) || (i.inovatorData && i.inovatorData.id_provinsi) || '',
+        (i.inovatorData && i.inovatorData.alamat) || '',
+        (i.inovatorData && i.inovatorData.longlat) || '',
+        (i.sdgsData && (i.sdgsData.tujuanKe ?? i.sdgs)) || i.sdgs || '',
+        (i.sdgsData && i.sdgsData.sdgs) || '',
+        i.thumbUrl || '',
+        i.videoUrl || '',
+        tanggalSumber
+      ]
+    })
+    const html = buildPreviewHtml(header, rows)
+    const w = window.open('', '_blank')
+    if (!w) { alert('Pop-up diblokir, aktifkan pop-up untuk preview'); return }
+    w.document.write(html)
+    w.document.close()
+  } catch (err) {
+    console.error('previewReport failed', err)
+    alert('Gagal membuat preview')
+  }
+}
+
+const saveTemplate = (fromModal = false) => {
+  try {
+    const templates = JSON.parse(localStorage.getItem('report_templates') || '[]')
+    templates.unshift({ id: Date.now(), name: `Template ${new Date().toLocaleString()}`, config: JSON.parse(JSON.stringify(reportConfig)) })
+    localStorage.setItem('report_templates', JSON.stringify(templates.slice(0, 20)))
+    alert('Template laporan berhasil disimpan!')
+  } catch (err) {
+    console.error('saveTemplate error', err)
+    alert('Gagal menyimpan template')
+  }
+}
+
+// small helper to escape HTML for preview
+function escapeHtml(s) {
+  return s.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;')
 }
 
 const getReportIcon = (type) => {
@@ -339,8 +621,17 @@ const getReportIcon = (type) => {
   return icons[type] || 'bg-gray-500'
 }
 
-const downloadReport = (report) => {
-  alert(`Downloading ${report.title}...`)
+const downloadReport = async (report) => {
+  try {
+    if (report.url) { window.open(report.url, '_blank'); return }
+    const map = { monthly: 'month', quarterly: 'quarter', yearly: 'year' }
+    reportConfig.period = map[report.type] || 'month'
+    reportConfig.format = report.format || 'excel'
+    await generateReport()
+  } catch (err) {
+    console.error('downloadReport failed', err)
+    alert('Gagal mendownload report')
+  }
 }
 
 const shareReport = (report) => {

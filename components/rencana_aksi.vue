@@ -66,6 +66,31 @@
 					<input v-model.number="form.progressPercentage" type="number" class="input input-bordered w-full focus:ring-2 focus:ring-teal-400" min="0" max="100" placeholder="0-100" />
 				</div>
 			</div>
+			<!-- File Upload (GDrive links) -->
+			<div class="md:col-span-2">
+				<label class="block font-semibold mb-1">File Upload (Google Drive links)</label>
+				<p class="text-sm text-gray-500 mb-2">Silakan tambahkan link Google Drive untuk berkas terkait (mis. SK Tim, Proposal, Foto Kegiatan, Video Inovasi). Masukkan link yang dapat diakses (share link).</p>
+				<div class="space-y-3">
+					<div v-for="(f, idx) in form.fileUpload" :key="idx" class="flex items-start gap-2">
+						<select v-model="f.type" class="input input-bordered w-48">
+							<option value="SK Tim">SK Tim</option>
+							<option value="Proposal">Proposal</option>
+							<option value="Foto Kegiatan">Foto Kegiatan</option>
+							<option value="Video Inovasi">Video Inovasi</option>
+							<option value="Lainnya">Lainnya</option>
+						</select>
+						<input v-model="f.url" type="url" placeholder="https://drive.google.com/...." class="input input-bordered flex-1" />
+						<button type="button" class="btn btn-secondary" @click="removeFile(idx)">Hapus</button>
+					</div>
+					<button type="button" class="btn btn-primary" @click="addFile">+ Tambah Berkas</button>
+				</div>
+			</div>
+			<!-- Link Publikasi -->
+			<div class="md:col-span-2 mt-2">
+				<label class="block font-semibold mb-1">Link Publikasi</label>
+				<p class="text-sm text-gray-500 mb-2">Jika inovasi ini sudah dipublikasikan di media (berita daerah, blog, sosial media), masukkan tautan publikasinya di sini.</p>
+				<input v-model="form.linkPublikasi" type="url" placeholder="https://..." class="input input-bordered w-full" />
+			</div>
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 				<div class="md:col-span-2">
 					<label class="block font-semibold mb-1">Catatan</label>
@@ -118,6 +143,8 @@ const form = ref({
 	hambatan: '',
 	solusi: '',
 	tahap: '',
+		fileUpload: [] as Array<{ type: string; url: string }>,
+		linkPublikasi: '',
 });
 const error = ref('');
 const success = ref('');
@@ -151,6 +178,8 @@ watch(() => props.ideInovasiId, (val) => {
 		hambatan: '',
 		solusi: '',
 		tahap: '',
+		fileUpload: [],
+			linkPublikasi: '',
 	};
 	error.value = '';
 	success.value = '';
@@ -165,6 +194,26 @@ async function handleSubmit() {
 	try {
 		// Prepare payload with correct types and date formatting
 		const payload: Record<string, any> = { ...form.value };
+
+		// Convert fileUpload array into file_upload field expected by backend (store as text JSON)
+		if (Array.isArray(payload.fileUpload) && payload.fileUpload.length > 0) {
+			try {
+				payload.file_upload = JSON.stringify(payload.fileUpload.map(f => ({ type: f.type, url: f.url })));
+			} catch (e) {
+				console.warn('Gagal stringify fileUpload', e);
+				payload.file_upload = '';
+			}
+		} else {
+			payload.file_upload = '';
+		}
+
+		// Map linkPublikasi to snake_case link_publikasi for backend
+		if (payload.linkPublikasi && typeof payload.linkPublikasi === 'string') {
+			payload.link_publikasi = payload.linkPublikasi.trim();
+		} else {
+			payload.link_publikasi = '';
+		}
+
 
 				// Ambil id user dari localStorage dan set ke createdBy (pasti setelah payload dibuat, sebelum submit)
 				try {
@@ -247,9 +296,21 @@ function resetForm() {
 		hambatan: '',
 		solusi: '',
 		tahap: '',
+		fileUpload: [],
+		linkPublikasi: '',
 	};
 	error.value = '';
 	success.value = '';
+}
+
+function addFile() {
+ 	form.value.fileUpload = form.value.fileUpload || [];
+ 	form.value.fileUpload.push({ type: 'Proposal', url: '' });
+}
+
+function removeFile(idx: number) {
+ 	if (!Array.isArray(form.value.fileUpload)) return;
+ 	form.value.fileUpload.splice(idx, 1);
 }
 </script>
 

@@ -8,7 +8,7 @@
         <div class="w-8 h-8 bg-yellow-400 rounded-lg flex items-center justify-center text-green-900 group-hover:bg-white transition-colors">
           <span class="text-lg">🏠</span>
         </div>
-        <span class="group-hover:font-bold">Dashboard</span>
+  <span class="group-hover:font-bold break-words leading-tight">Dashboard</span>
       </NuxtLink>
       
       <!-- Statistik Menu -->
@@ -16,7 +16,7 @@
         <div class="w-8 h-8 bg-blue-400 rounded-lg flex items-center justify-center text-white group-hover:bg-white group-hover:text-blue-600 transition-colors">
           <span class="text-lg">📊</span>
         </div>
-        <span class="group-hover:font-bold">Statistik Inovasi</span>
+  <span class="group-hover:font-bold break-words leading-tight">Statistik Inovasi</span>
       </NuxtLink>
       
       <!-- Status Inkubasi Menu -->
@@ -24,7 +24,7 @@
         <div class="w-8 h-8 bg-purple-400 rounded-lg flex items-center justify-center text-white group-hover:bg-white group-hover:text-purple-600 transition-colors">
           <span class="text-lg">🚀</span>
         </div>
-        <span class="group-hover:font-bold">Status Inkubasi</span>
+  <span class="group-hover:font-bold break-words leading-tight">Status Inkubasi</span>
       </NuxtLink>
       
       <!-- Laporan Menu -->
@@ -32,7 +32,7 @@
         <div class="w-8 h-8 bg-orange-400 rounded-lg flex items-center justify-center text-white group-hover:bg-white group-hover:text-orange-600 transition-colors">
           <span class="text-lg">📋</span>
         </div>
-        <span class="group-hover:font-bold">Laporan</span>
+  <span class="group-hover:font-bold break-words leading-tight">Laporan</span>
       </NuxtLink>
       
       <!-- Master OPD Menu -->
@@ -40,7 +40,7 @@
         <div class="w-8 h-8 bg-teal-400 rounded-lg flex items-center justify-center text-white group-hover:bg-white group-hover:text-teal-600 transition-colors">
           <span class="text-lg">🏛️</span>
         </div>
-        <span class="group-hover:font-bold">Master OPD</span>
+  <span class="group-hover:font-bold break-words leading-tight">Master OPD/Pelajar/Mahasiswa/Masyarakat</span>
       </NuxtLink>
       
       <!-- Verifikasi User Menu -->
@@ -48,7 +48,7 @@
         <div class="w-8 h-8 bg-indigo-400 rounded-lg flex items-center justify-center text-white group-hover:bg-white group-hover:text-indigo-600 transition-colors">
           <span class="text-lg">✅</span>
         </div>
-        <span class="group-hover:font-bold">Verifikasi User</span>
+  <span class="group-hover:font-bold break-words leading-tight">Verifikasi User</span>
       </NuxtLink>
 
       <!-- Verifikasi Ide Inovasi Menu -->
@@ -56,7 +56,7 @@
         <div class="w-8 h-8 bg-pink-400 rounded-lg flex items-center justify-center text-white group-hover:bg-white group-hover:text-pink-600 transition-colors">
           <span class="text-lg">💡</span>
         </div>
-        <span class="group-hover:font-bold">Verifikasi Ide Inovasi</span>
+  <span class="group-hover:font-bold break-words leading-tight">Verifikasi Ide Inovasi</span>
       </NuxtLink>
 
       <!-- Tambah Video Gallery Menu -->
@@ -64,7 +64,7 @@
         <div class="w-8 h-8 bg-red-400 rounded-lg flex items-center justify-center text-white group-hover:bg-white group-hover:text-red-600 transition-colors">
           <span class="text-lg">🎬</span>
         </div>
-        <span class="group-hover:font-bold">Tambah Video Gallery</span>
+  <span class="group-hover:font-bold break-words leading-tight">Tambah Video Gallery</span>
       </NuxtLink>
     </nav>
     
