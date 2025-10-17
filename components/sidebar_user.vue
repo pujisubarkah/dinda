@@ -35,13 +35,7 @@
         <span class="group-hover:font-bold">Status Usulan</span>
       </NuxtLink>
       
-      <!-- Galeri Inovasi Menu -->
-      <NuxtLink to="/user/galeri-inovasi" class="group flex items-center gap-3 px-4 py-3 rounded-lg font-semibold hover:bg-gradient-to-r hover:from-yellow-400 hover:to-yellow-500 hover:text-green-900 transition-all duration-300 transform hover:scale-105">
-        <div class="w-8 h-8 bg-orange-400 rounded-lg flex items-center justify-center text-white group-hover:bg-white group-hover:text-orange-600 transition-colors">
-          <span class="text-lg">🎨</span>
-        </div>
-        <span class="group-hover:font-bold">Galeri Inovasi</span>
-      </NuxtLink>
+    
       
       <!-- Forum Diskusi Menu -->
       <NuxtLink to="/user/forum-diskusi" class="group flex items-center gap-3 px-4 py-3 rounded-lg font-semibold hover:bg-gradient-to-r hover:from-yellow-400 hover:to-yellow-500 hover:text-green-900 transition-all duration-300 transform hover:scale-105">
