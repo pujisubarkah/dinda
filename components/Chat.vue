@@ -32,7 +32,9 @@
 
       <div v-if="!isAuthenticated && !collapsed" class="px-3 pb-3 text-xs text-gray-500">Silakan login untuk mengirim pesan.</div>
     </div>
-    <button v-else class="chat-opener-btn" @click="openChat" title="Buka chat">Tanya Kami</button>
+    <button v-else class="chat-opener-btn" @click="openChat" title="Buka chat">
+      💬
+    </button>
   </div>
 </template>
 
@@ -164,6 +166,7 @@ onBeforeUnmount(()=>{ stopPolling() })
 .chat-input input{ flex:1; padding:8px; border-radius:6px; border:1px solid #e0e0e0 }
 .chat-input button{ padding:8px 12px; background:#4CAF50; color:white; border-radius:6px; border:none }
 .clear-btn{ background:transparent; border:1px solid #e0e0e0; padding:6px 8px; border-radius:6px }
-.chat-opener-btn{ position:fixed; bottom:32px; right:32px; z-index:1000; width:56px; height:56px; border-radius:50%; background:#17B3A9; color:white; font-size:28px; border:none; box-shadow:0 2px 8px rgba(0,0,0,0.12); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background 0.2s }
-.chat-opener-btn:hover{ background:#0FA39B }
+.chat-opener-btn{ position:fixed; bottom:24px; right:24px; z-index:1000; width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg, #17B3A9, #0FA39B); color:white; font-size:24px; border:none; box-shadow:0 4px 20px rgba(23, 179, 169, 0.3); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.3s ease; animation:pulse 2s infinite }
+.chat-opener-btn:hover{ transform:scale(1.1); box-shadow:0 6px 25px rgba(23, 179, 169, 0.4) }
+@keyframes pulse{ 0%{ box-shadow:0 4px 20px rgba(23, 179, 169, 0.3) } 50%{ box-shadow:0 4px 20px rgba(23, 179, 169, 0.6), 0 0 0 10px rgba(23, 179, 169, 0.1) } 100%{ box-shadow:0 4px 20px rgba(23, 179, 169, 0.3) } }
 </style>

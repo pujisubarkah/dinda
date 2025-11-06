@@ -318,7 +318,7 @@ const loadAllInovasi = async () => {
     }
     
     const inovasiData = data.value?.data || []
-    allInovasi.value = inovasiData
+    allInovasi.value = Array.isArray(inovasiData) ? inovasiData : []
     console.log('All inovasi loaded successfully:', inovasiData.length, 'items')
   } catch (e) {
     console.error('Failed to load inovasi:', e)
@@ -336,7 +336,8 @@ const loadInovasiByKecamatan = async (kecamatanId) => {
   try {
     const { data, error } = await useFetch(`/api/inovasi/${kecamatanId}`)
     if (error.value) throw error.value
-    inovasiTable.value = data.value?.data || []
+    const inovasiData = data.value?.data || []
+    inovasiTable.value = Array.isArray(inovasiData) ? inovasiData : []
   } catch (e) {
     inovasiError.value = e
     inovasiTable.value = []
@@ -383,6 +384,12 @@ const displayedInovasi = computed(() => {
     inovasiData = allInovasi.value || []
   }
   
+  // Pastikan inovasiData adalah array
+  if (!Array.isArray(inovasiData)) {
+    console.warn('inovasiData is not an array:', inovasiData)
+    inovasiData = []
+  }
+  
   // Debug log
   console.log('displayedInovasi computed:', {
     selectedKecamatanFilter: selectedKecamatanFilter.value,
@@ -399,21 +406,31 @@ const displayedInovasi = computed(() => {
   
   const searchLower = searchQuery.value.toLowerCase()
   return inovasiData.filter(item => 
-    item.judulInovasi?.toLowerCase().includes(searchLower) ||
-    item.deskripsi?.toLowerCase().includes(searchLower) ||
-    item.inovator?.toLowerCase().includes(searchLower)
+    item?.judulInovasi?.toLowerCase?.()?.includes(searchLower) ||
+    item?.deskripsi?.toLowerCase?.()?.includes(searchLower) ||
+    item?.inovator?.toLowerCase?.()?.includes(searchLower)
   )
 })
 
 // Computed untuk menghitung jumlah inovasi yang terfilter
 const filteredInovasiCount = computed(() => {
-  return displayedInovasi.value.length
+  const inovasi = displayedInovasi.value
+  if (!Array.isArray(inovasi)) {
+    console.warn('displayedInovasi is not an array:', inovasi)
+    return 0
+  }
+  return inovasi.length
 })
 
 // Compute inovasi counts per kecamatan using allInovasi
 const inovasiCountsByKecamatan = computed(() => {
   const map = new Map()
-  (allInovasi.value || []).forEach(item => {
+  const inovasiList = allInovasi.value || []
+  if (!Array.isArray(inovasiList)) {
+    console.warn('allInovasi is not an array:', inovasiList)
+    return map
+  }
+  inovasiList.forEach(item => {
     const kid = item.inovatorData?.idKecamatan || item.idKecamatan || null
     const key = kid ? String(kid) : 'unknown'
     map.set(key, (map.get(key) || 0) + 1)
@@ -438,8 +455,12 @@ function countToColor(count, min, max){
 const inovasiMinMax = computed(() => {
   // Defensive: inovasiCountsByKecamatan.value may be undefined during SSR or early lifecycle
   const countsMap = inovasiCountsByKecamatan.value || new Map()
+  if (!(countsMap instanceof Map)) {
+    console.warn('inovasiCountsByKecamatan is not a Map:', countsMap)
+    return { min: 0, max: 0 }
+  }
   const values = Array.from(countsMap.values())
-  if (!values || values.length === 0) return { min: 0, max: 0 }
+  if (!Array.isArray(values) || values.length === 0) return { min: 0, max: 0 }
   return { min: Math.min(...values), max: Math.max(...values) }
 })
 
@@ -458,7 +479,7 @@ function getRegionFill(kecamatanId){
 // Legend buckets (e.g., 4 buckets)
 const legendBuckets = computed(() => {
   const { min, max } = inovasiMinMax.value
-  if (max === 0) return []
+  if (typeof min !== 'number' || typeof max !== 'number' || max === 0) return []
   const buckets = 4
   const step = Math.ceil((max - min) / buckets) || 1
   const arr = []

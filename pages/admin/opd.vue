@@ -10,7 +10,7 @@
                 <span class="text-2xl">🏛️</span>
               </div>
               <div>
-                <h1 class="text-3xl font-bold drop-shadow-lg">Master OPD</h1>
+                <h1 class="text-3xl font-bold drop-shadow-lg">Master OPD/Sekolah/Universitas/Ormas/Kelompok Masyarakat</h1>
                 <p class="text-green-100 text-sm font-light">Kelola data Organisasi Perangkat Daerah Kota Cilegon</p>
               </div>
             </div>
@@ -22,7 +22,7 @@
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
             </svg>
-            Tambah OPD Baru
+            Tambah Kelompok Inovator Baru
           </button>
         </div>
       </div>
@@ -35,7 +35,7 @@
         <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-6 text-white shadow-xl">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-blue-100 text-sm font-medium">Total OPD</p>
+              <p class="text-blue-100 text-sm font-medium">Total</p>
               <p class="text-3xl font-bold">{{ opdList.length }}</p>
             </div>
             <div class="w-16 h-16 bg-blue-400 bg-opacity-30 rounded-2xl flex items-center justify-center">
@@ -47,7 +47,7 @@
         <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl p-6 text-white shadow-xl">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-green-100 text-sm font-medium">OPD Aktif</p>
+              <p class="text-green-100 text-sm font-medium">Kelompok Aktif</p>
               <p class="text-3xl font-bold">{{ opdList.length }}</p>
             </div>
             <div class="w-16 h-16 bg-green-400 bg-opacity-30 rounded-2xl flex items-center justify-center">
@@ -81,7 +81,7 @@
             <input
               v-model="searchQuery"
               type="text"
-              placeholder="Cari nama OPD atau kepala dinas..."
+              placeholder="Cari nama OPD/Sekolah/Kelompok Masyarakat atau Kepala Dinas..."
               class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 shadow-sm"
             >
           </div>
@@ -105,7 +105,7 @@
             <div class="animate-spin rounded-full h-16 w-16 border-4 border-green-600 border-t-transparent absolute top-0"></div>
           </div>
           <div>
-            <p class="text-lg font-semibold text-gray-800">Memuat Data OPD</p>
+            <p class="text-lg font-semibold text-gray-800">Memuat Data Kelompok Inovator</p>
             <p class="text-sm text-gray-500">Mohon tunggu sebentar...</p>
           </div>
         </div>
@@ -129,7 +129,7 @@
         <div class="bg-gradient-to-r from-green-600 to-teal-600 px-6 py-4">
           <h3 class="text-white font-poppins font-semibold text-lg flex items-center gap-2">
             <span class="text-xl">📋</span>
-            Daftar Organisasi Perangkat Daerah
+            Daftar Kelompok Inovator
           </h3>
         </div>
         <div class="overflow-x-auto">
@@ -145,7 +145,7 @@
                 <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 tracking-wide">
                   <div class="flex items-center gap-2">
                     <span class="text-green-600">🏛️</span>
-                    Nama OPD
+                    Nama Kelompok Inovator
                   </div>
                 </th>
                 <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 tracking-wide">
@@ -176,8 +176,8 @@
                       <span class="text-4xl text-gray-400">📄</span>
                     </div>
                     <div class="text-gray-500 font-poppins">
-                      <p class="text-lg font-medium">Tidak ada data OPD</p>
-                      <p class="text-sm">Silakan tambah data OPD baru</p>
+                      <p class="text-lg font-medium">Tidak ada data</p>
+                      <p class="text-sm">Silakan tambah data baru</p>
                     </div>
                   </div>
                 </td>
@@ -197,7 +197,7 @@
                     </div>
                     <div>
                       <div class="text-sm font-semibold text-gray-900 font-poppins">{{ opd.namaOpd }}</div>
-                      <div class="text-xs text-gray-500 font-poppins">Organisasi Perangkat Daerah</div>
+                      <div class="text-xs text-gray-500 font-poppins">OPD/Sekolah/Ormas</div>
                     </div>
                   </div>
                 </td>
@@ -222,7 +222,7 @@
                     <button
                       @click="editOPD(opd)"
                       class="group bg-blue-100 hover:bg-blue-200 text-blue-600 hover:text-blue-700 p-2.5 rounded-xl transition-all duration-300 transform hover:scale-110"
-                      title="Edit OPD"
+                      title="Edit"
                     >
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
@@ -231,7 +231,7 @@
                     <button
                       @click="confirmDelete(opd)"
                       class="group bg-red-100 hover:bg-red-200 text-red-600 hover:text-red-700 p-2.5 rounded-xl transition-all duration-300 transform hover:scale-110"
-                      title="Hapus OPD"
+                      title="Hapus"
                     >
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
@@ -266,20 +266,20 @@
             <div>
               <label class="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
                 <span class="text-green-600">🏛️</span>
-                Nama OPD *
+                Nama OPD/Sekolah/Univ/Ormas *
               </label>
               <input
                 v-model="formData.nama_opd"
                 type="text"
                 required
                 class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 text-gray-900 font-medium transition-all duration-200"
-                placeholder="Masukkan nama OPD"
+                placeholder="Masukkan nama instansi/organisasi..."
               >
             </div>
             <div>
               <label class="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
                 <span class="text-blue-600">👤</span>
-                Kepala Dinas
+                Kepala Instansi/Organisasi
               </label>
               <input
                 v-model="formData.kode_opd"
@@ -328,7 +328,7 @@
             <span class="text-2xl">🏛️</span>
             <div>
               <p class="font-semibold text-gray-900">{{ selectedOPD?.namaOpd }}</p>
-              <p class="text-sm text-gray-600">Organisasi Perangkat Daerah</p>
+              <p class="text-sm text-gray-600">OPD/Sekolah/Univ/Ormas</p>
             </div>
           </div>
         </div>

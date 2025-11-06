@@ -1,39 +1,42 @@
 <template>
-  <nav class="text-white shadow-lg border-b-2 border-gray-400 h-20 md:h-24 flex items-center" style="background: linear-gradient(to right, #17B3A9, #0FA39B);">
-    <div class="w-full px-0">
-      <div class="flex items-center justify-between h-full pl-1 pr-4 sm:pl-2 sm:pr-6 lg:pl-3 lg:pr-8">
-        <!-- Logo dan Text di pojok kiri -->
-        <div class="flex items-center flex-shrink-0">
-          <!-- Logo Banten, Kota Cilegon & Berakhlak -->
-          <div class="flex items-center space-x-2 mr-2">
-            <img src="/banten.png" alt="Logo Banten" class="w-12 h-12 object-contain" />
-            <img src="https://cilegon.go.id/assets/images/logokotacilegon.png" alt="Logo Kota Cilegon" class="w-12 h-12 object-contain" />
-            <div class="bg-white/10 backdrop-blur-sm rounded-lg p-1.5 border border-white/20">
-              <img src="/berakhlak.png" alt="Logo Berakhlak" class="w-18 h-14 object-contain" />
+  <nav class="bg-gradient-to-r from-teal-600 to-teal-700 text-white shadow-lg border-b-2 border-teal-500 h-16 md:h-20 flex items-center relative z-50">
+    <div class="w-full px-2 md:px-4 lg:px-6">
+      <div class="flex items-center justify-between h-full">
+        <!-- Logo Section - Responsive -->
+        <div class="flex items-center flex-shrink-0 min-w-0">
+          <!-- Mobile Logo - Compact -->
+          <div class="flex items-center space-x-1 md:hidden">
+            <img src="https://cilegon.go.id/assets/images/logokotacilegon.png" alt="Logo Kota Cilegon" class="w-8 h-8 object-contain" />
+            <span class="text-sm font-bold text-white">DINDA</span>
+
+          <!-- Desktop Logo - Full -->
+          <div class="hidden md:flex items-center space-x-2 lg:space-x-3">
+            <img src="/banten.png" alt="Logo Banten" class="w-10 h-10 lg:w-12 lg:h-12 object-contain" />
+            <img src="https://cilegon.go.id/assets/images/logokotacilegon.png" alt="Logo Kota Cilegon" class="w-10 h-10 lg:w-12 lg:h-12 object-contain" />
+            <div class="bg-white/10 backdrop-blur-sm rounded-lg p-1 border border-white/20">
+              <img src="/berakhlak.png" alt="Logo Berakhlak" class="w-14 h-10 lg:w-16 lg:h-12 object-contain" />
             </div>
           </div>
-          <!-- Text Logo -->
-          <div class="bg-white/5 backdrop-blur-sm rounded-xl p-3 border border-white/10">
+
+          <!-- Text Logo - Responsive -->
+          <div class="ml-2 md:ml-3 lg:ml-4 bg-white/5 backdrop-blur-sm rounded-lg px-2 py-1 md:px-3 md:py-2 border border-white/10 min-w-0">
             <div class="flex items-center">
-              <span class="text-xl md:text-3xl font-extrabold text-white tracking-wide" 
-                    style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 1px 1px 2px rgba(255, 255, 255, 0.3); 
-                           background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 50%, #ffffff 100%); 
-                           background-clip: text; 
-                           -webkit-background-clip: text;">
+              <span class="text-lg md:text-xl lg:text-2xl font-extrabold text-white tracking-wide truncate"
+                    style="text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);">
                 DINDA CILEGON
               </span>
             </div>
-            <p class="text-xs md:text-sm text-blue-100 italic hidden lg:block font-medium" 
-               style="text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3), 0px 0px 3px rgba(173, 216, 230, 0.5);">
+            <p class="text-xs text-teal-100 italic hidden lg:block font-medium leading-tight"
+               style="text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.5);">
               Wahana Informasi & Akselerasi Inovasi Kota Cilegon
             </p>
           </div>
         </div>
         
-        <!-- Menu & Login di tengah-kanan -->
-        <div class="flex items-center space-x-10 ml-auto">
-          <!-- Menu Desktop & Tablet -->
-          <div class="hidden md:flex items-center space-x-8">
+        <!-- Desktop Menu & User Section -->
+        <div class="hidden md:flex items-center space-x-6 lg:space-x-8">
+          <!-- Navigation Menu -->
+          <div class="flex items-center space-x-4 lg:space-x-6">
             <NuxtLink to="/" class="nav-link">
               Home
             </NuxtLink>
@@ -50,31 +53,35 @@
               Lomba
             </NuxtLink>
           </div>
-          
-          <!-- User/Profile -->
-          <div class="hidden md:flex items-center space-x-4">
+
+          <!-- User Section -->
+          <div class="flex items-center space-x-3">
             <div v-if="!isLoggedIn">
-                <button @click="showLoginModal = true" class="bg-gray-100 px-6 py-2.5 rounded-lg font-semibold hover:bg-gray-200 hover:shadow-lg transition-all duration-200 transform hover:scale-105" style="color: #17B3A9;">
+              <button @click="showLoginModal = true" class="bg-white text-teal-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 hover:shadow-lg transition-all duration-200 transform hover:scale-105">
                 Login
               </button>
             </div>
-            <div v-else class="flex items-center space-x-4">
+            <div v-else class="flex items-center space-x-3">
               <!-- Admin Menu -->
               <NuxtLink v-if="currentUser?.role === 'admin'" to="/admin" class="nav-link-admin">
                 Admin
               </NuxtLink>
               <!-- User Info -->
               <div class="flex items-center space-x-3">
-                <div class="text-right">
+                <div class="text-right hidden lg:block">
                   <p class="text-sm font-medium text-white">{{ currentUser?.name }}</p>
-                  <p class="text-xs text-blue-100">{{ currentUser?.role }} - {{ currentUser?.opd }}</p>
+                  <p class="text-xs text-teal-100">{{ currentUser?.role }} - {{ currentUser?.opd }}</p>
                 </div>
-                <button @click="handleNavbarLogout" class="bg-red-100 text-red-700 px-4 py-2 rounded-lg font-semibold hover:bg-red-200 transition-colors">
+                <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                  <span class="text-sm font-bold text-white">{{ currentUser?.name?.charAt(0)?.toUpperCase() }}</span>
+                </div>
+                <button @click="handleNavbarLogout" class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg font-semibold transition-colors text-sm">
                   Logout
                 </button>
               </div>
             </div>
           </div>
+        </div>
           
           <!-- Mobile Menu - Hanya untuk HP kecil -->
           <div class="md:hidden flex items-center">
@@ -107,7 +114,7 @@
         🎨 Galeri
       </NuxtLink>
       <NuxtLink to="/inkubasi" @click="isOpen = false" class="block py-3 px-4 rounded-lg text-white font-medium hover:text-gray-200 transition-all duration-200 hover-tosca nav-text-outline">
-        🚀 Inkubasi
+        🚀 Inovasi
       </NuxtLink>
       <NuxtLink to="/forum" @click="isOpen = false" class="block py-3 px-4 rounded-lg text-white font-medium hover:text-gray-200 transition-all duration-200 hover-tosca nav-text-outline">
         💬 Forum
